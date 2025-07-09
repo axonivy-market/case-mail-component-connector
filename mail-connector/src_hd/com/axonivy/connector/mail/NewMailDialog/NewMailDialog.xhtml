@@ -1,0 +1,90 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ic="http://ivyteam.ch/jsf/component"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<cc:interface componentType="IvyComponent">
+	<cc:attribute name="id" required="true" />
+	<cc:attribute name="mailBrowserId" required="true" />
+	<cc:attribute name="mail" required="true"
+		type="com.axonivy.connector.mail.businessData.Mail"
+		shortDescription="Email object to show on dialog, possible a new email or existing email" />
+</cc:interface>
+
+<cc:implementation>
+	<!-- CSS and JS includes -->
+	<h:outputStylesheet name="suneditor/css/suneditor.min.css" />
+	<h:outputStylesheet name="suneditor/css/suneditor-custom.css" />
+	<h:outputScript name="suneditor/suneditor.min.js" target="head" />
+	<h:outputScript name="suneditor/suneditor-custom.js" target="head" />
+
+	<p:dialog id="newEmailDialog" header="New Email"
+		widgetVar="newEmailDialog" modal="true" width="600" closable="true"
+		fitViewport="true">
+		<h:form id="newMailForm">
+			<p:messages id="messages" showDetail="false" closable="true" />
+
+			<h:panelGrid columns="2" columnClasses="label, value"
+				styleClass="ui-fluid" style="width:100%">
+
+				<p:outputLabel for="from" value="#{ivy.cms.co('/Mail/from')}" />
+				<p:inputText id="from" value="#{cc.attrs.mail.sender}"
+					required="true"
+					requiredMessage="#{ivy.cms.co('/Validation/requiredMessage', [ivy.cms.co('/Mail/from')])}"
+					validatorMessage="#{ivy.cms.co('/Mail/from')}: #{ivy.cms.co('/Validation/InvalidEmail/message')}">
+					<f:validateRegex for="from"
+						pattern="#{ivy.cms.co('/Validation/InvalidEmail/regex')}" />
+				</p:inputText>
+
+				<p:outputLabel for="to" value="#{ivy.cms.co('/Mail/to')}" />
+				<p:inputText id="to" value="#{cc.attrs.mail.recipient}"
+					required="true"
+					requiredMessage="#{ivy.cms.co('/Validation/requiredMessage', [ivy.cms.co('/Mail/to')])}"
+					validatorMessage="#{ivy.cms.co('/Mail/to')}: #{ivy.cms.co('/Validation/InvalidEmailList/message')}">
+					<f:validateRegex for="to"
+						pattern="#{ivy.cms.co('/Validation/InvalidEmailList/regex')}" />
+				</p:inputText>
+
+				<p:outputLabel for="cc" value="#{ivy.cms.co('/Mail/cc')}" />
+				<p:inputText id="cc" value="#{cc.attrs.mail.recipientCC}"
+					validatorMessage="#{ivy.cms.co('/Mail/cc')}: #{ivy.cms.co('/Validation/InvalidEmailList/message')}">
+					<f:validateRegex for="cc"
+						pattern="#{ivy.cms.co('/Validation/InvalidEmailList/regex')}" />
+				</p:inputText>
+
+				<p:outputLabel for="subject" value="Subject" />
+				<p:inputText id="subject" value="#{cc.attrs.mail.subject}" />
+			</h:panelGrid>
+
+			<div style="margin-top: 1rem;">
+				<p:inputTextarea id="body" value="#{cc.attrs.mail.body}" rows="3"
+					autoResize="false" />
+				<h:outputScript>
+                    initSunEditor('#{cc.attrs.mailBrowserId}:form:#{cc.attrs.id}:newMailForm:body', false, '100%', '30vh', true, 13, '#000000', false);
+            </h:outputScript>
+			</div>
+		</h:form>
+		<f:facet name="footer">
+			<p:commandButton value="Cancel" oncomplete="close()"
+				update="@([id$=newEmailDialog])" styleClass="ui-button-flat" />
+			<p:commandButton value="Send Email"
+				actionListener="#{logic.sendMail(cc.attrs.mail)}"
+				process="#{cc.attrs.mailBrowserId}:form:#{cc.attrs.id}:newMailForm"
+				icon="pi pi-send" styleClass="ui-button-primary"
+				oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newEmailDialog').hide()" 
+				update="@([id$=newEmailForm]) @([id$=mailTable]) @([id$=messages])"/>
+			<p:remoteCommand name="close"
+				update="@([id$=newEmailDialog]) @([id$=mailTable])"
+				actionListener="#{mailBean.handleCloseDialog()}"
+				oncomplete="PF('newEmailDialog').hide()">
+			</p:remoteCommand>
+			<p:remoteCommand name="resetData" update="#{cc.attrs.mailBrowserId}"
+				actionListener="#{mailBean.resetMail()}">
+			</p:remoteCommand>
+		</f:facet>
+	</p:dialog>
+</cc:implementation>
+</html>
