@@ -76,8 +76,7 @@
         "output" : {
           "code" : [
             "in.mail.createdDate = new DateTime();",
-            "in.mail.id = ivy.repo.save(in.mail).getId();",
-            "ivy.log.info(\"mail id={0}, from={1}\", in.mail.id, in.mail.sender);"
+            "in.mail.id = ivy.repo.save(in.mail).getId();"
           ]
         }
       },
@@ -103,7 +102,7 @@
         "at" : { "x" : 528, "y" : 264 }
       },
       "connect" : [
-        { "id" : "f10", "to" : "f15" }
+        { "id" : "f10", "to" : "f9" }
       ]
     }, {
       "id" : "f9",
@@ -128,26 +127,6 @@
       },
       "connect" : [
         { "id" : "f14", "to" : "f4", "color" : "default" }
-      ]
-    }, {
-      "id" : "f15",
-      "type" : "Script",
-      "name" : "reset data",
-      "config" : {
-        "output" : {
-          "code" : [
-            "import org.primefaces.PrimeFaces;",
-            "import javax.faces.context.FacesContext;",
-            "",
-            "PrimeFaces.current().executeScript(\"resetData\");"
-          ]
-        }
-      },
-      "visual" : {
-        "at" : { "x" : 720, "y" : 264 }
-      },
-      "connect" : [
-        { "id" : "f16", "to" : "f9", "color" : "default" }
       ]
     } ]
 }

@@ -1,16 +1,23 @@
 Button:
+  abort: Abort
   cancel: ''
   forward: ''
+  newMail: New Mail
   'no': ''
   reply: ''
   resend: ''
+  retry: Retry
   send: ''
   'yes': ''
 Errors:
   mailNotSent: ''
 Labels:
+  abortTaskAndEnd: Abort Task and end the Process
+  abortTaskMessage: Do you really want to abort this Task and end the Process?
   confirmation: ''
   resendConfirmMessage: ''
+  retrySendMailMessage: Do you really want to retry to send this Mail?
+  retryTooltip: Retry Mail sending
 Mail:
   attachments: ''
   bcc: ''

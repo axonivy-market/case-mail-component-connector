@@ -24,7 +24,8 @@
 	<p:dialog id="newEmailDialog" header="New Email"
 		widgetVar="newEmailDialog" modal="true" width="600" closable="true"
 		fitViewport="true">
-		<h:form id="newMailForm">
+		<p:ajax event="close" oncomplete="close()"></p:ajax>
+		<h:panelGroup id="newMailForm">
 			<p:messages id="messages" showDetail="false" closable="true" />
 
 			<h:panelGrid columns="2" columnClasses="label, value"
@@ -63,26 +64,22 @@
 				<p:inputTextarea id="body" value="#{cc.attrs.mail.body}" rows="3"
 					autoResize="false" />
 				<h:outputScript>
-                    initSunEditor('#{cc.attrs.mailBrowserId}:form:#{cc.attrs.id}:newMailForm:body', false, '100%', '30vh', true, 13, '#000000', false);
+                    initSunEditor('#{cc.attrs.mailBrowserId}:form:#{cc.attrs.id}:body', false, '100%', '30vh', true, 13, '#000000', false);
             </h:outputScript>
 			</div>
-		</h:form>
+		</h:panelGroup>
 		<f:facet name="footer">
-			<p:commandButton value="Cancel" oncomplete="close()"
-				update="@([id$=newEmailDialog])" styleClass="ui-button-flat" />
-			<p:commandButton value="Send Email"
-				actionListener="#{logic.sendMail(cc.attrs.mail)}"
-				process="#{cc.attrs.mailBrowserId}:form:#{cc.attrs.id}:newMailForm"
+			<p:commandButton value="#{ivy.cms.co('/Button/cancel')}"
+				oncomplete="PF('newEmailDialog').hide()" styleClass="ui-button-flat" />
+			<p:commandButton value="#{ivy.cms.co('/Button/send')}"
+				actionListener="#{logic.sendMail(cc.attrs.mail)}" process="@form"
 				icon="pi pi-send" styleClass="ui-button-primary"
-				oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newEmailDialog').hide()" 
-				update="@([id$=newEmailForm]) @([id$=mailTable]) @([id$=messages])"/>
-			<p:remoteCommand name="close"
-				update="@([id$=newEmailDialog]) @([id$=mailTable])"
+				oncomplete="if (!args.validationFailed) PF('newEmailDialog').hide()"
+				update="@([id$=newEmailForm]) @([id$=mailTable]) @([id$=messages])" />
+			<p:remoteCommand name="close" immediate="true"
+				update="@([id$=newEmailDialog]) @([id$=mailTable]) @form"
 				actionListener="#{mailBean.handleCloseDialog()}"
-				oncomplete="PF('newEmailDialog').hide()">
-			</p:remoteCommand>
-			<p:remoteCommand name="resetData" update="#{cc.attrs.mailBrowserId}"
-				actionListener="#{mailBean.resetMail()}">
+				oncomplete="PF('newEmailDialog').hide()" resetValues="true">
 			</p:remoteCommand>
 		</f:facet>
 	</p:dialog>

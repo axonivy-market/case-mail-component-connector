@@ -5,7 +5,8 @@
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
 	xmlns:ic="http://ivyteam.ch/jsf/component"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 <cc:interface componentType="IvyComponent">
 	<cc:attribute name="id" required="true" />
 </cc:interface>
@@ -17,9 +18,11 @@
 				<h2 style="margin: 0">Email details</h2>
 			</div>
 			<div class="flex justify-content-end mb-2">
-				<p:commandButton id="newMailBtn" value="New mail"
-					update="@([id$=newMail])" icon="pi pi-envelope"
-					onclick="PF('newEmailDialog').show()" />
+				<p:commandButton id="newMailBtn"
+					value="#{ivy.cms.co('/Button/newMail')}"
+					update="@([id$=newEmailForm])"
+					actionListener="#{mailBean.resetMail()}" icon="pi pi-envelope"
+					oncomplete="PF('newEmailDialog').show()" />
 			</div>
 		</div>
 
@@ -51,39 +54,41 @@
 		<h:panelGroup id="viewMailComponent">
 			<h:panelGroup rendered="#{not empty mailBean.selectedMail.id}">
 				<!-- Actions -->
-				<div class="flex mt-2">
-					<p:commandButton id="replyEmail" process="@this"
-						value="#{ivy.cms.co('/Button/reply')}"
-						update="form @([id$=newEmailDialog])" icon="si si-arrow-left"
-						actionListener="#{mailBean.prepareMail('REPLY')}"
-						oncomplete="PF('newEmailDialog').show()" />
+				<c:if test="#{mailBean.selectedMail.status ne 'SMTP_FAILED'}">
+					<div class="flex mt-2">
+						<p:commandButton id="replyEmail" process="@this"
+							value="#{ivy.cms.co('/Button/reply')}"
+							update="form @([id$=newEmailDialog])" icon="si si-arrow-left"
+							actionListener="#{mailBean.prepareMail('REPLY')}"
+							oncomplete="PF('newEmailDialog').show()" />
 
-					<p:commandButton id="forwardEmail"
-						value="#{ivy.cms.co('/Button/forward')}"
-						update="form @([id$=newEmailDialog])" icon="si si-arrow-right"
-						process="@this"
-						actionListener="#{mailBean.prepareMail('FORWARD')}"
-						oncomplete="PF('newEmailDialog').show()" />
-					<p:commandButton id="resendEmail" process="@this"
-						value="#{ivy.cms.co('/Button/resend')}"
-						rendered="#{mailBean.isSent()}"
-						update="form @([id$=newEmailDialog])" icon="si si-undo"
-						oncomplete="PF('newEmailDialog').show()"
-						actionListener="#{mailBean.prepareMail('RESEND')}">
-						<p:confirm header="#{ivy.cms.co('/Labels/confirmation')}"
-							message="#{mailBean.getConfirmMessage()}" escape="false"
-							icon="si si-road-sign-warning" />
-					</p:commandButton>
-					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
-						responsive="true" width="auto">
-						<p:commandButton id="confirm-no-button"
-							value="#{ivy.cms.co('/Button/no')}" type="button"
-							styleClass="ui-confirmdialog-no ui-button-flat" />
-						<p:commandButton id="confirm-yes-button"
-							value="#{ivy.cms.co('/Button/yes')}" type="button"
-							styleClass="ui-confirmdialog-yes" />
-					</p:confirmDialog>
-				</div>
+						<p:commandButton id="forwardEmail"
+							value="#{ivy.cms.co('/Button/forward')}"
+							update="form @([id$=newEmailDialog])" icon="si si-arrow-right"
+							process="@this"
+							actionListener="#{mailBean.prepareMail('FORWARD')}"
+							oncomplete="PF('newEmailDialog').show()" />
+						<p:commandButton id="resendEmail" process="@this"
+							value="#{ivy.cms.co('/Button/resend')}"
+							rendered="#{mailBean.isSent()}"
+							update="form @([id$=newEmailDialog])" icon="si si-undo"
+							oncomplete="PF('newEmailDialog').show()"
+							actionListener="#{mailBean.prepareMail('RESEND')}">
+							<p:confirm header="#{ivy.cms.co('/Labels/confirmation')}"
+								message="#{mailBean.getConfirmMessage()}" escape="false"
+								icon="si si-road-sign-warning" />
+						</p:commandButton>
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+							responsive="true" width="auto">
+							<p:commandButton id="confirm-no-button"
+								value="#{ivy.cms.co('/Button/no')}" type="button"
+								styleClass="ui-confirmdialog-no ui-button-flat" />
+							<p:commandButton id="confirm-yes-button"
+								value="#{ivy.cms.co('/Button/yes')}" type="button"
+								styleClass="ui-confirmdialog-yes" />
+						</p:confirmDialog>
+					</div>
+				</c:if>
 
 				<!-- Mail Details -->
 				<p:fieldset id="mailDetail" legend="Mail Details" toggleable="true"

@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json-schema.axonivy.com/app/12.0.0/variables.json
 Variables:
   # number of re-sending mail when sent fail
-  mailLoopRepeatNumber: "1"
+  mailLoopRepeatNumber: "0"
   # number seconds delay before re-sending mail
   mailLoopRepeatDelay: "30"

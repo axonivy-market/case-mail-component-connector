@@ -1,7 +1,7 @@
 package com.axonivy.connector.mail.enums;
 
 public enum MailStatus {
-	DRAFT(),
+	DRAFT,
 	OUTBOX,
 	SENT,
 	SMTP_FAILED,

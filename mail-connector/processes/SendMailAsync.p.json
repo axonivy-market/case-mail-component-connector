@@ -75,9 +75,6 @@
           "body" : "<%=in.mail.body%>",
           "contentType" : "text/html"
         },
-        "attachments" : [
-          ""
-        ],
         "exceptionHandler" : "f31"
       },
       "visual" : {
@@ -198,9 +195,9 @@
     }, {
       "id" : "f22",
       "type" : "DialogCall",
-      "name" : "MailSendErrorDetails",
+      "name" : "ErrorMailDetails",
       "config" : {
-        "dialog" : "com.axonivy.connector.mail.RetrySendMailDetail:start(String)",
+        "dialog" : "com.axonivy.connector.mail.ErrorMailDetails:start(String)",
         "call" : {
           "map" : {
             "param.mailId" : "in.mail.id"
@@ -265,10 +262,6 @@
       "name" : "SendMailException",
       "config" : {
         "output" : {
-          "map" : {
-            "out" : "in",
-            "out.mail" : "in.mail"
-          },
           "code" : [
             "// log error",
             "ivy.log.error(error);",
@@ -432,7 +425,7 @@
             "color" : "green"
           }, {
             "name" : "error task for admin",
-            "size" : 256,
+            "size" : 264,
             "color" : "red"
           } ]
       } ],

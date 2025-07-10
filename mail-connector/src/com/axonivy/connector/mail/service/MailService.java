@@ -2,6 +2,7 @@ package com.axonivy.connector.mail.service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,8 @@ import com.axonivy.connector.mail.enums.MailStatus;
 import ch.ivyteam.ivy.bpm.error.BpmError;
 import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.scripting.objects.DateTime;
+import ch.ivyteam.ivy.workflow.ICase;
+import ch.ivyteam.ivy.workflow.ITask;
 
 public class MailService {
 
@@ -195,7 +198,7 @@ public class MailService {
 			setUpMetaInformation(mail, templateSb);
 		}
 
-		final StringBuilder bodySb = new StringBuilder(mail.getBody());
+		final StringBuilder bodySb = new StringBuilder(mail.getBody() != null ? mail.getBody() : "");
 		bodySb.insert(0, templateSb.toString());
 
 		mail.setBody(bodySb.toString());
@@ -250,7 +253,7 @@ public class MailService {
 				.append(StringUtils.isBlank(mail.getSubject()) ? Constants.EMPTY : Constants.BLANK + mail.getSubject());
 		templateSb.append(Constants.BREAK_LINE);
 	}
-	
+
 	/*
 	 * Create confirm message when resends mail
 	 */
@@ -258,10 +261,8 @@ public class MailService {
 		String result = StringUtils.EMPTY;
 		if (actionType.equals(ResponseAction.RESEND.toString())) {
 			final String message = Ivy.cms().co("/Labels/resendConfirmMessage",
-					Arrays.asList(mail.getSubject(),
-							mail.getRecipient(),
-							mail.getRecipientCC()));
-			if(StringUtils.isEmpty(mail.getRecipientCC())) {
+					Arrays.asList(mail.getSubject(), mail.getRecipient(), mail.getRecipientCC()));
+			if (StringUtils.isEmpty(mail.getRecipientCC())) {
 				result = StringUtils.replace(message, Constants.SEMICOLON, StringUtils.EMPTY);
 				return result;
 			} else {
@@ -269,5 +270,18 @@ public class MailService {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Get SendingMail task list which have errorMessage in custom field
+	 * 
+	 * @param ivyCase
+	 * @return
+	 */
+	static public List<ITask> getSendMailTasks(ICase ivyCase) {
+		return ivyCase.tasks().all().stream()
+				.filter(task -> task.getName().equals(Ivy.cms().co("/Tasks/SendingMail/name"))
+						|| task.getName().equals(Ivy.cms().co("/Tasks/RetrySendingMail/name")))
+				.toList();
 	}
 }

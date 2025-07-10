@@ -16,19 +16,11 @@
     "type" : "String",
     "modifiers" : [ "PERSISTENT" ]
   }, {
-    "name" : "recipient",
-    "type" : "String",
-    "modifiers" : [ "PERSISTENT" ]
-  }, {
     "name" : "subject",
     "type" : "String",
     "modifiers" : [ "PERSISTENT" ]
   }, {
-    "name" : "emailHeader",
-    "type" : "String",
-    "modifiers" : [ "PERSISTENT" ]
-  }, {
-    "name" : "body",
+    "name" : "recipient",
     "type" : "String",
     "modifiers" : [ "PERSISTENT" ]
   }, {
@@ -37,6 +29,14 @@
     "modifiers" : [ "PERSISTENT" ]
   }, {
     "name" : "recipientBCC",
+    "type" : "String",
+    "modifiers" : [ "PERSISTENT" ]
+  }, {
+    "name" : "body",
+    "type" : "String",
+    "modifiers" : [ "PERSISTENT" ]
+  }, {
+    "name" : "emailHeader",
     "type" : "String",
     "modifiers" : [ "PERSISTENT" ]
   }, {

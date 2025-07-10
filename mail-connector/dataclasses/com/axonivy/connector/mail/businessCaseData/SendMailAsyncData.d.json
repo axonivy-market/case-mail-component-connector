@@ -5,7 +5,8 @@
   "isBusinessCaseData" : false,
   "fields" : [ {
     "name" : "mail",
-    "type" : "com.axonivy.connector.mail.businessData.Mail"
+    "type" : "com.axonivy.connector.mail.businessData.Mail",
+    "modifiers" : [ "PERSISTENT" ]
   }, {
     "name" : "counter",
     "type" : "java.lang.Integer",

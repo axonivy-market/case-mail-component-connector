@@ -5,7 +5,6 @@
   "isBusinessCaseData" : false,
   "fields" : [ {
     "name" : "mail",
-    "type" : "com.axonivy.connector.mail.businessData.Mail",
-    "modifiers" : [ "PERSISTENT" ]
+    "type" : "com.axonivy.connector.mail.businessData.Mail"
   } ]
 }
