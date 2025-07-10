@@ -9,6 +9,13 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  <dependencies>
+    <dependency>
+	    <groupId>org.apache.commons</groupId>
+	    <artifactId>commons-text</artifactId>
+	    <version>1.11.0</version>
+	</dependency>
+  </dependencies>
   <build>
     <plugins>
       <plugin>

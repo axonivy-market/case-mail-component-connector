@@ -19,6 +19,10 @@ Labels:
   retrySendMailMessage: Do you really want to retry to send this Mail?
   retryTooltip: Retry Mail sending
 Mail:
+  Status:
+    failed: SMTP failed
+    outbox: Outbox
+    sent: Sent
   attachments: ''
   bcc: ''
   body: ''
