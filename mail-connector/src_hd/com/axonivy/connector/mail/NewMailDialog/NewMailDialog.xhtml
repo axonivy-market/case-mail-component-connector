@@ -25,59 +25,60 @@
 		widgetVar="newEmailDialog" modal="true" width="600" closable="true"
 		fitViewport="true">
 		<p:ajax event="close" oncomplete="close()"></p:ajax>
-		<h:panelGroup id="newMailForm">
-			<p:messages id="messages" showDetail="false" closable="true" />
+		<p:outputPanel id="dialogInputs" layout="block">
+			<h:panelGroup id="newMailForm">
+				<p:messages id="messages" showDetail="false" closable="true" />
 
-			<h:panelGrid columns="2" columnClasses="label, value"
-				styleClass="ui-fluid" style="width:100%">
+				<h:panelGrid columns="2" columnClasses="width-20, width-80"
+					styleClass="ui-fluid" style="width:100%">
+					<p:outputLabel for="from" value="#{ivy.cms.co('/Mail/from')}" />
+					<p:inputText id="from" value="#{cc.attrs.mail.sender}"
+						required="true"
+						requiredMessage="#{ivy.cms.co('/Validation/requiredMessage', [ivy.cms.co('/Mail/from')])}"
+						validatorMessage="#{ivy.cms.co('/Mail/from')}: #{ivy.cms.co('/Validation/InvalidEmail/message')}">
+						<f:validateRegex for="from"
+							pattern="#{ivy.cms.co('/Validation/InvalidEmail/regex')}" />
+					</p:inputText>
 
-				<p:outputLabel for="from" value="#{ivy.cms.co('/Mail/from')}" />
-				<p:inputText id="from" value="#{cc.attrs.mail.sender}"
-					required="true"
-					requiredMessage="#{ivy.cms.co('/Validation/requiredMessage', [ivy.cms.co('/Mail/from')])}"
-					validatorMessage="#{ivy.cms.co('/Mail/from')}: #{ivy.cms.co('/Validation/InvalidEmail/message')}">
-					<f:validateRegex for="from"
-						pattern="#{ivy.cms.co('/Validation/InvalidEmail/regex')}" />
-				</p:inputText>
+					<p:outputLabel for="to" value="#{ivy.cms.co('/Mail/to')}" />
+					<p:inputText id="to" value="#{cc.attrs.mail.recipient}"
+						required="true"
+						requiredMessage="#{ivy.cms.co('/Validation/requiredMessage', [ivy.cms.co('/Mail/to')])}"
+						validatorMessage="#{ivy.cms.co('/Mail/to')}: #{ivy.cms.co('/Validation/InvalidEmailList/message')}">
+						<f:validateRegex for="to"
+							pattern="#{ivy.cms.co('/Validation/InvalidEmailList/regex')}" />
+					</p:inputText>
 
-				<p:outputLabel for="to" value="#{ivy.cms.co('/Mail/to')}" />
-				<p:inputText id="to" value="#{cc.attrs.mail.recipient}"
-					required="true"
-					requiredMessage="#{ivy.cms.co('/Validation/requiredMessage', [ivy.cms.co('/Mail/to')])}"
-					validatorMessage="#{ivy.cms.co('/Mail/to')}: #{ivy.cms.co('/Validation/InvalidEmailList/message')}">
-					<f:validateRegex for="to"
-						pattern="#{ivy.cms.co('/Validation/InvalidEmailList/regex')}" />
-				</p:inputText>
+					<p:outputLabel for="cc" value="#{ivy.cms.co('/Mail/cc')}" />
+					<p:inputText id="cc" value="#{cc.attrs.mail.recipientCC}"
+						validatorMessage="#{ivy.cms.co('/Mail/cc')}: #{ivy.cms.co('/Validation/InvalidEmailList/message')}">
+						<f:validateRegex for="cc"
+							pattern="#{ivy.cms.co('/Validation/InvalidEmailList/regex')}" />
+					</p:inputText>
 
-				<p:outputLabel for="cc" value="#{ivy.cms.co('/Mail/cc')}" />
-				<p:inputText id="cc" value="#{cc.attrs.mail.recipientCC}"
-					validatorMessage="#{ivy.cms.co('/Mail/cc')}: #{ivy.cms.co('/Validation/InvalidEmailList/message')}">
-					<f:validateRegex for="cc"
-						pattern="#{ivy.cms.co('/Validation/InvalidEmailList/regex')}" />
-				</p:inputText>
+					<p:outputLabel for="subject" value="Subject" />
+					<p:inputText id="subject" value="#{cc.attrs.mail.subject}" />
+				</h:panelGrid>
 
-				<p:outputLabel for="subject" value="Subject" />
-				<p:inputText id="subject" value="#{cc.attrs.mail.subject}" />
-			</h:panelGrid>
-
-			<div style="margin-top: 1rem;">
-				<p:inputTextarea id="body" value="#{cc.attrs.mail.body}" rows="3"
-					autoResize="false" />
-				<h:outputScript>
-                    initSunEditor('form:#{cc.attrs.mailBrowserId}:#{cc.attrs.id}:body', false, '100%', '30vh', true, 13, '#000000', false);
+				<div style="margin-top: 1rem;">
+					<p:inputTextarea id="body" value="#{cc.attrs.mail.body}" rows="3"
+						autoResize="false" />
+					<h:outputScript>
+                    initSunEditor('#{cc.attrs.mailBrowserId}:#{cc.attrs.id}:body', false, '100%', '30vh', true, 13, '#000000', false);
             </h:outputScript>
-			</div>
-		</h:panelGroup>
+				</div>
+			</h:panelGroup>
+		</p:outputPanel>
 		<f:facet name="footer">
 			<p:commandButton value="#{ivy.cms.co('/Button/cancel')}"
 				oncomplete="PF('newEmailDialog').hide()" styleClass="ui-button-flat" />
 			<p:commandButton value="#{ivy.cms.co('/Button/send')}"
-				actionListener="#{logic.sendMail(cc.attrs.mail, mailBean.mailModel.rowCount)}" process="@form"
-				icon="pi pi-send" styleClass="ui-button-primary"
-				oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newEmailDialog').hide()"
-				update="@([id$=newEmailForm]) @([id$=mailTable]) @([id$=messages])" />
+				actionListener="#{logic.sendMail(cc.attrs.mail, mailBean.mailModel.rowCount)}"
+				process="@form" icon="pi pi-send" styleClass="ui-button-primary"
+				oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newEmailDialog').hide();"
+				update="@([id$=dialogInputs]) @([id$=#{cc.attrs.mailBrowserId}])" />
 			<p:remoteCommand name="close" immediate="true"
-				update="@([id$=newEmailDialog]) @([id$=form]) @form"
+				update="@([id$=newEmailDialog]) @form"
 				actionListener="#{mailBean.handleCloseDialog()}"
 				oncomplete="PF('newEmailDialog').hide()" resetValues="true">
 			</p:remoteCommand>

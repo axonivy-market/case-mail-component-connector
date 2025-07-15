@@ -10,9 +10,8 @@
 		<ui:define name="title">EditCase</ui:define>
 		<ui:define name="content">
 			<h:form id="form">
-				<p:messages />
 				<ic:com.axonivy.connector.mail.MailBrowser id="mailBrowser"
-					caseId="#{data.caseId}" />
+					mailBrowserId="form:mailBrowser" caseId="#{data.caseId}" />
 				<br />
 				<div class="command-btns">
 					<p:link value="Back to Case list"

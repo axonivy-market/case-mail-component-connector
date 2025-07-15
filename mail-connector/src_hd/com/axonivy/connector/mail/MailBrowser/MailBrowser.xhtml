@@ -9,6 +9,8 @@
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 <cc:interface componentType="IvyComponent">
 	<cc:attribute name="id" required="true" />
+	<cc:attribute name="mailBrowserId" required="true"
+		shortDescription="The absolute client ID of the included component in the JSF view. For example 'form:mailBrowser'" />
 	<cc:attribute name="caseId"
 		shortDescription="Specifies the Case ID associated with the email. If not provided, all emails will be retrieved." />
 </cc:interface>
@@ -57,9 +59,6 @@
 			<h:outputText
 				value="#{mail.subject.length() > 25 ? mail.subject.substring(0, 25).concat('...') : mail.subject}"
 				title="#{mail.subject}" />
-		</p:column>
-		<p:column headerText="Case ID" sortBy="#{mail.caseId}">
-			<h:outputText value="#{mail.caseId}" title="#{mail.caseId}" />
 		</p:column>
 	</p:dataTable>
 
@@ -161,7 +160,7 @@
 
 	<!-- Mail Dialog -->
 	<ic:com.axonivy.connector.mail.NewMailDialog id="newMail"
-		mail="#{mailBean.mail}" mailBrowserId="#{cc.attrs.id}" />
+		mail="#{mailBean.mail}" mailBrowserId="#{cc.attrs.mailBrowserId}" />
 </cc:implementation>
 
 </html>
