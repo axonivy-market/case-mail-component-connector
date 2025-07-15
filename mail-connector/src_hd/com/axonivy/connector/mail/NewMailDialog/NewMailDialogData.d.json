@@ -6,5 +6,9 @@
   "fields" : [ {
     "name" : "mail",
     "type" : "com.axonivy.connector.mail.businessData.Mail"
+  }, {
+    "name" : "mailCount",
+    "type" : "Number",
+    "modifiers" : [ "PERSISTENT" ]
   } ]
 }

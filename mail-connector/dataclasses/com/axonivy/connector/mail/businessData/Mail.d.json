@@ -63,5 +63,13 @@
     "name" : "createdDate",
     "type" : "DateTime",
     "modifiers" : [ "PERSISTENT" ]
+  }, {
+    "name" : "attachments",
+    "type" : "List<com.axonivy.connector.mail.businessData.File>",
+    "modifiers" : [ "PERSISTENT" ]
+  }, {
+    "name" : "caseId",
+    "type" : "String",
+    "modifiers" : [ "PERSISTENT" ]
   } ]
 }

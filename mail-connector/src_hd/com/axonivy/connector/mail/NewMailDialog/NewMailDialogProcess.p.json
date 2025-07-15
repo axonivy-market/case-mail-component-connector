@@ -37,7 +37,7 @@
         "at" : { "x" : 96, "y" : 160 }
       },
       "connect" : [
-        { "id" : "f5", "to" : "f12" }
+        { "id" : "f5", "to" : "f4" }
       ]
     }, {
       "id" : "f4",
@@ -49,15 +49,17 @@
     }, {
       "id" : "f6",
       "type" : "HtmlDialogMethodStart",
-      "name" : "sendMail(Mail)",
+      "name" : "sendMail(Mail,Number)",
       "config" : {
         "signature" : "sendMail",
         "input" : {
           "params" : [
-            { "name" : "mail", "type" : "com.axonivy.connector.mail.businessData.Mail", "desc" : "" }
+            { "name" : "mail", "type" : "com.axonivy.connector.mail.businessData.Mail", "desc" : "" },
+            { "name" : "mailCount", "type" : "Number", "desc" : "" }
           ],
           "map" : {
-            "out.mail" : "param.mail"
+            "out.mail" : "param.mail",
+            "out.mailCount" : "param.mailCount"
           }
         },
         "guid" : "197D43FD2B3294DB"
@@ -74,6 +76,10 @@
       "name" : "save mail",
       "config" : {
         "output" : {
+          "map" : {
+            "out" : "in",
+            "out.mail" : "in.mail"
+          },
           "code" : [
             "in.mail.createdDate = new DateTime();",
             "in.mail.id = ivy.repo.save(in.mail).getId();"
@@ -102,7 +108,7 @@
         "at" : { "x" : 528, "y" : 264 }
       },
       "connect" : [
-        { "id" : "f10", "to" : "f9" }
+        { "id" : "f10", "to" : "f15" }
       ]
     }, {
       "id" : "f9",
@@ -112,21 +118,23 @@
         "labelOffset" : { "x" : 10, "y" : 30 }
       }
     }, {
-      "id" : "f12",
+      "id" : "f15",
       "type" : "Script",
+      "name" : "wait for mail update",
       "config" : {
         "output" : {
-          "map" : {
-            "out" : "in",
-            "out.mail" : "new com.axonivy.connector.mail.businessData.Mail();"
-          }
+          "code" : [
+            "import com.axonivy.connector.mail.service.MailService;",
+            "",
+            "MailService.waitForMailCount(in.mailCount, in.mail.caseId);"
+          ]
         }
       },
       "visual" : {
-        "at" : { "x" : 224, "y" : 160 }
+        "at" : { "x" : 712, "y" : 264 }
       },
       "connect" : [
-        { "id" : "f14", "to" : "f4", "color" : "default" }
+        { "id" : "f16", "to" : "f9", "color" : "default" }
       ]
     } ]
 }

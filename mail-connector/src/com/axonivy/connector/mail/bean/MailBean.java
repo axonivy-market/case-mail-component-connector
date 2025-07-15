@@ -1,5 +1,6 @@
 package com.axonivy.connector.mail.bean;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -15,22 +16,30 @@ import com.axonivy.connector.mail.service.MailService;
 @ManagedBean
 @ViewScoped
 public class MailBean {
-	private Mail mail = new Mail();
+	private Mail mail;
 	private Mail selectedMail;
-	private MailLazyDataModel mailModel = new MailLazyDataModel();
-	private MailService mailService = new MailService();
+	private MailLazyDataModel mailModel;
+	private MailService mailService;
+	private String caseId;
+	
+	@PostConstruct
+    public void init() {
+		mailService = new MailService();
+    }
 
-	public void resetMail() {
-		mailModel = new MailLazyDataModel();
+	public void initMail() {
+		mailModel = new MailLazyDataModel(caseId);
 		mail = new Mail();
+		mail.setCaseId(caseId);
 	}
 
 	public void handleCloseDialog() {
-		resetMail();
+		initMail();
 	}
 
 	public void prepareMail(String actionType) {
 		ResponseAction type = ResponseAction.valueOf(actionType);
+		mail.setCaseId(caseId);
 		switch (type) {
 		case RESEND:
 			setMail(mailService.setUpResendMail(selectedMail));
@@ -115,6 +124,14 @@ public class MailBean {
 
 	public void setSelectedMail(Mail selectedMail) {
 		this.selectedMail = selectedMail;
+	}
+
+	public String getCaseId() {
+		return caseId;
+	}
+
+	public void setCaseId(String caseId) {
+		this.caseId = caseId;
 	}
 
 }

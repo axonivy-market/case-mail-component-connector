@@ -7,9 +7,20 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <h:body>
 	<ui:composition template="/layouts/frame-10.xhtml">
-		<ui:define name="title">MailDemo</ui:define>
+		<ui:define name="title">EditCase</ui:define>
 		<ui:define name="content">
-			<ic:com.axonivy.connector.mail.MailBrowser id="mailBrowser" />
+			<h:form id="form">
+				<p:messages />
+				<ic:com.axonivy.connector.mail.MailBrowser id="mailBrowser"
+					caseId="#{data.caseId}" />
+				<br />
+				<div class="command-btns">
+					<p:link value="Back to Case list"
+						href="#{ivy.html.startref('197CF45768C992CF/start.ivp')}" />
+					<br />
+				</div>
+			</h:form>
+
 		</ui:define>
 	</ui:composition>
 </h:body>

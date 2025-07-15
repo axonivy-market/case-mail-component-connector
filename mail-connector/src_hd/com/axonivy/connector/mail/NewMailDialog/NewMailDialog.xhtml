@@ -64,7 +64,7 @@
 				<p:inputTextarea id="body" value="#{cc.attrs.mail.body}" rows="3"
 					autoResize="false" />
 				<h:outputScript>
-                    initSunEditor('#{cc.attrs.mailBrowserId}:form:#{cc.attrs.id}:body', false, '100%', '30vh', true, 13, '#000000', false);
+                    initSunEditor('form:#{cc.attrs.mailBrowserId}:#{cc.attrs.id}:body', false, '100%', '30vh', true, 13, '#000000', false);
             </h:outputScript>
 			</div>
 		</h:panelGroup>
@@ -72,12 +72,12 @@
 			<p:commandButton value="#{ivy.cms.co('/Button/cancel')}"
 				oncomplete="PF('newEmailDialog').hide()" styleClass="ui-button-flat" />
 			<p:commandButton value="#{ivy.cms.co('/Button/send')}"
-				actionListener="#{logic.sendMail(cc.attrs.mail)}" process="@form"
+				actionListener="#{logic.sendMail(cc.attrs.mail, mailBean.mailModel.rowCount)}" process="@form"
 				icon="pi pi-send" styleClass="ui-button-primary"
-				oncomplete="if (!args.validationFailed) PF('newEmailDialog').hide()"
+				oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newEmailDialog').hide()"
 				update="@([id$=newEmailForm]) @([id$=mailTable]) @([id$=messages])" />
 			<p:remoteCommand name="close" immediate="true"
-				update="@([id$=newEmailDialog]) @([id$=mailTable]) @form"
+				update="@([id$=newEmailDialog]) @([id$=form]) @form"
 				actionListener="#{mailBean.handleCloseDialog()}"
 				oncomplete="PF('newEmailDialog').hide()" resetValues="true">
 			</p:remoteCommand>

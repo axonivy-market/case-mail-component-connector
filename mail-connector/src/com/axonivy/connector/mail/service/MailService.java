@@ -11,8 +11,8 @@ import com.axonivy.connector.mail.Constants;
 import com.axonivy.connector.mail.businessData.Mail;
 import com.axonivy.connector.mail.enums.BpmErrorCode;
 import com.axonivy.connector.mail.enums.DirectionCode;
-import com.axonivy.connector.mail.enums.ResponseAction;
 import com.axonivy.connector.mail.enums.MailStatus;
+import com.axonivy.connector.mail.enums.ResponseAction;
 
 import ch.ivyteam.ivy.bpm.error.BpmError;
 import ch.ivyteam.ivy.environment.Ivy;
@@ -283,5 +283,21 @@ public class MailService {
 				.filter(task -> task.getName().equals(Ivy.cms().co("/Tasks/SendingMail/name"))
 						|| task.getName().equals(Ivy.cms().co("/Tasks/RetrySendingMail/name")))
 				.toList();
+	}
+
+	public static void waitForMailCount(long count, String caseId) {
+		long mailCount;
+		mailCount = countMail(caseId);
+		while (mailCount <= count) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+			}
+			mailCount = countMail(caseId);
+		}
+	}
+
+	private static long countMail(String caseId) {
+		return Ivy.repo().search(Mail.class).textField("caseId").containsAllWordPatterns(caseId).execute().count();
 	}
 }
