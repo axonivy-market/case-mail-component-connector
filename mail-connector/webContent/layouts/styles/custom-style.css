@@ -1,0 +1,42 @@
+.iframe-wrapper, .iframe-wrapper > .iframe-mail-body {
+	display: flex;
+	flex-grow: 1;
+	resize: vertical;
+	overflow: hidden;
+	
+	margin:7px 8px;
+	padding:0;
+	border-radius : 6px;
+	
+	min-height: 9em;
+	max-height: 35em;
+}
+
+.iframe-wrapper { 
+	border: 1px solid #D4D6D9;
+	height: 100%;
+}
+
+.iframe-wrapper > .iframe-mail-body { 
+	border: 0px solid #D4D6D9;
+	background: transparent;
+}
+
+/* .table-layout-fixed {
+	table-layout:fixed;
+}
+
+.mail-attachments-component {
+	border: 1px solid #D4D6D9;
+	border-radius: 6px;
+	display: block;
+}
+
+.attachment-item {
+	padding: 7px;
+	word-wrap:break-word;
+}
+
+.ui-confirm-dialog {
+	width: auto !important;
+} */
