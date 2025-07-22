@@ -8,7 +8,7 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <cc:interface componentType="IvyComponent">
 	<cc:attribute name="id" required="true" />
-	<cc:attribute name="mailBrowserId" required="true" />
+	<cc:attribute name="newMailDialogId" required="true" />
 	<cc:attribute name="mail" required="true"
 		type="com.axonivy.connector.mail.businessData.Mail"
 		shortDescription="Email object to show on dialog, possible a new email or existing email" />
@@ -18,17 +18,19 @@
 	<!-- CSS and JS includes -->
 	<h:outputStylesheet name="suneditor/css/suneditor.min.css" />
 	<h:outputStylesheet name="suneditor/css/suneditor-custom.css" />
+	<h:outputStylesheet
+		name="resources/fileUpload/simpleLookForAdvancedFileUpload.css" />
 	<h:outputScript name="suneditor/suneditor.min.js" target="head" />
 	<h:outputScript name="suneditor/suneditor-custom.js" target="head" />
+	<h:outputScript name="resources/fileUpload/fileUploadHelper.js" />
 
 	<p:dialog id="newEmailDialog" header="New Email"
-		widgetVar="newEmailDialog" modal="true" width="600" closable="true"
-		fitViewport="true">
+		widgetVar="newEmailDialog" modal="true" width="800" closable="true"
+		styleClass="max-height: 900" fitViewport="true">
 		<p:ajax event="close" oncomplete="close()"></p:ajax>
 		<p:outputPanel id="dialogInputs" layout="block">
 			<h:panelGroup id="newMailForm">
 				<p:messages id="messages" showDetail="false" closable="true" />
-
 				<h:panelGrid columns="2" columnClasses="width-20, width-80"
 					styleClass="ui-fluid" style="width:100%">
 					<p:outputLabel for="from" value="#{ivy.cms.co('/Mail/from')}" />
@@ -56,7 +58,7 @@
 							pattern="#{ivy.cms.co('/Validation/InvalidEmailList/regex')}" />
 					</p:inputText>
 
-					<p:outputLabel for="subject" value="Subject" />
+					<p:outputLabel for="subject" value="#{ivy.cms.co('/Mail/subject')}" />
 					<p:inputText id="subject" value="#{cc.attrs.mail.subject}" />
 				</h:panelGrid>
 
@@ -64,9 +66,44 @@
 					<p:inputTextarea id="body" value="#{cc.attrs.mail.body}" rows="3"
 						autoResize="false" />
 					<h:outputScript>
-                    initSunEditor('#{cc.attrs.mailBrowserId}:#{cc.attrs.id}:body', false, '100%', '30vh', true, 13, '#000000', false);
-            </h:outputScript>
+		            	initSunEditor('#{cc.attrs.newMailDialogId}:body', false, '100%', '30vh', true, 13, '#000000', false);
+		            </h:outputScript>
 				</div>
+				<h:panelGroup id="attachments" style="margin: 0 1rem;">
+					<div class="flex justify-content-between" style="align-items: center">
+						<div>
+							<h4 class="m-0">#{ivy.cms.co('/Mail/attachments')}</h4>
+						</div>
+						<div class="flex justify-content-end mb-2">
+							<p:fileUpload id="mailAttachmentUpload"
+								widgetVar="mailAttachmentUpload" mode="advanced"
+								styleClass="file-upload" chooseIcon="pi pi-paperclip"
+								label="#{ivy.cms.co('/File/upload')}" skinSimple="true"
+								auto="true" sizeLimit="#{mailBean.getMaxUploadSizeInBytes()}"
+								allowTypes="/(\.|\/)(#{mailBean.getAllowedFileTypes()})$/"
+								invalidSizeMessage="#{ivy.cms.co('/File/maximumFileSizeMessage', [mailBean.getMaxUploadSizeInMB()])}"
+								invalidFileMessage="#{ivy.cms.co('/File/fileTypesAllowedMessage', [mailBean.allowFileTypes])}"
+								update="@([id$=attachments]) @([id$=messages])"
+								listener="#{mailBean.handleFileUpload}" process="@this">
+								<f:validateBean disabled="true" />
+							</p:fileUpload>
+						</div>
+					</div>
+					<p:outputPanel styleClass="ui-g-12"
+						rendered="#{mailBean.mail.attachments.size() > 0}"
+						style="background:#f9f9f9;border:1px solid #dcdcdc;border-radius:6px;padding:0.75rem 0.75rem;">
+						<ui:repeat var="attachment" value="#{mailBean.mail.attachments}"
+							varStatus="attachmentStatus">
+							<p:chip label="#{attachment.name} - #{attachment.size} KB"
+								icon="pi pi-file" styleClass="mr-2" removable="true">
+								<p:ajax event="close"
+									listener="#{mailBean.removeFile(attachment)}"
+									update="@([id$=attachments])" />
+							</p:chip>
+						</ui:repeat>
+					</p:outputPanel>
+
+				</h:panelGroup>
 			</h:panelGroup>
 		</p:outputPanel>
 		<f:facet name="footer">
@@ -76,9 +113,9 @@
 				actionListener="#{logic.sendMail(cc.attrs.mail, mailBean.mailModel.rowCount)}"
 				process="@form" icon="pi pi-send" styleClass="ui-button-primary"
 				oncomplete="if (args &amp;&amp; !args.validationFailed) PF('newEmailDialog').hide();"
-				update="@([id$=dialogInputs]) @([id$=#{cc.attrs.mailBrowserId}])" />
+				update="@([id$=dialogInputs]) @([id$=mailTable]) @([id$=messages])" />
 			<p:remoteCommand name="close" immediate="true"
-				update="@([id$=newEmailDialog]) @form"
+				update="@([id$=newEmailDialog]) @([id$=mailTable])"
 				actionListener="#{mailBean.handleCloseDialog()}"
 				oncomplete="PF('newEmailDialog').hide()" resetValues="true">
 			</p:remoteCommand>

@@ -75,6 +75,10 @@
           "body" : "<%=in.mail.body%>",
           "contentType" : "text/html"
         },
+        "attachments" : [
+          "in.attachments",
+          ""
+        ],
         "exceptionHandler" : "f31"
       },
       "visual" : {
@@ -384,9 +388,10 @@
       "config" : {
         "output" : {
           "code" : [
+            "import com.axonivy.connector.mail.service.MailService;",
             "",
             "",
-            "//in.attachments = MailSendService.prepareAttachments(in.mail.attachments);"
+            "in.attachments = MailService.prepareAttachments(in.mail.attachments);"
           ]
         }
       },

@@ -18,5 +18,9 @@
   }, {
     "name" : "retryAction",
     "type" : "com.axonivy.connector.mail.enums.RetryAction"
+  }, {
+    "name" : "attachments",
+    "type" : "List<File>",
+    "modifiers" : [ "PERSISTENT" ]
   } ]
 }

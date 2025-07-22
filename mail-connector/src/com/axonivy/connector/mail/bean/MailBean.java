@@ -1,17 +1,26 @@
 package com.axonivy.connector.mail.bean;
 
+import java.io.IOException;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.file.UploadedFile;
 
 import com.axonivy.connector.mail.Constants;
+import com.axonivy.connector.mail.businessData.Attachment;
 import com.axonivy.connector.mail.businessData.Mail;
 import com.axonivy.connector.mail.enums.MailStatus;
 import com.axonivy.connector.mail.enums.ResponseAction;
 import com.axonivy.connector.mail.model.MailLazyDataModel;
 import com.axonivy.connector.mail.service.MailService;
+
+import ch.ivyteam.ivy.environment.Ivy;
+import ch.ivyteam.ivy.scripting.objects.List;
 
 @ManagedBean
 @ViewScoped
@@ -21,11 +30,13 @@ public class MailBean {
 	private MailLazyDataModel mailModel;
 	private MailService mailService;
 	private String caseId;
-	
+	private String allowFileTypes = Ivy.var().get("allowFileTypes");
+	private String maxUploadSize = Ivy.var().get("maxUploadSize");
+
 	@PostConstruct
-    public void init() {
+	public void init() {
 		mailService = new MailService();
-    }
+	}
 
 	public void initMail() {
 		mailModel = new MailLazyDataModel(caseId);
@@ -102,6 +113,62 @@ public class MailBean {
 		return text != null && text.trim().matches(Constants.HTML_REGEX);
 	}
 
+	/**
+	 * Gets the maximum size allowed for uploading files in bytes
+	 *
+	 * @return
+	 */
+	public Integer getMaxUploadSizeInBytes() {
+		return getMaxUploadSizeInMB() * 1024 * 1024;
+	}
+
+	/**
+	 * Gets the maximum size allowed for uploading files in megabytes.
+	 * 
+	 * @return
+	 */
+	public Integer getMaxUploadSizeInMB() {
+		if (StringUtils.isBlank(maxUploadSize)) {
+			return Integer.valueOf(10);
+		}
+		return Integer.valueOf(maxUploadSize);
+	}
+
+	/**
+	 * Gets the allowed file types.
+	 *
+	 * @return
+	 */
+	public String getAllowedFileTypes() {
+		if (StringUtils.isBlank(allowFileTypes)) {
+			return "";
+		}
+		return java.util.Arrays.stream(allowFileTypes.split(",")).map(String::trim).filter(s -> !s.isEmpty())
+				.collect(java.util.stream.Collectors.joining("|"));
+	}
+
+	/**
+	 * Uploads a file and attaches it to the mail
+	 *
+	 * @param event {@link FileUploadEvent}
+	 */
+	public void handleFileUpload(FileUploadEvent event) throws IOException {
+		final UploadedFile uploadedFile = event.getFile();
+		final Attachment attachment = new Attachment();
+		attachment.setName(uploadedFile.getFileName());
+		attachment.setContent(uploadedFile.getContent());
+		attachment.setSize(uploadedFile.getSize());
+		attachment.setContentType(uploadedFile.getContentType());
+		if (mail.getAttachments() == null) {
+			mail.setAttachments(new List<>());
+		}
+		mail.getAttachments().add(attachment);
+	}
+
+	public void removeFile(Attachment attachment) {
+		mail.getAttachments().remove(attachment);
+	}
+
 	public Mail getMail() {
 		return mail;
 	}
@@ -132,6 +199,22 @@ public class MailBean {
 
 	public void setCaseId(String caseId) {
 		this.caseId = caseId;
+	}
+
+	public String getAllowFileTypes() {
+		return allowFileTypes;
+	}
+
+	public void setAllowFileTypes(String allowFileTypes) {
+		this.allowFileTypes = allowFileTypes;
+	}
+
+	public String getMaxUploadSize() {
+		return maxUploadSize;
+	}
+
+	public void setMaxUploadSize(String maxUploadSize) {
+		this.maxUploadSize = maxUploadSize;
 	}
 
 }

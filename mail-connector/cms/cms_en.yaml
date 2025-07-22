@@ -11,13 +11,19 @@ Button:
   'yes': 'Yes'
 Errors:
   mailNotSent: Error by sending email message
+File:
+  fileTypesAllowedMessage: only {0} is allowed
+  maximumFileSizeMessage: Maximum file size allowed is {0} MB
+  upload: Upload
 Labels:
   abortTaskAndEnd: Abort Task and end the Process
   abortTaskMessage: Do you really want to abort this Task and end the Process?
   confirmation: Confirmation
+  emailDetails: Email details
   resendConfirmMessage: Do you want to resend the mail <b>{0}</b> to <b>{1}; {2}</b>?
   retrySendMailMessage: Do you really want to retry to send this Mail?
   retryTooltip: Retry Mail sending
+  status: Status
 Mail:
   Status:
     failed: SMTP failed

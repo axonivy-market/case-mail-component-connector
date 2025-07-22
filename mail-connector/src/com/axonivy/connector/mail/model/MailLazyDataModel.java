@@ -1,5 +1,7 @@
 package com.axonivy.connector.mail.model;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.axonivy.connector.mail.businessData.Mail;
 
 import ch.ivyteam.ivy.business.data.store.search.Filter;
@@ -21,7 +23,10 @@ public class MailLazyDataModel extends AbstractBusinessDataLazyDataModel<Mail> {
 
 	@Override
 	protected Filter<Mail> filter(Query<Mail> query) {
-		return query.textField("caseId").containsAllWordPatterns(caseId == null ? "" : caseId);
+		if (StringUtils.isBlank(caseId)) {
+			return null;
+		}
+		return query.textField("caseId").containsPhrase(caseId);
 	}
 
 	public String getCaseId() {

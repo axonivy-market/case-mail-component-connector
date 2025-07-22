@@ -27,3 +27,11 @@
 .width-80 {
 	width: 80%;
 }
+
+.ui-growl {
+  z-index: 999999 !important;
+  top: 20px;
+  right: 20px;
+  left: auto;
+  position: fixed;
+}

@@ -1,13 +1,17 @@
 package com.axonivy.connector.mail.service;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.axonivy.connector.mail.Constants;
+import com.axonivy.connector.mail.businessData.Attachment;
 import com.axonivy.connector.mail.businessData.Mail;
 import com.axonivy.connector.mail.enums.BpmErrorCode;
 import com.axonivy.connector.mail.enums.DirectionCode;
@@ -16,6 +20,7 @@ import com.axonivy.connector.mail.enums.ResponseAction;
 
 import ch.ivyteam.ivy.bpm.error.BpmError;
 import ch.ivyteam.ivy.environment.Ivy;
+import ch.ivyteam.ivy.scripting.objects.Binary;
 import ch.ivyteam.ivy.scripting.objects.DateTime;
 import ch.ivyteam.ivy.workflow.ICase;
 import ch.ivyteam.ivy.workflow.ITask;
@@ -123,6 +128,7 @@ public class MailService {
 			final String prefix = Ivy.cms().co("/NewMail/FW");
 			updateBody(newMail, null);
 			updateSubject(newMail, prefix);
+			newMail.setRecipient(null);
 
 		} catch (final IllegalAccessException e) {
 			Ivy.log().error("An error occurred when copy mail: " + e.getMessage());
@@ -168,9 +174,11 @@ public class MailService {
 	private void copyOriginalMail(Mail mail, final Mail newMail, ResponseAction actionType)
 			throws IllegalAccessException, InvocationTargetException {
 		BeanUtils.copyProperties(newMail, mail);
-//		if(!MailActionType.REPLY.equals(actionType)) {
-//			copyMailAttachment(newMail, mail);
-//		}
+		if (!ResponseAction.REPLY.equals(actionType) && mail.getAttachments() != null) {
+			copyMailAttachment(newMail, mail);
+		} else {
+			newMail.setAttachments(null);
+		}
 		newMail.setResponseTo(mail);
 		newMail.setResponseAction(actionType);
 		newMail.setId(null);
@@ -178,6 +186,20 @@ public class MailService {
 		if (ResponseAction.isReplyResendForward(actionType)) {
 			newMail.setSentDate(null);
 		}
+	}
+
+	private void copyMailAttachment(Mail newMail, Mail originalMail) {
+		final ch.ivyteam.ivy.scripting.objects.List<Attachment> originalAttachments = originalMail.getAttachments();
+		ch.ivyteam.ivy.scripting.objects.List<Attachment> cloneAttachments = new ch.ivyteam.ivy.scripting.objects.List<>();
+		for (Attachment attachment : originalAttachments) {
+			Attachment cloneAttachment = new Attachment();
+			cloneAttachment.setName(attachment.getName());
+			cloneAttachment.setContent(attachment.getContent());
+			cloneAttachment.setSize(attachment.getSize());
+			cloneAttachment.setContentType(attachment.getContentType());
+			cloneAttachments.add(cloneAttachment);
+		}
+		newMail.setAttachments(cloneAttachments);
 	}
 
 	/**
@@ -299,5 +321,30 @@ public class MailService {
 
 	private static long countMail(String caseId) {
 		return Ivy.repo().search(Mail.class).textField("caseId").containsAllWordPatterns(caseId).execute().count();
+	}
+
+	/**
+	 * create list of {@link ch.ivyteam.ivy.scripting.objects.File} from list
+	 * attchments {@link Attachment}
+	 * 
+	 * @param attachments
+	 * @return
+	 */
+	static public List<ch.ivyteam.ivy.scripting.objects.File> prepareAttachments(List<Attachment> attachments) {
+		final List<ch.ivyteam.ivy.scripting.objects.File> files = new ArrayList<ch.ivyteam.ivy.scripting.objects.File>();
+		if (CollectionUtils.isNotEmpty(attachments)) {
+			for (final Attachment attachment : attachments) {
+				try {
+					final ch.ivyteam.ivy.scripting.objects.File file = new ch.ivyteam.ivy.scripting.objects.File(
+							attachment.getName(), true);
+					final Binary binary = new Binary(attachment.getContent());
+					file.writeBinary(binary);
+					files.add(file);
+				} catch (final IOException e) {
+					Ivy.log().error("prepareAttachments Error " + e.getMessage());
+				}
+			}
+		}
+		return files;
 	}
 }
