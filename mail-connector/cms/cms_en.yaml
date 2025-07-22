@@ -48,6 +48,7 @@ NewMail:
     Subject: <b>Subject:</b>
     To: <b>To:</b>
   RE: 'RE:'
+  newMail: New Email
 Tasks:
   EmailFailAdminTask:
     description: Task for Mail Admin which will (try) to send the mail.

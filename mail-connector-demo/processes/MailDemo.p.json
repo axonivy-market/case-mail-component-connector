@@ -11,6 +11,9 @@
       "config" : {
         "signature" : "start"
       },
+      "tags" : [
+        "demo"
+      ],
       "visual" : {
         "at" : { "x" : 96, "y" : 64 }
       },
@@ -56,6 +59,9 @@
           "isVisibleOnStartList" : false
         }
       },
+      "tags" : [
+        "demo"
+      ],
       "visual" : {
         "at" : { "x" : 96, "y" : 216 }
       },

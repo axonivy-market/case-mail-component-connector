@@ -48,6 +48,7 @@ NewMail:
     Subject: <b>Betreff:</b>
     To: <b>An:</b>
   RE: 'AW:'
+  newMail: New Email
 Tasks:
   description: Technical process to send Mails asynchronously with automatic retry and admin task handling.
   name: Send Mail Async

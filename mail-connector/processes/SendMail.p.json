@@ -24,6 +24,9 @@
           ]
         }
       },
+      "tags" : [
+        "connector"
+      ],
       "visual" : {
         "at" : { "x" : 96, "y" : 64 }
       },

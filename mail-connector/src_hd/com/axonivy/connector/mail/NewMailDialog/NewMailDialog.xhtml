@@ -24,7 +24,7 @@
 	<h:outputScript name="suneditor/suneditor-custom.js" target="head" />
 	<h:outputScript name="resources/fileUpload/fileUploadHelper.js" />
 
-	<p:dialog id="newEmailDialog" header="New Email"
+	<p:dialog id="newEmailDialog" header="#{ivy.cms.co('/NewMail/newMail')}"
 		widgetVar="newEmailDialog" modal="true" width="800" closable="true"
 		styleClass="max-height: 900" fitViewport="true">
 		<p:ajax event="close" oncomplete="close()"></p:ajax>
@@ -70,7 +70,8 @@
 		            </h:outputScript>
 				</div>
 				<h:panelGroup id="attachments" style="margin: 0 1rem;">
-					<div class="flex justify-content-between" style="align-items: center">
+					<div class="flex justify-content-between"
+						style="align-items: center">
 						<div>
 							<h4 class="m-0">#{ivy.cms.co('/Mail/attachments')}</h4>
 						</div>
