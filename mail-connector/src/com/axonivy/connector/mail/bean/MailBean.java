@@ -18,8 +18,10 @@ import com.axonivy.connector.mail.enums.MailStatus;
 import com.axonivy.connector.mail.enums.ResponseAction;
 import com.axonivy.connector.mail.model.MailLazyDataModel;
 import com.axonivy.connector.mail.service.MailService;
+import com.axonivy.connector.mail.utils.DateUtil;
 
 import ch.ivyteam.ivy.environment.Ivy;
+import ch.ivyteam.ivy.scripting.objects.DateTime;
 import ch.ivyteam.ivy.scripting.objects.List;
 
 @ManagedBean
@@ -167,6 +169,28 @@ public class MailBean {
 
 	public void removeFile(Attachment attachment) {
 		mail.getAttachments().remove(attachment);
+	}
+
+	public String formatDate(DateTime dateTime) {
+		return DateUtil.format(dateTime);
+	}
+
+	public String getAttachmentIcon(Attachment attachment) {
+		switch (attachment.getContentType()) {
+		case "application/pdf": {
+			return "pi-file-pdf";
+		}
+		case "application/vnd.ms-excel":
+		case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+			return "pi-file-excel";
+		}
+		case "application/msword":
+		case "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+			return "pi-file-word";
+		}
+		default:
+			return "pi-file";
+		}
 	}
 
 	public Mail getMail() {

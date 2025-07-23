@@ -42,8 +42,8 @@
 			<p:ajax event="rowSelect" update="@parent:viewMailComponent" />
 			<p:column headerText="Created date" sortBy="#{mail.createdDate}"
 				sortOrder="desc">
-				<h:outputText value="#{mail.createdDate}"
-					title="#{mail.createdDate}" />
+				<h:outputText value="#{mailBean.formatDate(mail.createdDate)}"
+					title="#{mailBean.formatDate(mail.createdDate)}" />
 			</p:column>
 			<p:column headerText="#{ivy.cms.co('/Labels/status')}"
 				sortBy="#{mail.status}" width="10%">
@@ -140,7 +140,8 @@
 
 						<h:panelGroup layout="block" style="width:100%">
 							<h:outputLabel for="sent" value="#{ivy.cms.co('/Mail/sent')}" />
-							<p:inputText id="sent" value="#{mailBean.selectedMail.sentDate}"
+							<p:inputText id="sent"
+								value="#{mailBean.formatDate(mailBean.selectedMail.sentDate)}"
 								readonly="true" style="width:100%" />
 						</h:panelGroup>
 
@@ -154,7 +155,7 @@
 								<ui:repeat var="attachment"
 									value="#{mailBean.selectedMail.attachments}">
 									<p:chip label="#{attachment.name} - #{attachment.size} KB"
-										icon="pi pi-file" styleClass="mr-2" removable="false">
+										icon="pi #{mailBean.getAttachmentIcon(attachment)}" styleClass="mr-2" removable="false">
 									</p:chip>
 								</ui:repeat>
 							</p:outputPanel>
