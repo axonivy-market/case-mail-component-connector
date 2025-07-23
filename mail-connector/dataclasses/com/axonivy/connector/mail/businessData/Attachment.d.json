@@ -27,5 +27,9 @@
     "name" : "inlineAttachment",
     "type" : "Boolean",
     "modifiers" : [ "PERSISTENT" ]
+  }, {
+    "name" : "defaultExtension",
+    "type" : "String",
+    "modifiers" : [ "PERSISTENT" ]
   } ]
 }

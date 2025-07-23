@@ -24,9 +24,10 @@
 	<h:outputScript name="suneditor/suneditor-custom.js" target="head" />
 	<h:outputScript name="resources/fileUpload/fileUploadHelper.js" />
 
-	<p:dialog id="newEmailDialog" header="#{ivy.cms.co('/NewMail/newMail')}"
-		widgetVar="newEmailDialog" modal="true" width="800" closable="true"
-		styleClass="max-height: 900" fitViewport="true">
+	<p:dialog id="newEmailDialog"
+		header="#{ivy.cms.co('/NewMail/newMail')}" widgetVar="newEmailDialog"
+		modal="true" width="800" closable="true" styleClass="max-height: 900"
+		fitViewport="true">
 		<p:ajax event="close" oncomplete="close()"></p:ajax>
 		<p:outputPanel id="dialogInputs" layout="block">
 			<h:panelGroup id="newMailForm">
@@ -96,7 +97,11 @@
 						<ui:repeat var="attachment" value="#{mailBean.mail.attachments}"
 							varStatus="attachmentStatus">
 							<p:chip label="#{attachment.name} - #{attachment.size} KB"
-								icon="pi #{mailBean.getAttachmentIcon(attachment)}" styleClass="mr-2" removable="true">
+								icon="pi #{mailBean.getAttachmentIcon(attachment)}"
+								styleClass="mr-2 chip-hover" removable="true">
+								<p:ajax listener="#{mailBean.viewDocument(attachment)}"
+									process="@this" update="@widgetVar(documentViewerWidget)"
+									oncomplete="PF('documentViewerWidget').show()" />
 								<p:ajax event="close"
 									listener="#{mailBean.removeFile(attachment)}"
 									update="@([id$=attachments])" />

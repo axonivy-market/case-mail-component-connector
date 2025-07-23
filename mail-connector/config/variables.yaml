@@ -5,6 +5,6 @@ Variables:
   # number seconds delay before re-sending mail
   mailLoopRepeatDelay: "10"
   # Accepted file types. Separate by comma
-  allowFileTypes: jpg, pdf
+  allowFileTypes: jpg, pdf, xlsx, docx
   # maximum size of uplaoded files in MB (fallback/default size is set to 10 MB)
   maxUploadSize: "10"

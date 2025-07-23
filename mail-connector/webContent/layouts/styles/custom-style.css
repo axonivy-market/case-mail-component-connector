@@ -35,3 +35,12 @@
   left: auto;
   position: fixed;
 }
+
+/* height for PDF file preview in new mail modal dialog */
+.new-mail-pdf-preview > iframe {
+	height: 82vh;
+}
+
+.chip-hover {
+	cursor: pointer;
+}

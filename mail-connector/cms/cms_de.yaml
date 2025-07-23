@@ -9,7 +9,13 @@ Button:
   retry: Retry
   send: ''
   'yes': ''
+Document:
+  documentPreview: Document Preview
+  previewNotAvailable: Preview not available
 Errors:
+  failedToCacheFile: Failed to cache file
+  failedToConvertToPdf: Failed to convert file to PDF
+  failedToLoadFile: Failed to load file
   mailNotSent: ''
 File:
   fileTypesAllowedMessage: Es sind nur {0} Dateien erlaubt

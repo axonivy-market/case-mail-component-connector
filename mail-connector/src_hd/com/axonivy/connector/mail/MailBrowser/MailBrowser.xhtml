@@ -155,7 +155,11 @@
 								<ui:repeat var="attachment"
 									value="#{mailBean.selectedMail.attachments}">
 									<p:chip label="#{attachment.name} - #{attachment.size} KB"
-										icon="pi #{mailBean.getAttachmentIcon(attachment)}" styleClass="mr-2" removable="false">
+										icon="pi #{mailBean.getAttachmentIcon(attachment)}"
+										styleClass="mr-2 chip-hover" removable="false">
+										<p:ajax listener="#{mailBean.viewDocument(attachment)}"
+											process="@this" update="@widgetVar(documentViewerWidget)"
+											oncomplete="PF('documentViewerWidget').show()" />
 									</p:chip>
 								</ui:repeat>
 							</p:outputPanel>
@@ -180,6 +184,15 @@
 		<ic:com.axonivy.connector.mail.NewMailDialog id="newMail"
 			mail="#{mailBean.mail}"
 			newMailDialogId="#{cc.attrs.mailBrowserId}:newMail" />
+
+		<!-- Document Viewer Dialog -->
+		<p:dialog id="documentViewerDlg" widgetVar="documentViewerWidget"
+			header="#{ivy.cms.co('/Document/documentPreview')}" modal="true"
+			resizable="true" maximizable="true" closable="true" width="60%"
+			height="60%">
+			<ic:com.axonivy.connector.mail.DocumentViewer
+				pdfViewerPanelGroupStyle="new-mail-pdf-preview" />
+		</p:dialog>
 	</h:panelGroup>
 </cc:implementation>
 

@@ -1,10 +1,12 @@
 package com.axonivy.connector.mail.bean;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -161,6 +163,8 @@ public class MailBean {
 		attachment.setContent(uploadedFile.getContent());
 		attachment.setSize(uploadedFile.getSize());
 		attachment.setContentType(uploadedFile.getContentType());
+		attachment.setDefaultExtension(
+				StringUtils.upperCase(StringUtils.substringAfterLast(uploadedFile.getFileName(), ".")));
 		if (mail.getAttachments() == null) {
 			mail.setAttachments(new List<>());
 		}
@@ -191,6 +195,17 @@ public class MailBean {
 		default:
 			return "pi-file";
 		}
+	}
+
+	/**
+	 * Show a file from attachment on DocumentViewer dialog
+	 * 
+	 * @param file to be for show
+	 */
+	public void viewDocument(Attachment file) {
+		Map<String, Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
+		DocumentViewerBean documentViewerBean = (DocumentViewerBean) viewMap.get("documentViewerBean");
+		documentViewerBean.showFile(file);
 	}
 
 	public Mail getMail() {
