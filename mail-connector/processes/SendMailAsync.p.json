@@ -7,7 +7,7 @@
   "elements" : [ {
       "id" : "f0",
       "type" : "RequestStart",
-      "name" : "sendMail(Mail)",
+      "name" : "sendMailAsync(Mail)",
       "config" : {
         "signature" : "sendMail",
         "input" : {
@@ -56,6 +56,7 @@
     }, {
       "id" : "f1",
       "type" : "TaskEnd",
+      "name" : "end",
       "visual" : {
         "at" : { "x" : 1256, "y" : 336 }
       }

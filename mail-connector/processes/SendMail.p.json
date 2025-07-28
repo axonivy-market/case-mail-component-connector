@@ -36,6 +36,7 @@
     }, {
       "id" : "f1",
       "type" : "CallSubEnd",
+      "name" : "end",
       "visual" : {
         "at" : { "x" : 368, "y" : 64 },
         "labelOffset" : { "x" : 13, "y" : 33 }
@@ -43,6 +44,7 @@
     }, {
       "id" : "f2",
       "type" : "TriggerCall",
+      "name" : "call send mail async",
       "config" : {
         "processCall" : "SendMailAsync:sendMail(com.axonivy.connector.mail.businessData.Mail)",
         "call" : {
