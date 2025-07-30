@@ -1,0 +1,253 @@
+package com.axonivy.connector.mail.bean;
+
+import java.io.IOException;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.file.UploadedFile;
+
+import com.axonivy.connector.mail.Constants;
+import com.axonivy.connector.mail.businessData.Attachment;
+import com.axonivy.connector.mail.businessData.Mail;
+import com.axonivy.connector.mail.enums.MailStatus;
+import com.axonivy.connector.mail.enums.ResponseAction;
+import com.axonivy.connector.mail.model.MailLazyDataModel;
+import com.axonivy.connector.mail.service.MailService;
+import com.axonivy.connector.mail.utils.DateUtil;
+import com.axonivy.connector.mail.utils.TextUtil;
+
+import ch.ivyteam.ivy.environment.Ivy;
+import ch.ivyteam.ivy.scripting.objects.DateTime;
+import ch.ivyteam.ivy.scripting.objects.List;
+
+@ManagedBean
+@ViewScoped
+public class MailBean {
+	private Mail mail;
+	private Mail selectedMail;
+	private MailLazyDataModel mailModel;
+	private MailService mailService;
+	private String caseId;
+	private String allowFileTypes = Ivy.var().get("allowFileTypes");
+	private String maxUploadSize = Ivy.var().get("maxUploadSize");
+
+	@PostConstruct
+	public void init() {
+		mailService = new MailService();
+	}
+
+	public void initMail() {
+		mailModel = new MailLazyDataModel(caseId);
+		mail = new Mail();
+		mail.setCaseId(caseId);
+	}
+
+	public void handleCloseDialog() {
+		initMail();
+	}
+
+	public void prepareMail(String actionType) {
+		ResponseAction type = ResponseAction.valueOf(actionType);
+		mail.setCaseId(caseId);
+		switch (type) {
+		case RESEND:
+			setMail(mailService.setUpResendMail(selectedMail));
+			break;
+		case FORWARD:
+			setMail(mailService.setUpForwardMail(selectedMail));
+			break;
+		case REPLY:
+			setMail(mailService.setUpReplyMail(selectedMail));
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
+	 * Check if mail is Sent
+	 *
+	 * @return boolean
+	 */
+	public boolean isSent() {
+		return selectedMail.getStatus().equals(MailStatus.SENT);
+	}
+
+	public String getConfirmMessage() {
+		return mailService.setUpMessageConfirm(selectedMail, ResponseAction.RESEND.toString());
+	}
+
+	/**
+	 * Get mail body with embedded images
+	 */
+	public String getMailBodyWithEmbeddedImages() {
+		// Detect if it's HTML or plain text
+		if (!isHtml(selectedMail.getBody())) {
+			// Escape HTML and wrap in <pre> to preserve formatting
+			selectedMail.setBody("<pre>" + StringEscapeUtils.escapeHtml4(selectedMail.getBody()) + "</pre>");
+		}
+
+		return selectedMail.getBody();
+	}
+
+	/**
+	 * Checks whether the given text contains HTML tags.
+	 * 
+	 * @param text the input string to check
+	 * @return {@code true} if the input contains HTML tags; {@code false} otherwise
+	 */
+	private static boolean isHtml(String text) {
+		return text != null && text.trim().matches(Constants.HTML_REGEX);
+	}
+
+	/**
+	 * Gets the maximum size allowed for uploading files in bytes
+	 *
+	 * @return
+	 */
+	public Integer getMaxUploadSizeInBytes() {
+		return getMaxUploadSizeInMB() * 1024 * 1024;
+	}
+
+	/**
+	 * Gets the maximum size allowed for uploading files in megabytes.
+	 * 
+	 * @return
+	 */
+	public Integer getMaxUploadSizeInMB() {
+		if (StringUtils.isBlank(maxUploadSize)) {
+			return Integer.valueOf(10);
+		}
+		return Integer.valueOf(maxUploadSize);
+	}
+
+	/**
+	 * Gets the allowed file types.
+	 *
+	 * @return
+	 */
+	public String getAllowedFileTypes() {
+		if (StringUtils.isBlank(allowFileTypes)) {
+			return "";
+		}
+		return java.util.Arrays.stream(allowFileTypes.split(",")).map(String::trim).filter(s -> !s.isEmpty())
+				.collect(java.util.stream.Collectors.joining("|"));
+	}
+
+	/**
+	 * Uploads a file and attaches it to the mail
+	 *
+	 * @param event {@link FileUploadEvent}
+	 */
+	public void handleFileUpload(FileUploadEvent event) throws IOException {
+		final UploadedFile uploadedFile = event.getFile();
+		final Attachment attachment = new Attachment();
+		attachment.setName(uploadedFile.getFileName());
+		attachment.setContent(uploadedFile.getContent());
+		attachment.setSize(uploadedFile.getSize());
+		attachment.setContentType(uploadedFile.getContentType());
+		attachment.setDefaultExtension(
+				StringUtils.upperCase(StringUtils.substringAfterLast(uploadedFile.getFileName(), ".")));
+		if (mail.getAttachments() == null) {
+			mail.setAttachments(new List<>());
+		}
+		mail.getAttachments().add(attachment);
+	}
+
+	public void removeFile(Attachment attachment) {
+		mail.getAttachments().remove(attachment);
+	}
+
+	public String formatDate(DateTime dateTime) {
+		return DateUtil.format(dateTime);
+	}
+
+	public String getAttachmentIcon(Attachment attachment) {
+		switch (attachment.getContentType()) {
+		case "application/pdf": {
+			return "pi-file-pdf";
+		}
+		case "application/vnd.ms-excel":
+		case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+			return "pi-file-excel";
+		}
+		case "application/msword":
+		case "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+			return "pi-file-word";
+		}
+		default:
+			return "pi-file";
+		}
+	}
+
+	/**
+	 * Show a file from attachment on DocumentViewer dialog
+	 * 
+	 * @param file to be for show
+	 */
+	public void viewDocument(Attachment file) {
+		Map<String, Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
+		DocumentViewerBean documentViewerBean = (DocumentViewerBean) viewMap.get("documentViewerBean");
+		documentViewerBean.showFile(file);
+	}
+
+	public String textEllipsis(String text, int maxLength) {
+		return TextUtil.ellipsis(text, maxLength);
+	}
+
+	public Mail getMail() {
+		return mail;
+	}
+
+	public void setMail(Mail mail) {
+		this.mail = mail;
+	}
+
+	public MailLazyDataModel getMailModel() {
+		return mailModel;
+	}
+
+	public void setMailModel(MailLazyDataModel mailModel) {
+		this.mailModel = mailModel;
+	}
+
+	public Mail getSelectedMail() {
+		return selectedMail;
+	}
+
+	public void setSelectedMail(Mail selectedMail) {
+		this.selectedMail = selectedMail;
+	}
+
+	public String getCaseId() {
+		return caseId;
+	}
+
+	public void setCaseId(String caseId) {
+		this.caseId = caseId;
+	}
+
+	public String getAllowFileTypes() {
+		return allowFileTypes;
+	}
+
+	public void setAllowFileTypes(String allowFileTypes) {
+		this.allowFileTypes = allowFileTypes;
+	}
+
+	public String getMaxUploadSize() {
+		return maxUploadSize;
+	}
+
+	public void setMaxUploadSize(String maxUploadSize) {
+		this.maxUploadSize = maxUploadSize;
+	}
+
+}
