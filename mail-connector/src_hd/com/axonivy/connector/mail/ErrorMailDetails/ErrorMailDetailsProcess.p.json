@@ -19,7 +19,6 @@
           "code" : [
             "import com.axonivy.connector.mail.businessData.Mail;",
             "",
-            "ivy.log.info(\"==== {0}\", param.mailId);",
             "out.mail = ivy.repo.find(param.mailId, Mail.class) as Mail;"
           ]
         },

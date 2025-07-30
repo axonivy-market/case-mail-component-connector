@@ -21,6 +21,7 @@ import com.axonivy.connector.mail.enums.ResponseAction;
 import com.axonivy.connector.mail.model.MailLazyDataModel;
 import com.axonivy.connector.mail.service.MailService;
 import com.axonivy.connector.mail.utils.DateUtil;
+import com.axonivy.connector.mail.utils.TextUtil;
 
 import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.scripting.objects.DateTime;
@@ -87,17 +88,6 @@ public class MailBean {
 	 * Get mail body with embedded images
 	 */
 	public String getMailBodyWithEmbeddedImages() {
-
-//		if (CollectionUtils.isNotEmpty(inlineAtachments)) {
-//			for (final File file : inlineAtachments) {
-//				final String content = Base64.getEncoder().encodeToString(file.getContent());
-//				final StringBuilder base64Content = new StringBuilder().append("data:image/")
-//						.append(file.getType().getDefaultExtension()).append(";base64,").append(content);
-//				email2CaseSelected.getEmail().setBody(
-//						email2CaseSelected.getEmail().getBody().replace("cid:" + file.getContentId(), base64Content));
-//			}
-//		}
-
 		// Detect if it's HTML or plain text
 		if (!isHtml(selectedMail.getBody())) {
 			// Escape HTML and wrap in <pre> to preserve formatting
@@ -206,6 +196,10 @@ public class MailBean {
 		Map<String, Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
 		DocumentViewerBean documentViewerBean = (DocumentViewerBean) viewMap.get("documentViewerBean");
 		documentViewerBean.showFile(file);
+	}
+
+	public String textEllipsis(String text, int maxLength) {
+		return TextUtil.ellipsis(text, maxLength);
 	}
 
 	public Mail getMail() {

@@ -56,14 +56,12 @@
 			</p:column>
 			<p:column headerText="#{ivy.cms.co('/Mail/to')}"
 				sortBy="#{mail.recipient}">
-				<h:outputText
-					value="#{mail.recipient.length() > 25 ? mail.recipient.substring(0, 25).concat('...') : mail.recipient}"
+				<h:outputText value="#{mailBean.textEllipsis(mail.recipient, 25)}"
 					title="#{mail.recipient}" />
 			</p:column>
 			<p:column headerText="#{ivy.cms.co('/Mail/subject')}"
 				sortBy="#{mail.subject}">
-				<h:outputText
-					value="#{mail.subject.length() > 25 ? mail.subject.substring(0, 25).concat('...') : mail.subject}"
+				<h:outputText value="#{mailBean.textEllipsis(mail.subject, 25)}"
 					title="#{mail.subject}" />
 			</p:column>
 		</p:dataTable>
