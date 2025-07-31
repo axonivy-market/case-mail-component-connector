@@ -236,8 +236,8 @@ public class MailService {
 	 * @return
 	 */
 	public Mail updateSubject(Mail mail, String prefix) {
-		mail.setSubject((new StringBuilder()).append(prefix).append(Constants.BLANK)
-				.append(StringUtils.isBlank(mail.getSubject()) ? Constants.EMPTY : mail.getSubject()).toString());
+		mail.setSubject((new StringBuilder()).append(prefix).append(StringUtils.SPACE)
+				.append(StringUtils.isBlank(mail.getSubject()) ? StringUtils.EMPTY : mail.getSubject()).toString());
 		return mail;
 	}
 
@@ -257,22 +257,22 @@ public class MailService {
 
 		templateSb.append(Constants.BREAK_LINE);
 		templateSb.append(Constants.HORIZONTAL_RULE);
-		templateSb.append(metaInforFrom + Constants.BLANK + mail.getSender());
+		templateSb.append(metaInforFrom + StringUtils.SPACE + mail.getSender());
 		templateSb.append(Constants.BREAK_LINE);
-		templateSb.append(metaInforSent + Constants.BLANK + mail.getResponseTo().getSentDate());
+		templateSb.append(metaInforSent + StringUtils.SPACE + mail.getResponseTo().getSentDate());
 		templateSb.append(Constants.BREAK_LINE);
-		templateSb.append(metaInforTo + Constants.BLANK + mail.getRecipient());
+		templateSb.append(metaInforTo + StringUtils.SPACE + mail.getRecipient());
 		templateSb.append(Constants.BREAK_LINE);
 		if (StringUtils.isNotEmpty(mail.getRecipientCC())) {
-			templateSb.append(metaInforCC + Constants.BLANK + mail.getRecipientCC());
+			templateSb.append(metaInforCC + StringUtils.SPACE + mail.getRecipientCC());
 			templateSb.append(Constants.BREAK_LINE);
 		}
 		if (StringUtils.isNotEmpty(mail.getRecipientBCC())) {
-			templateSb.append(metaInforBCC + Constants.BLANK + mail.getRecipientBCC());
+			templateSb.append(metaInforBCC + StringUtils.SPACE + mail.getRecipientBCC());
 			templateSb.append(Constants.BREAK_LINE);
 		}
 		templateSb.append(metaInforSubject)
-				.append(StringUtils.isBlank(mail.getSubject()) ? Constants.EMPTY : Constants.BLANK + mail.getSubject());
+				.append(StringUtils.isBlank(mail.getSubject()) ? StringUtils.EMPTY : StringUtils.SPACE + mail.getSubject());
 		templateSb.append(Constants.BREAK_LINE);
 	}
 
@@ -307,16 +307,27 @@ public class MailService {
 				.toList();
 	}
 
-	public static void waitForMailCount(long count, String caseId) {
-		long mailCount;
-		mailCount = countMail(caseId);
-		while (mailCount <= count) {
+	public static void waitForMailCount(long oldCount, String caseId, long timeoutMillis) {
+		long startTime = System.currentTimeMillis();
+		long currentCount;
+
+		do {
+			currentCount = countMail(caseId);
+			if (currentCount > oldCount) {
+				return;
+			}
+
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				Ivy.log().warn("Thread was interrupted while waiting for mail count {0}", e.getMessage());
 			}
-			mailCount = countMail(caseId);
-		}
+
+		} while (System.currentTimeMillis() - startTime < timeoutMillis);
+
+		Ivy.log().warn("Timeout after {0} ms waiting for mail count to more than {1} for caseId: {2}. Current count: {3}",
+				timeoutMillis, oldCount, caseId, currentCount);
 	}
 
 	private static long countMail(String caseId) {

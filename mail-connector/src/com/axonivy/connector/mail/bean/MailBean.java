@@ -1,6 +1,7 @@
 package com.axonivy.connector.mail.bean;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -37,6 +38,16 @@ public class MailBean {
 	private String caseId;
 	private String allowFileTypes = Ivy.var().get("allowFileTypes");
 	private String maxUploadSize = Ivy.var().get("maxUploadSize");
+	
+	private static final Map<String, String> MIME_TYPE_ICON_MAP = new HashMap<>();
+
+	static {
+		MIME_TYPE_ICON_MAP.put(Constants.MIME_PDF, Constants.ICON_PDF);
+		MIME_TYPE_ICON_MAP.put(Constants.MIME_EXCEL_LEGACY, Constants.ICON_EXCEL);
+		MIME_TYPE_ICON_MAP.put(Constants.MIME_EXCEL_OPENXML, Constants.ICON_EXCEL);
+		MIME_TYPE_ICON_MAP.put(Constants.MIME_WORD_LEGACY, Constants.ICON_WORD);
+		MIME_TYPE_ICON_MAP.put(Constants.MIME_WORD_OPENXML, Constants.ICON_WORD);
+	}
 
 	@PostConstruct
 	public void init() {
@@ -168,23 +179,9 @@ public class MailBean {
 	public String formatDate(DateTime dateTime) {
 		return DateUtil.format(dateTime);
 	}
-
-	public String getAttachmentIcon(Attachment attachment) {
-		switch (attachment.getContentType()) {
-		case "application/pdf": {
-			return "pi-file-pdf";
-		}
-		case "application/vnd.ms-excel":
-		case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-			return "pi-file-excel";
-		}
-		case "application/msword":
-		case "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
-			return "pi-file-word";
-		}
-		default:
-			return "pi-file";
-		}
+	
+	public static String getAttachmentIcon(String contentType) {
+		return MIME_TYPE_ICON_MAP.getOrDefault(contentType, Constants.ICON_DEFAULT);
 	}
 
 	/**

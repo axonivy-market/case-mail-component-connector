@@ -97,7 +97,7 @@
 						<ui:repeat var="attachment" value="#{mailBean.mail.attachments}"
 							varStatus="attachmentStatus">
 							<p:chip label="#{attachment.name} - #{attachment.size} KB"
-								icon="pi #{mailBean.getAttachmentIcon(attachment)}"
+								icon="pi #{mailBean.getAttachmentIcon(attachment.contentType)}"
 								styleClass="mr-2 chip-hover" removable="true">
 								<p:ajax listener="#{mailBean.viewDocument(attachment)}"
 									process="@this" update="@widgetVar(documentViewerWidget)"

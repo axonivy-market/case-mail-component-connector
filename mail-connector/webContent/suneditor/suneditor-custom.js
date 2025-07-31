@@ -40,15 +40,3 @@ function initSunEditor(elementId, iframe, width, height, resizeEnable, defaultFo
 }
 
 let sunEditor; 
-
-//workaround to force sunEditor apply style when the template is loaded the first time and no need to manipulate it (CMTD-1022)
-function forceContentReload() {
-	if (!sunEditor) return;
-	
-    const currentContent = sunEditor.getContents();
-	if (currentContent == null) {
-    	return;
-	}	
-    sunEditor.setContents(currentContent + ' ');
-    sunEditor.setContents(sunEditor.getContents().trim());
-}

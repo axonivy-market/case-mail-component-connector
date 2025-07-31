@@ -126,7 +126,7 @@
           "code" : [
             "import com.axonivy.connector.mail.service.MailService;",
             "",
-            "MailService.waitForMailCount(in.mailCount, in.mail.caseId);"
+            "MailService.waitForMailCount(in.mailCount, in.mail.caseId, 5000);"
           ]
         }
       },
