@@ -67,9 +67,5 @@
     "name" : "caseId",
     "type" : "String",
     "modifiers" : [ "PERSISTENT" ]
-  }, {
-    "name" : "attachments",
-    "type" : "List<com.axonivy.connector.mail.businessData.Attachment>",
-    "modifiers" : [ "PERSISTENT" ]
   } ]
 }

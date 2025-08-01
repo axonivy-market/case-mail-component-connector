@@ -31,5 +31,9 @@
     "name" : "defaultExtension",
     "type" : "String",
     "modifiers" : [ "PERSISTENT" ]
+  }, {
+    "name" : "mailId",
+    "type" : "String",
+    "modifiers" : [ "PERSISTENT" ]
   } ]
 }

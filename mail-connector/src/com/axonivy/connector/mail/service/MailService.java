@@ -174,11 +174,6 @@ public class MailService {
 	private void copyOriginalMail(Mail mail, final Mail newMail, ResponseAction actionType)
 			throws IllegalAccessException, InvocationTargetException {
 		BeanUtils.copyProperties(newMail, mail);
-		if (!ResponseAction.REPLY.equals(actionType) && mail.getAttachments() != null) {
-			copyMailAttachment(newMail, mail);
-		} else {
-			newMail.setAttachments(null);
-		}
 		newMail.setResponseTo(mail);
 		newMail.setResponseAction(actionType);
 		newMail.setId(null);
@@ -188,18 +183,18 @@ public class MailService {
 		}
 	}
 
-	private void copyMailAttachment(Mail newMail, Mail originalMail) {
-		final ch.ivyteam.ivy.scripting.objects.List<Attachment> originalAttachments = originalMail.getAttachments();
+	public ch.ivyteam.ivy.scripting.objects.List<Attachment> copyMailAttachment(String mailId)
+			throws IllegalAccessException, InvocationTargetException {
+		final List<Attachment> originalAttachments = findMailAttachments(mailId);
 		ch.ivyteam.ivy.scripting.objects.List<Attachment> cloneAttachments = new ch.ivyteam.ivy.scripting.objects.List<>();
 		for (Attachment attachment : originalAttachments) {
 			Attachment cloneAttachment = new Attachment();
-			cloneAttachment.setName(attachment.getName());
-			cloneAttachment.setContent(attachment.getContent());
-			cloneAttachment.setSize(attachment.getSize());
-			cloneAttachment.setContentType(attachment.getContentType());
+			BeanUtils.copyProperties(cloneAttachment, attachment);
+			cloneAttachment.setId(null);
+			cloneAttachment.setMailId(null);
 			cloneAttachments.add(cloneAttachment);
 		}
-		newMail.setAttachments(cloneAttachments);
+		return cloneAttachments;
 	}
 
 	/**
@@ -271,8 +266,8 @@ public class MailService {
 			templateSb.append(metaInforBCC + StringUtils.SPACE + mail.getRecipientBCC());
 			templateSb.append(Constants.BREAK_LINE);
 		}
-		templateSb.append(metaInforSubject)
-				.append(StringUtils.isBlank(mail.getSubject()) ? StringUtils.EMPTY : StringUtils.SPACE + mail.getSubject());
+		templateSb.append(metaInforSubject).append(
+				StringUtils.isBlank(mail.getSubject()) ? StringUtils.EMPTY : StringUtils.SPACE + mail.getSubject());
 		templateSb.append(Constants.BREAK_LINE);
 	}
 
@@ -325,9 +320,6 @@ public class MailService {
 			}
 
 		} while (System.currentTimeMillis() - startTime < timeoutMillis);
-
-		Ivy.log().warn("Timeout after {0} ms waiting for mail count to more than {1} for caseId: {2}. Current count: {3}",
-				timeoutMillis, oldCount, caseId, currentCount);
 	}
 
 	private static long countMail(String caseId) {
@@ -341,8 +333,9 @@ public class MailService {
 	 * @param attachments
 	 * @return
 	 */
-	static public List<ch.ivyteam.ivy.scripting.objects.File> prepareAttachments(List<Attachment> attachments) {
+	static public List<ch.ivyteam.ivy.scripting.objects.File> prepareAttachments(String mailId) {
 		final List<ch.ivyteam.ivy.scripting.objects.File> files = new ArrayList<ch.ivyteam.ivy.scripting.objects.File>();
+		List<Attachment> attachments = findMailAttachments(mailId);
 		if (CollectionUtils.isNotEmpty(attachments)) {
 			for (final Attachment attachment : attachments) {
 				try {
@@ -358,4 +351,28 @@ public class MailService {
 		}
 		return files;
 	}
+
+	public static List<Attachment> findMailAttachments(String mailId) {
+		return Ivy.repo().search(Attachment.class).textField("mailId").containsAllWordPatterns(mailId).execute()
+				.getAll();
+	}
+
+	public static long countMailAttachments(String mailId) {
+		return Ivy.repo().search(Attachment.class).textField("mailId").containsAllWordPatterns(mailId).execute()
+				.count();
+	}
+
+	public static Mail saveMail(Mail mail, List<Attachment> attachments) {
+		mail.setCreatedDate(new DateTime());
+		String mailId = Ivy.repo().save(mail).getId();
+		mail.setId(mailId);
+		if (CollectionUtils.isNotEmpty(attachments)) {
+			for (Attachment attachment : attachments) {
+				attachment.setMailId(mailId);
+				Ivy.repo().save(attachment);
+			}
+		}
+		return mail;
+	}
+
 }

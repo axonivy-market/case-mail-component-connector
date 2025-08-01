@@ -1,6 +1,8 @@
 package com.axonivy.connector.mail.bean;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,9 +11,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.file.UploadedFile;
 
 import com.axonivy.connector.mail.Constants;
@@ -26,7 +30,6 @@ import com.axonivy.connector.mail.utils.TextUtil;
 
 import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.scripting.objects.DateTime;
-import ch.ivyteam.ivy.scripting.objects.List;
 
 @ManagedBean
 @ViewScoped
@@ -36,9 +39,10 @@ public class MailBean {
 	private MailLazyDataModel mailModel;
 	private MailService mailService;
 	private String caseId;
+	private java.util.List<Attachment> attachments;
 	private String allowFileTypes = Ivy.var().get("allowFileTypes");
 	private String maxUploadSize = Ivy.var().get("maxUploadSize");
-	
+
 	private static final Map<String, String> MIME_TYPE_ICON_MAP = new HashMap<>();
 
 	static {
@@ -58,21 +62,24 @@ public class MailBean {
 		mailModel = new MailLazyDataModel(caseId);
 		mail = new Mail();
 		mail.setCaseId(caseId);
+		attachments = new ArrayList<Attachment>();
 	}
 
 	public void handleCloseDialog() {
 		initMail();
 	}
 
-	public void prepareMail(String actionType) {
+	public void prepareMail(String actionType) throws IllegalAccessException, InvocationTargetException {
 		ResponseAction type = ResponseAction.valueOf(actionType);
 		mail.setCaseId(caseId);
 		switch (type) {
 		case RESEND:
 			setMail(mailService.setUpResendMail(selectedMail));
+			attachments = mailService.copyMailAttachment(selectedMail.getId());
 			break;
 		case FORWARD:
 			setMail(mailService.setUpForwardMail(selectedMail));
+			attachments = mailService.copyMailAttachment(selectedMail.getId());
 			break;
 		case REPLY:
 			setMail(mailService.setUpReplyMail(selectedMail));
@@ -166,20 +173,20 @@ public class MailBean {
 		attachment.setContentType(uploadedFile.getContentType());
 		attachment.setDefaultExtension(
 				StringUtils.upperCase(StringUtils.substringAfterLast(uploadedFile.getFileName(), ".")));
-		if (mail.getAttachments() == null) {
-			mail.setAttachments(new List<>());
+		if (CollectionUtils.isEmpty(attachments)) {
+			attachments = new java.util.ArrayList<Attachment>();
 		}
-		mail.getAttachments().add(attachment);
+		attachments.add(attachment);
 	}
 
 	public void removeFile(Attachment attachment) {
-		mail.getAttachments().remove(attachment);
+		attachments.remove(attachment);
 	}
 
 	public String formatDate(DateTime dateTime) {
 		return DateUtil.format(dateTime);
 	}
-	
+
 	public static String getAttachmentIcon(String contentType) {
 		return MIME_TYPE_ICON_MAP.getOrDefault(contentType, Constants.ICON_DEFAULT);
 	}
@@ -197,6 +204,13 @@ public class MailBean {
 
 	public String textEllipsis(String text, int maxLength) {
 		return TextUtil.ellipsis(text, maxLength);
+	}
+
+	public void handleSelectMail(SelectEvent<Mail> event) {
+		selectedMail = event.getObject();
+		if (selectedMail != null) {
+			attachments = MailService.findMailAttachments(selectedMail.getId());
+		}
 	}
 
 	public Mail getMail() {
@@ -245,6 +259,14 @@ public class MailBean {
 
 	public void setMaxUploadSize(String maxUploadSize) {
 		this.maxUploadSize = maxUploadSize;
+	}
+
+	public java.util.List<Attachment> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(java.util.List<Attachment> attachments) {
+		this.attachments = attachments;
 	}
 
 }
