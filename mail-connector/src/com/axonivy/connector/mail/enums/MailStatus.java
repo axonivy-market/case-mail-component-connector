@@ -10,7 +10,7 @@ public enum MailStatus {
 
 	private String cmsPath;
 
-	MailStatus(String cmsPath) {
+	private MailStatus(String cmsPath) {
 		this.cmsPath = cmsPath;
 	}
 

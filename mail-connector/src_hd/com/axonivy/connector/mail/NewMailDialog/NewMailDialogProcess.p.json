@@ -49,15 +49,17 @@
     }, {
       "id" : "f6",
       "type" : "HtmlDialogMethodStart",
-      "name" : "sendMail(Mail,Number)",
+      "name" : "sendMail(Mail,Number,List<Attachment>)",
       "config" : {
         "signature" : "sendMail",
         "input" : {
           "params" : [
             { "name" : "mail", "type" : "com.axonivy.connector.mail.businessData.Mail", "desc" : "" },
-            { "name" : "mailCount", "type" : "Number", "desc" : "" }
+            { "name" : "mailCount", "type" : "Number", "desc" : "" },
+            { "name" : "attachments", "type" : "java.util.List<com.axonivy.connector.mail.businessData.Attachment>", "desc" : "" }
           ],
           "map" : {
+            "out.attachments" : "param.attachments",
             "out.mail" : "param.mail",
             "out.mailCount" : "param.mailCount"
           }
@@ -65,7 +67,8 @@
         "guid" : "197D43FD2B3294DB"
       },
       "visual" : {
-        "at" : { "x" : 96, "y" : 264 }
+        "at" : { "x" : 96, "y" : 264 },
+        "labelOffset" : { "x" : 43, "y" : 35 }
       },
       "connect" : [
         { "id" : "f8", "to" : "f11" }
@@ -81,8 +84,9 @@
             "out.mail" : "in.mail"
           },
           "code" : [
-            "in.mail.createdDate = new DateTime();",
-            "in.mail.id = ivy.repo.save(in.mail).getId();"
+            "import com.axonivy.connector.mail.service.MailService;",
+            "",
+            "in.mail = MailService.saveMail(in.mail, in.attachments);"
           ]
         }
       },
@@ -126,7 +130,7 @@
           "code" : [
             "import com.axonivy.connector.mail.service.MailService;",
             "",
-            "MailService.waitForMailCount(in.mailCount, in.mail.caseId);"
+            "MailService.waitForMailCount(in.mailCount, in.mail.caseId, 5000);"
           ]
         }
       },

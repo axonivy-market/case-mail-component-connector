@@ -23,6 +23,5 @@ public class DemoDataCreator {
 		caseModel.setName(name);
 		caseModel.setDescription(desc);
 		return caseModel;
-
 	}
 }

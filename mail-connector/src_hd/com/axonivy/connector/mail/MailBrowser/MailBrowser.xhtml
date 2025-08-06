@@ -23,7 +23,7 @@
 		<f:event listener="#{mailBean.initMail}" type="preRenderComponent"></f:event>
 		<div class="flex justify-content-between">
 			<div>
-				<h2 style="margin: 0">#{ivy.cms.co("/Labels/emailDetails")}</h2>
+				<h2>#{ivy.cms.co("/Labels/emailDetails")}</h2>
 			</div>
 			<div class="flex justify-content-end mb-2">
 				<p:commandButton id="newMailBtn" process="@this"
@@ -39,7 +39,8 @@
 			paginatorPosition="bottom" rows="5"
 			rowsPerPageTemplate="5,10,15,25,50,100" lazy="true"
 			selectionMode="single" selection="#{mailBean.selectedMail}">
-			<p:ajax event="rowSelect" update="@parent:viewMailComponent" />
+			<p:ajax event="rowSelect" update="@parent:viewMailComponent"
+				listener="#{mailBean.handleSelectMail}" />
 			<p:column headerText="Created date" sortBy="#{mail.createdDate}"
 				sortOrder="desc">
 				<h:outputText value="#{mailBean.formatDate(mail.createdDate)}"
@@ -81,13 +82,13 @@
 							update="@([id$=newEmailDialog])" icon="si si-arrow-right"
 							process="@this"
 							actionListener="#{mailBean.prepareMail('FORWARD')}"
-							oncomplete="PF('newEmailDialog').show()"
-							style="margin: 0px 4px !important" />
+							oncomplete="PF('newEmailDialog').show()" styleClass="m-0 mx-1" />
 						<p:commandButton id="resendEmail" process="@this"
 							value="#{ivy.cms.co('/Button/resend')}"
 							rendered="#{mailBean.isSent()}" update="@([id$=newEmailDialog])"
 							icon="si si-undo" oncomplete="PF('newEmailDialog').show()"
-							actionListener="#{mailBean.prepareMail('RESEND')}">
+							actionListener="#{mailBean.prepareMail('RESEND')}"
+							styleClass="ml-0">
 							<p:confirm header="#{ivy.cms.co('/Labels/confirmation')}"
 								message="#{mailBean.getConfirmMessage()}" escape="false"
 								icon="si si-road-sign-warning" />
@@ -106,9 +107,9 @@
 
 				<!-- Mail Details -->
 				<p:fieldset id="mailDetail" legend="Mail Details" toggleable="true"
-					toggleSpeed="500" style="margin-top:1.5rem">
-					<h:panelGrid columns="1" style="width:100%;">
-						<h:panelGroup layout="block" style="width:100%">
+					toggleSpeed="500" styleClass="mt-4">
+					<h:panelGrid columns="1" styleClass="w-full">
+						<h:panelGroup layout="block" styleClass="p-1">
 							<h:outputLabel for="subject"
 								value="#{ivy.cms.co('/Mail/subject')}" />
 							<p:inputText id="subject"
@@ -116,44 +117,42 @@
 						</h:panelGroup>
 					</h:panelGrid>
 
-					<h:panelGrid columns="2" style="width:100%;"
-						columnClasses="value,value">
-						<h:panelGroup layout="block" style="width:100%">
+					<h:panelGrid columns="2" styleClass="w-full ">
+						<h:panelGroup layout="block" styleClass="p-1">
 							<h:outputLabel for="from" value="#{ivy.cms.co('/Mail/from')}" />
 							<p:inputText id="from" value="#{mailBean.selectedMail.sender}"
-								readonly="true" style="width:100%" />
+								readonly="true" />
 						</h:panelGroup>
 
-						<h:panelGroup layout="block" style="width:100%">
+						<h:panelGroup layout="block" styleClass="p-1">
 							<h:outputLabel for="to" value="#{ivy.cms.co('/Mail/to')}" />
 							<p:inputText id="to" value="#{mailBean.selectedMail.recipient}"
-								readonly="true" style="width:100%" />
+								readonly="true" />
 						</h:panelGroup>
 
-						<h:panelGroup layout="block" style="width:100%">
+						<h:panelGroup layout="block" styleClass="p-1">
 							<h:outputLabel for="cc" value="#{ivy.cms.co('/Mail/cc')}" />
 							<p:inputText id="cc" value="#{mailBean.selectedMail.recipientCC}"
-								readonly="true" style="width:100%" />
+								readonly="true" />
 						</h:panelGroup>
 
-						<h:panelGroup layout="block" style="width:100%">
+						<h:panelGroup layout="block" styleClass="p-1">
 							<h:outputLabel for="sent" value="#{ivy.cms.co('/Mail/sent')}" />
 							<p:inputText id="sent"
 								value="#{mailBean.formatDate(mailBean.selectedMail.sentDate)}"
-								readonly="true" style="width:100%" />
+								readonly="true" />
 						</h:panelGroup>
 
 					</h:panelGrid>
-					<h:panelGrid columns="1" style="width:100%;">
-						<h:panelGroup layout="block" style="width:100%">
+					<h:panelGrid columns="1" styleClass="w-full">
+						<h:panelGroup layout="block" styleClass="p-1">
 							<h:outputLabel for="attachments"
 								value="#{ivy.cms.co('/Mail/attachments')}" />
-							<p:outputPanel styleClass="ui-g-12"
-								style="background:#f9f9f9;border:1px solid #dcdcdc;border-radius:6px;padding:0.75rem 0.75rem;">
-								<ui:repeat var="attachment"
-									value="#{mailBean.selectedMail.attachments}">
+							<p:outputPanel styleClass="ui-g-12 border-round-md p-3"
+								style="background:#f9f9f9;border:1px solid #dcdcdc;">
+								<ui:repeat var="attachment" value="#{mailBean.attachments}">
 									<p:chip label="#{attachment.name} - #{attachment.size} KB"
-										icon="pi #{mailBean.getAttachmentIcon(attachment)}"
+										icon="pi #{mailBean.getAttachmentIcon(attachment.contentType)}"
 										styleClass="mr-2 chip-hover" removable="false">
 										<p:ajax listener="#{mailBean.viewDocument(attachment)}"
 											process="@this" update="@widgetVar(documentViewerWidget)"

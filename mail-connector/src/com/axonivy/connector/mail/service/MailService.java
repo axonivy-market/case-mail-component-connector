@@ -174,11 +174,6 @@ public class MailService {
 	private void copyOriginalMail(Mail mail, final Mail newMail, ResponseAction actionType)
 			throws IllegalAccessException, InvocationTargetException {
 		BeanUtils.copyProperties(newMail, mail);
-		if (!ResponseAction.REPLY.equals(actionType) && mail.getAttachments() != null) {
-			copyMailAttachment(newMail, mail);
-		} else {
-			newMail.setAttachments(null);
-		}
 		newMail.setResponseTo(mail);
 		newMail.setResponseAction(actionType);
 		newMail.setId(null);
@@ -188,18 +183,18 @@ public class MailService {
 		}
 	}
 
-	private void copyMailAttachment(Mail newMail, Mail originalMail) {
-		final ch.ivyteam.ivy.scripting.objects.List<Attachment> originalAttachments = originalMail.getAttachments();
+	public ch.ivyteam.ivy.scripting.objects.List<Attachment> copyMailAttachment(String mailId)
+			throws IllegalAccessException, InvocationTargetException {
+		final List<Attachment> originalAttachments = findMailAttachments(mailId);
 		ch.ivyteam.ivy.scripting.objects.List<Attachment> cloneAttachments = new ch.ivyteam.ivy.scripting.objects.List<>();
 		for (Attachment attachment : originalAttachments) {
 			Attachment cloneAttachment = new Attachment();
-			cloneAttachment.setName(attachment.getName());
-			cloneAttachment.setContent(attachment.getContent());
-			cloneAttachment.setSize(attachment.getSize());
-			cloneAttachment.setContentType(attachment.getContentType());
+			BeanUtils.copyProperties(cloneAttachment, attachment);
+			cloneAttachment.setId(null);
+			cloneAttachment.setMailId(null);
 			cloneAttachments.add(cloneAttachment);
 		}
-		newMail.setAttachments(cloneAttachments);
+		return cloneAttachments;
 	}
 
 	/**
@@ -236,8 +231,8 @@ public class MailService {
 	 * @return
 	 */
 	public Mail updateSubject(Mail mail, String prefix) {
-		mail.setSubject((new StringBuilder()).append(prefix).append(Constants.BLANK)
-				.append(StringUtils.isBlank(mail.getSubject()) ? Constants.EMPTY : mail.getSubject()).toString());
+		mail.setSubject((new StringBuilder()).append(prefix).append(StringUtils.SPACE)
+				.append(StringUtils.isBlank(mail.getSubject()) ? StringUtils.EMPTY : mail.getSubject()).toString());
 		return mail;
 	}
 
@@ -257,22 +252,22 @@ public class MailService {
 
 		templateSb.append(Constants.BREAK_LINE);
 		templateSb.append(Constants.HORIZONTAL_RULE);
-		templateSb.append(metaInforFrom + Constants.BLANK + mail.getSender());
+		templateSb.append(metaInforFrom + StringUtils.SPACE + mail.getSender());
 		templateSb.append(Constants.BREAK_LINE);
-		templateSb.append(metaInforSent + Constants.BLANK + mail.getResponseTo().getSentDate());
+		templateSb.append(metaInforSent + StringUtils.SPACE + mail.getResponseTo().getSentDate());
 		templateSb.append(Constants.BREAK_LINE);
-		templateSb.append(metaInforTo + Constants.BLANK + mail.getRecipient());
+		templateSb.append(metaInforTo + StringUtils.SPACE + mail.getRecipient());
 		templateSb.append(Constants.BREAK_LINE);
 		if (StringUtils.isNotEmpty(mail.getRecipientCC())) {
-			templateSb.append(metaInforCC + Constants.BLANK + mail.getRecipientCC());
+			templateSb.append(metaInforCC + StringUtils.SPACE + mail.getRecipientCC());
 			templateSb.append(Constants.BREAK_LINE);
 		}
 		if (StringUtils.isNotEmpty(mail.getRecipientBCC())) {
-			templateSb.append(metaInforBCC + Constants.BLANK + mail.getRecipientBCC());
+			templateSb.append(metaInforBCC + StringUtils.SPACE + mail.getRecipientBCC());
 			templateSb.append(Constants.BREAK_LINE);
 		}
-		templateSb.append(metaInforSubject)
-				.append(StringUtils.isBlank(mail.getSubject()) ? Constants.EMPTY : Constants.BLANK + mail.getSubject());
+		templateSb.append(metaInforSubject).append(
+				StringUtils.isBlank(mail.getSubject()) ? StringUtils.EMPTY : StringUtils.SPACE + mail.getSubject());
 		templateSb.append(Constants.BREAK_LINE);
 	}
 
@@ -307,16 +302,24 @@ public class MailService {
 				.toList();
 	}
 
-	public static void waitForMailCount(long count, String caseId) {
-		long mailCount;
-		mailCount = countMail(caseId);
-		while (mailCount <= count) {
+	public static void waitForMailCount(long oldCount, String caseId, long timeoutMillis) {
+		long startTime = System.currentTimeMillis();
+		long currentCount;
+
+		do {
+			currentCount = countMail(caseId);
+			if (currentCount > oldCount) {
+				return;
+			}
+
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				Ivy.log().warn("Thread was interrupted while waiting for mail count {0}", e.getMessage());
 			}
-			mailCount = countMail(caseId);
-		}
+
+		} while (System.currentTimeMillis() - startTime < timeoutMillis);
 	}
 
 	private static long countMail(String caseId) {
@@ -330,8 +333,9 @@ public class MailService {
 	 * @param attachments
 	 * @return
 	 */
-	static public List<ch.ivyteam.ivy.scripting.objects.File> prepareAttachments(List<Attachment> attachments) {
+	static public List<ch.ivyteam.ivy.scripting.objects.File> prepareAttachments(String mailId) {
 		final List<ch.ivyteam.ivy.scripting.objects.File> files = new ArrayList<ch.ivyteam.ivy.scripting.objects.File>();
+		List<Attachment> attachments = findMailAttachments(mailId);
 		if (CollectionUtils.isNotEmpty(attachments)) {
 			for (final Attachment attachment : attachments) {
 				try {
@@ -347,4 +351,28 @@ public class MailService {
 		}
 		return files;
 	}
+
+	public static List<Attachment> findMailAttachments(String mailId) {
+		return Ivy.repo().search(Attachment.class).textField("mailId").containsAllWordPatterns(mailId).execute()
+				.getAll();
+	}
+
+	public static long countMailAttachments(String mailId) {
+		return Ivy.repo().search(Attachment.class).textField("mailId").containsAllWordPatterns(mailId).execute()
+				.count();
+	}
+
+	public static Mail saveMail(Mail mail, List<Attachment> attachments) {
+		mail.setCreatedDate(new DateTime());
+		String mailId = Ivy.repo().save(mail).getId();
+		mail.setId(mailId);
+		if (CollectionUtils.isNotEmpty(attachments)) {
+			for (Attachment attachment : attachments) {
+				attachment.setMailId(mailId);
+				Ivy.repo().save(attachment);
+			}
+		}
+		return mail;
+	}
+
 }

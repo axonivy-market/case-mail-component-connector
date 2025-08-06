@@ -5,7 +5,6 @@
   "isBusinessCaseData" : false,
   "fields" : [ {
     "name" : "caseId",
-    "type" : "String",
-    "modifiers" : [ "PERSISTENT" ]
+    "type" : "String"
   } ]
 }
