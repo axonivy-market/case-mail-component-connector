@@ -11,23 +11,28 @@ The Mail Connector allows sending, receiving, replying, forwarding, and resendin
 ## Demo
 ### Mail List View
 Displays a list of all emails
+
 ![Alt text](images/mail-list.png)
 
 
 ### Mail Details View
-- Full details of a selected email
+Full details of a selected email
+
 ![Alt text](images/mail-details.png)
+
 
 ### New Mail
 - Allows composing and sending new emails.
-- **Field validations:**
+- Field validations:
   - `From`: Required; must be a valid email address.
   - `To`: Required; must be a valid list of email addresses.
   - `CC`: Optional; if provided, must be a valid list of email addresses.
+  
  ![Alt text](images/new-mail.png)
 
+
 ### Reply Mail
-- Automatically populates fields based on the original email:
+Automatically populates fields based on the original email:
   - `Subject`: Prefixed with `RE:`
   - `Body`:
     ```
@@ -40,15 +45,18 @@ Displays a list of all emails
     Subject: <original subject>
     <original body>
     ```
+    
 ![Alt text](images/reply-mail.png)
 
+
 ### Forward Mail
-- Used to forward received messages:
+Used to forward received messages:
   - `From`: Original sender.
   - `To`: User-defined.
   - `Subject`: Prefixed with `FW:`
   - `Body` includes full original message details.
-  - **Attachments:** Original attachments are included.
+  - Attachments: Original attachments are included.
+  
 ![Alt text](images/forward.png)
 
 ### Resend Mail
@@ -62,9 +70,12 @@ Displays a list of all emails
     Original message:
     <original body>
     ```
-  - **Attachments:** Original attachments are included.
+  - Attachments: Original attachments are included.
+  
 ![Alt text](images/resend-confirmation.png)
+
 ![Alt text](images/resend-mail.png)
+
 
 ### Error Handling
 - Automatic retry mechanism:
@@ -76,12 +87,15 @@ Displays a list of all emails
 ### Admin Tasks
 - **Abort:** Cancels the task and ends the process.
 - **Retry:** Attempts to send the email again.
-  - If it fails, retries based on the configured retry logic and generates another admin task if needed.
+If it fails, retries based on the configured retry logic and generates another admin task if needed.
+
 ![Alt text](images/admin-task.png)
+
 ![Alt text](images/admin-task-detail.png)
 
+
 ## Setup
-1. **Configure Maximum Request Body Size**
+1. Configure Maximum Request Body Size
 
    Set the maximum size (in bytes) of the request body that the server should buffer/save during:
    - FORM or CLIENT-CERT authentication
@@ -100,11 +114,7 @@ Displays a list of all emails
      client_max_body_size 150M;
      ```
 
-2. **Set the following variables in your project:**
-
+2. Set the following variables in your project:
 ```
-  mailLoopRepeatNumber
-  mailLoopRepeatDelay
-  allowFileTypes
-  maxUploadSize
+@variables.yaml@
 ```
