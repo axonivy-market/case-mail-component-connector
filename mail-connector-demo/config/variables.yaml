@@ -1,2 +1,11 @@
 # yaml-language-server: $schema=https://json-schema.axonivy.com/app/12.0.0/variables.json
 Variables:
+  retrieveMailJobExpression: 0 9 * * MON
+  mailstore-connector:
+    imap:
+      protocol: imaps
+      host: imap.gmail.com
+  # Subject pattern used to identify emails for processing. To match by 'contains', use a regular expression like: .*your-pattern.*
+  subjectMatches: .*Connector.*
+  # Regex to match received email with case. For example: \[Ref=(.+?)\]
+  caseReferenceRegex: \[Ref=(.+?)\]
