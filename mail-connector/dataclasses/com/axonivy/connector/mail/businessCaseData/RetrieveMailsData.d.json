@@ -6,5 +6,8 @@
   "fields" : [ {
     "name" : "handleUnclearEmailsTask",
     "type" : "com.axonivy.connector.mail.model.CustomTaskDefinition"
+  }, {
+    "name" : "storeName",
+    "type" : "String"
   } ]
 }

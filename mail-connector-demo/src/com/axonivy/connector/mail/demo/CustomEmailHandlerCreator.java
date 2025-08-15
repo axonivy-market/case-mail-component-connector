@@ -6,8 +6,8 @@ import com.axonivy.connector.mail.service.AbstractEmailHandlerCreator;
 public class CustomEmailHandlerCreator extends AbstractEmailHandlerCreator {
 
 	@Override
-	public AbstractEmailHandler getEmailHandler() {
-		return new CustomEmailHandler();
+	protected AbstractEmailHandler getEmailHandler(String storeName) {
+		return new CustomEmailHandler(storeName);
 	}
 
 }

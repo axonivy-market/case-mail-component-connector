@@ -1,19 +1,18 @@
 package com.axonivy.connector.mail.service;
 
-
 public abstract class AbstractEmailHandlerCreator {
 
 	/**
 	 * Retrieve Mail
 	 *
 	 */
-	public void retrieveEmails() {
-		final AbstractEmailHandler emailHandler = getEmailHandler();
+	public void retrieveEmails(String storeName) {
+		final AbstractEmailHandler emailHandler = getEmailHandler(storeName);
 
 		emailHandler.handleMail();
 	}
 
-	protected AbstractEmailHandler getEmailHandler() {
-		return new DefaultEmailHandler();
+	protected AbstractEmailHandler getEmailHandler(String storeName) {
+		return new DefaultEmailHandler(storeName);
 	}
 }

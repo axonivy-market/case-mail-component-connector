@@ -10,7 +10,15 @@
       "type" : "CallSubStart",
       "name" : "handleRetrieveMail()",
       "config" : {
-        "signature" : "call"
+        "signature" : "call",
+        "input" : {
+          "params" : [
+            { "name" : "storeName", "type" : "String", "desc" : "" }
+          ],
+          "map" : {
+            "out.storeName" : "param.storeName"
+          }
+        }
       },
       "visual" : {
         "at" : { "x" : 96, "y" : 168 }
@@ -36,7 +44,7 @@
             "import com.axonivy.connector.mail.service.AbstractEmailHandlerCreator;",
             "",
             "AbstractEmailHandlerCreator emailHandlerCreator = new CustomEmailHandlerCreator();",
-            "emailHandlerCreator.retrieveEmails();"
+            "emailHandlerCreator.retrieveEmails(in.storeName);"
           ]
         }
       },
@@ -46,17 +54,5 @@
       "connect" : [
         { "id" : "f4", "to" : "f1", "color" : "default" }
       ]
-    }, {
-      "id" : "f5",
-      "type" : "ProcessAnnotation",
-      "name" : [
-        "Override it in your project to",
-        "handle retrieve mail."
-      ],
-      "visual" : {
-        "at" : { "x" : 151, "y" : 87 },
-        "size" : { "width" : 181, "height" : 61 },
-        "color" : "default"
-      }
     } ]
 }

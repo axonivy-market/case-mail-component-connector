@@ -10,7 +10,15 @@
       "type" : "CallSubStart",
       "name" : "retrieveMails()",
       "config" : {
-        "signature" : "call"
+        "signature" : "call",
+        "input" : {
+          "params" : [
+            { "name" : "storeName", "type" : "String", "desc" : "" }
+          ],
+          "map" : {
+            "out.storeName" : "param.storeName"
+          }
+        }
       },
       "visual" : {
         "at" : { "x" : 96, "y" : 64 }
@@ -30,7 +38,12 @@
       "type" : "SubProcessCall",
       "name" : "HandleRetrieveMail",
       "config" : {
-        "processCall" : "HandleRetrieveMail:call()"
+        "processCall" : "HandleRetrieveMail:call(String)",
+        "call" : {
+          "map" : {
+            "param.storeName" : "in.storeName"
+          }
+        }
       },
       "visual" : {
         "at" : { "x" : 292, "y" : 65 },
