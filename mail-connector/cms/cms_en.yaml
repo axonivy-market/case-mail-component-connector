@@ -72,10 +72,13 @@ RetrieveMail:
       name: Email assigned for Case ''{3}''
   connectorError: 'Getting error when retrieve mail from mailbox ''''{0}'''', exception: {1}'
   contentError: 'Mail retrieve - content error handling: {0}.'
+  date: Date
   incompleteMailError: 'Mail retrieve incomplete error: {0}, for Mail Subject: {1}, Mail From {2}, Attachment name {3}, content-type {4}, will be moved to folder: {5}.'
   ivyRoleNotFound: Ivy role ''{0}'' not found.
   processingMessage: '{0} [Email in mailbox ''''{1}'''' with subject ''''{2}'''' received on {3}]'
   readingMailMessageError: Getting error when reading mail from server {0}, mailbox {1}, mail subject {2}, mail sender {3}
+  taskDesc: Task description
+  taskTitle: Task title
 Tasks:
   EmailFailAdminTask:
     description: Task for Mail Admin which will (try) to send the mail.

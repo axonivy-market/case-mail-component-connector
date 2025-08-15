@@ -10,7 +10,15 @@
       "type" : "CallSubStart",
       "name" : "handleRetrieveMail()",
       "config" : {
-        "signature" : "call"
+        "signature" : "call",
+        "input" : {
+          "params" : [
+            { "name" : "storeName", "type" : "String", "desc" : "" }
+          ],
+          "map" : {
+            "out.storeName" : "param.storeName"
+          }
+        }
       },
       "visual" : {
         "at" : { "x" : 96, "y" : 168 }
@@ -35,7 +43,7 @@
             "import com.axonivy.connector.mail.service.AbstractEmailHandlerCreator;",
             "",
             "AbstractEmailHandlerCreator emailHandlerCreator = new DefaultEmailHandlerCreator();",
-            "emailHandlerCreator.retrieveEmails();"
+            "emailHandlerCreator.retrieveEmails(in.storeName);"
           ]
         }
       },

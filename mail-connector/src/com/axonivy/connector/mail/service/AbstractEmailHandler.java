@@ -44,13 +44,12 @@ import ch.ivyteam.ivy.workflow.signal.IBpmSignalService;
 
 public abstract class AbstractEmailHandler {
 	private static final String INBOX = "INBOX";
-	private static final String IMAP = "imap";
 	private static final String SUBJECT_MATCHES_VAR = "subjectMatches";
 	private static final String RECEIVED_MAIL_TASK_ROLE_VAR = "retrieveMailTaskRole";
 	private static final String CASE_REFERENCE_REGEX_VAR = "caseReferenceRegex";
-
-	private static final String PROCESSED_FOLDER = "Processed";
-	private static final String ERROR_FOLDER = "ErrorFolder";
+	private static final String MAIL_STORE_VAR = "mailstore-connector";
+	private static final String PROCESSED_FOLDER = Ivy.var().get("processedFolderName");
+	private static final String ERROR_FOLDER = Ivy.var().get("errorFolderName");
 	private static final String HANDLE_UNCLEAR_EMAILS_SIGNAL_CODE = "email:handleUnclear";
 
 	protected Mail mail;
@@ -58,13 +57,14 @@ public abstract class AbstractEmailHandler {
 	private boolean isHandleMessageFail;
 	private boolean isIncompleteMail;
 	private boolean isUnclearMail;
-
 	protected List<Attachment> files;
 	private Attachment originalMailFile;
+	private String storeName;
 
-	private final String mailBoxServer = Ivy.var().get("mailstore-connector.imap.host");
+	private final String mailBoxServer = Ivy.var().get(String.format("%s.%s.%s", MAIL_STORE_VAR, storeName, "host"));
 
-	public AbstractEmailHandler() {
+	public AbstractEmailHandler(String storeName) {
+		this.setStoreName(storeName);
 	}
 
 	/**
@@ -95,11 +95,11 @@ public abstract class AbstractEmailHandler {
 			}
 		} catch (final MessagingException ex) {
 			setFlag();
-			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_READING_MAIL_MESSAGE_ERROR.getCmsMessage(mailBoxServer, IMAP,
+			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_READING_MAIL_MESSAGE_ERROR.getCmsMessage(mailBoxServer, storeName,
 					this.mail.getSubject(), this.mail.getSender()), ex);
 		} catch (final IOException ex) {
 			setFlag();
-			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_READING_MAIL_MESSAGE_ERROR.getCmsMessage(mailBoxServer, IMAP,
+			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_READING_MAIL_MESSAGE_ERROR.getCmsMessage(mailBoxServer, storeName,
 					this.mail.getSubject(), this.mail.getSender()), ex);
 		} catch (final Exception ex) {
 			setFlag();
@@ -115,7 +115,7 @@ public abstract class AbstractEmailHandler {
 		final Instant mailReceivedDT = DateUtil.convertDateToInstant(message.getReceivedDate());
 		final String mailReceivedDTString = DateUtil.formatInstantToMediumStyleWithTime(mailReceivedDT,
 				Ivy.session().getFormattingLocale());
-		Ivy.log().info(formatWithEmailReadableMetadata("Extracting mail from javax.mail.message", Ivy.var().get(IMAP),
+		Ivy.log().info(formatWithEmailReadableMetadata("Extracting mail from javax.mail.message", mailBoxServer,
 				message.getSubject(), mailReceivedDTString));
 		final Mail newMail = new Mail();
 		final Address[] froms = message.getFrom();
@@ -232,7 +232,7 @@ public abstract class AbstractEmailHandler {
 	 *
 	 */
 	protected void processMail() {
-		final String caseReference = getCaseReference(mail.getSubject());
+		final String caseReference = getReferenceCaseId(mail.getSubject());
 		final Instant mailReceivedDT = DateUtil.convertDateToInstant(mail.getReceivedDateTime().toJavaDate());
 		final String receivedDateTimeString = DateUtil.formatInstantToMediumStyleWithTime(mailReceivedDT,
 				Ivy.session().getFormattingLocale());
@@ -250,7 +250,7 @@ public abstract class AbstractEmailHandler {
 		}
 	};
 
-	protected String getCaseReference(String subject) {
+	protected String getReferenceCaseId(String subject) {
 		final Pattern pattern = Pattern.compile(Ivy.var().get(CASE_REFERENCE_REGEX_VAR), Pattern.CASE_INSENSITIVE);
 		final Matcher matcher = pattern.matcher(subject);
 
@@ -364,7 +364,7 @@ public abstract class AbstractEmailHandler {
 		final String subjectMatches = Ivy.var().get(SUBJECT_MATCHES_VAR);
 
 		// basic auth
-		return MailStoreService.messageIterator(IMAP, INBOX, dstFolderName, true,
+		return MailStoreService.messageIterator(storeName, INBOX, dstFolderName, true,
 				MailStoreService.subjectMatches(subjectMatches), new MessageComparator());
 	}
 
@@ -426,6 +426,14 @@ public abstract class AbstractEmailHandler {
 
 	public void setOriginalMailFile(Attachment originalMailFile) {
 		this.originalMailFile = originalMailFile;
+	}
+
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
 	}
 
 }

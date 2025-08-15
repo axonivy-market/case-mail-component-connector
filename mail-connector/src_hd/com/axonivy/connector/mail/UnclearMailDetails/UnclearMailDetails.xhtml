@@ -7,18 +7,17 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 <h:body>
 	<ui:composition template="/layouts/frame-10.xhtml">
-		<ui:define name="title">Task with error details</ui:define>
 		<ui:define name="content">
 			<h:form id="form">
 				<p:messages />
 				<p:panelGrid columns="2" layout="grid"
 					styleClass="ui-panelgrid-blank ui-fluid"
 					columnClasses="ui-g-12 ui-md-3 ui-lg-3, ui-g-12 ui-md-9 ui-lg-9">
-					<h:outputText value="Task title" />
+					<h:outputText value="#{ivy.cms.co('/RetrieveMail/taskTitle')}" />
 					<h:outputText value="#{ivy.task.name}" />
-					<h:outputText value="Task description" />
+					<h:outputText value="#{ivy.cms.co('/RetrieveMail/taskDesc')}" />
 					<h:outputText value="#{ivy.task.description}" />
-					<h:outputText value="Datetime" />
+					<h:outputText value="#{ivy.cms.co('/RetrieveMail/date')}" />
 					<h:outputText value="#{ivy.task.startTimestamp}" />
 				</p:panelGrid>
 				<br />
@@ -36,12 +35,12 @@
 				</div>
 				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
 					responsive="true" width="auto">
-					<p:commandButton id="confirm-no-button"
+					<p:commandButton id="confirmNoBtn"
 						value="#{ivy.cms.co('/Button/no')}" type="button"
-						styleClass="ui-confirmdialog-no ui-button-flat doNotDisable" />
-					<p:commandButton id="confirm-yes-button"
+						styleClass="ui-confirmdialog-no ui-button-flat" />
+					<p:commandButton id="confirmYesBtn"
 						value="#{ivy.cms.co('/Button/yes')}" type="button"
-						styleClass="ui-confirmdialog-yes doNotDisable" />
+						styleClass="ui-confirmdialog-yes" />
 				</p:confirmDialog>
 			</h:form>
 		</ui:define>

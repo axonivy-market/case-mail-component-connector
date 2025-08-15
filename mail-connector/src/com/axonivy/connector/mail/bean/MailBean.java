@@ -43,6 +43,7 @@ public class MailBean {
 	private MailLazyDataModel mailModel;
 	private MailService mailService;
 	private String caseId;
+	private String caseRef;
 	private java.util.List<Attachment> attachments;
 	private String allowFileTypes = Ivy.var().get("allowFileTypes");
 	private String maxUploadSize = Ivy.var().get("maxUploadSize");
@@ -67,6 +68,9 @@ public class MailBean {
 		mailModel = new MailLazyDataModel(caseId);
 		mail = new Mail();
 		mail.setCaseId(caseId);
+		if (StringUtils.isNotBlank(caseRef)) {
+			mail.setSubject(caseRef);
+		}
 		attachments = new ArrayList<Attachment>();
 	}
 
@@ -276,6 +280,14 @@ public class MailBean {
 
 	public void setAttachments(java.util.List<Attachment> attachments) {
 		this.attachments = attachments;
+	}
+
+	public String getCaseRef() {
+		return caseRef;
+	}
+
+	public void setCaseRef(String caseRef) {
+		this.caseRef = caseRef;
 	}
 
 }
