@@ -3,35 +3,35 @@
 A simple mail component designed to send and receive emails related to a specific Ivy case. All sent emails are automatically linked to their corresponding case, providing seamless tracking and management of communication within the workflow.
 
 The Mail Connector allows sending, receiving, replying, forwarding, and resending emails linked to an Ivy case.
-- A mail list view displays key details like date, sender, recipient, and subject.
-- Detailed mail views and process integration ensure seamless communication tracking.
-- It supports field validation, error handling with retry logic, and admin task management for failed mails.
+- A email list view displays key details like date, sender, recipient, and subject.
+- Detailed email views and process integration ensure seamless communication tracking.
+- It supports field validation, error handling with retry logic, and admin task management for failed emails.
 - Original message content and attachments are preserved in replies, forwards, and resends.
 
 ## Demo
-### Mail List View
+### Email List View
 Displays a list of all emails
 
-![Alt text](images/mail-list.png)
+![Alt text](images/email-list.png)
 
 
-### Mail Details View
+### Email Details View
 Full details of a selected email
 
-![Alt text](images/mail-details.png)
+![Alt text](images/email-details.png)
 
 
-### New Mail
+### New Email
 - Allows composing and sending new emails.
 - Field validations:
   - `From`: Required; must be a valid email address.
   - `To`: Required; must be a valid list of email addresses.
   - `CC`: Optional; if provided, must be a valid list of email addresses.
   
- ![Alt text](images/new-mail.png)
+ ![Alt text](images/new-email.png)
 
 
-### Reply Mail
+### Reply Email
 Automatically populates fields based on the original email:
   - `Subject`: Prefixed with `RE:`
   - `Body`:
@@ -46,10 +46,10 @@ Automatically populates fields based on the original email:
     <original body>
     ```
     
-![Alt text](images/reply-mail.png)
+![Alt text](images/reply-email.png)
 
 
-### Forward Mail
+### Forward Email
 Used to forward received messages:
   - `From`: Original sender.
   - `To`: User-defined.
@@ -59,8 +59,8 @@ Used to forward received messages:
   
 ![Alt text](images/forward.png)
 
-### Resend Mail
-- Available only for mails in `Sent` state.
+### Resend Email
+- Available only for emails in `Sent` state.
 - Used to resend a previously sent email:
   - `From`, `To`, `Subject`: Same as the original.
   - `Body`:
@@ -74,7 +74,7 @@ Used to forward received messages:
   
 ![Alt text](images/resend-confirmation.png)
 
-![Alt text](images/resend-mail.png)
+![Alt text](images/resend-email.png)
 
 
 ### Error Handling
