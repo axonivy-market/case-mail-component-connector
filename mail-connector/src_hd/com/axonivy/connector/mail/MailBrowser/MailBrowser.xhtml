@@ -46,7 +46,7 @@
 			selectionMode="single" selection="#{mailBean.selectedMail}">
 			<p:ajax event="rowSelect" update="@parent:viewMailComponent"
 				listener="#{mailBean.handleSelectMail}" />
-			<p:column headerText="Created date" sortBy="#{mail.createdDate}"
+			<p:column headerText="#{ivy.cms.co('/Labels/createdDate')}" sortBy="#{mail.createdDate}"
 				sortOrder="desc">
 				<h:outputText value="#{mailBean.formatDate(mail.createdDate)}"
 					title="#{mailBean.formatDate(mail.createdDate)}" />
@@ -111,7 +111,7 @@
 				</c:if>
 
 				<!-- Mail Details -->
-				<p:fieldset id="mailDetail" legend="Mail Details" toggleable="true"
+				<p:fieldset id="mailDetail" legend="#{ivy.cms.co('/Labels/emailDetails')}" toggleable="true"
 					toggleSpeed="500" styleClass="mt-4">
 					<h:panelGrid columns="1" styleClass="w-full">
 						<h:panelGroup layout="block" styleClass="p-1">

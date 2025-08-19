@@ -26,6 +26,7 @@ Labels:
   abortTaskAndEnd: Abort Task and end the Process
   abortTaskMessage: Do you really want to abort this Task and end the Process?
   confirmation: Confirmation
+  createdDate: Created date
   emailDetails: Email details
   proceedTooltip: Finish the Task and end the Process
   resendConfirmMessage: Do you want to resend the email <b>{0}</b> to <b>{1}; {2}</b>?
