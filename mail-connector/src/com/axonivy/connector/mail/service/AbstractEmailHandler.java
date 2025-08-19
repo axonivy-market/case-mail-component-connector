@@ -93,11 +93,7 @@ public abstract class AbstractEmailHandler {
 				Ivy.log().debug("Mail with subject {0} was moved to {1}", getMessage().getSubject(), PROCESSED_FOLDER);
 				moveEmailAfterProcessing(iterator);
 			}
-		} catch (final MessagingException ex) {
-			setFlag();
-			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_READING_MAIL_MESSAGE_ERROR.getCmsMessage(mailBoxServer, storeName,
-					this.mail.getSubject(), this.mail.getSender()), ex);
-		} catch (final IOException ex) {
+		} catch (final MessagingException | IOException ex) {
 			setFlag();
 			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_READING_MAIL_MESSAGE_ERROR.getCmsMessage(mailBoxServer, storeName,
 					this.mail.getSubject(), this.mail.getSender()), ex);

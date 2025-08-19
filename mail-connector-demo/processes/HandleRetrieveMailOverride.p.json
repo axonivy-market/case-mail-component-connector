@@ -40,7 +40,6 @@
         "output" : {
           "code" : [
             "import com.axonivy.connector.mail.demo.CustomEmailHandlerCreator;",
-            "import com.axonivy.connector.mail.demo.CustomEmailHandler;",
             "import com.axonivy.connector.mail.service.AbstractEmailHandlerCreator;",
             "",
             "AbstractEmailHandlerCreator emailHandlerCreator = new CustomEmailHandlerCreator();",

@@ -13,7 +13,8 @@ import ch.ivyteam.ivy.scripting.objects.DateTime;
 
 public class DateUtil {
 	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss");
-	private static final DateTimeFormatter MEDIUM_DATE_TIME_FORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+	private static final DateTimeFormatter MEDIUM_DATE_TIME_FORMATTER = DateTimeFormatter
+			.ofLocalizedDateTime(FormatStyle.MEDIUM);
 
 	public static String format(DateTime dateTime) {
 		if (dateTime == null) {
@@ -22,7 +23,7 @@ public class DateUtil {
 		Date javaDate = dateTime.toJavaDate();
 		return FORMATTER.format(javaDate);
 	}
-	
+
 	/**
 	 * Converts a {@link Date} to {@link Instant}
 	 *
@@ -32,17 +33,17 @@ public class DateUtil {
 	public static Instant convertDateToInstant(Date date) {
 		return date.toInstant();
 	}
-	
+
 	/**
-	 * Formats a {@link Instant} for the given {@link Locale} using the MEDIUM format style.
-	 * It includes the time part.
+	 * Formats a {@link Instant} for the given {@link Locale} using the MEDIUM
+	 * format style. It includes the time part.
 	 *
-	 * @param date - date to convert
+	 * @param date   - date to convert
 	 * @param locale - target Locale
 	 * @return formatted date as String
 	 */
 	public static String formatInstantToMediumStyleWithTime(Instant date, Locale locale) {
-		if(Objects.isNull(date)) {
+		if (Objects.isNull(date)) {
 			return "";
 		}
 		return MEDIUM_DATE_TIME_FORMATTER.withZone(ZoneId.systemDefault()).withLocale(locale).format(date);

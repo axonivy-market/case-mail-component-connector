@@ -77,8 +77,7 @@
           "contentType" : "text/html"
         },
         "attachments" : [
-          "in.attachments",
-          ""
+          "in.attachments"
         ],
         "exceptionHandler" : "f31"
       },

@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -180,6 +180,7 @@ public class MailBean {
 		attachment.setContentType(uploadedFile.getContentType());
 		attachment.setDefaultExtension(
 				StringUtils.upperCase(StringUtils.substringAfterLast(uploadedFile.getFileName(), ".")));
+		attachment.setInlineAttachment(false);
 		if (CollectionUtils.isEmpty(attachments)) {
 			attachments = new java.util.ArrayList<Attachment>();
 		}
@@ -215,14 +216,26 @@ public class MailBean {
 
 	public void handleSelectMail(SelectEvent<Mail> event) {
 		selectedMail = event.getObject();
-		if (selectedMail != null) {
-			List<Attachment> allAttachments = MailService.findMailAttachments(selectedMail.getId());
-			attachments = allAttachments.stream()
-					.filter(a -> !a.getInlineAttachment()
-							&& !StringUtils.equals(a.getDefaultExtension(), Constants.EML_EXTENTION))
-					.collect(Collectors.toList());
-			inlineAtachments = allAttachments.stream().filter(a -> a.getInlineAttachment())
-					.collect(Collectors.toList());
+		if (selectedMail == null) {
+			attachments = Collections.emptyList();
+			inlineAtachments = Collections.emptyList();
+			return;
+		}
+
+		List<Attachment> allAttachments = MailService.findMailAttachments(selectedMail.getId());
+
+		attachments = new ArrayList<>();
+		inlineAtachments = new ArrayList<>();
+
+		for (Attachment attachment : allAttachments) {
+			boolean isInline = Boolean.TRUE.equals(attachment.getInlineAttachment());
+			boolean isEml = StringUtils.equalsIgnoreCase(attachment.getDefaultExtension(), Constants.EML_EXTENTION);
+
+			if (isInline) {
+				inlineAtachments.add(attachment);
+			} else if (!isEml) {
+				attachments.add(attachment);
+			}
 		}
 	}
 
