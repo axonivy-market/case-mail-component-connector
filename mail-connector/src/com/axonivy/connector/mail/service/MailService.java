@@ -132,6 +132,7 @@ public class MailService {
 			updateSubject(newMail, prefix);
 			newMail.setRecipient(null);
 			newMail.setRecipientCC(null);
+			newMail.setSender(null);
 
 		} catch (final IllegalAccessException e) {
 			Ivy.log().error("An error occurred when copy mail: " + e.getMessage());
@@ -379,7 +380,28 @@ public class MailService {
 				Ivy.repo().save(attachment);
 			}
 		}
+		waitForMailAttachmentCount(0, mailId, 5000);
 		return mail;
+	}
+
+	public static void waitForMailAttachmentCount(long oldCount, String mailId, long timeoutMillis) {
+		long startTime = System.currentTimeMillis();
+		long currentCount;
+
+		do {
+			currentCount = countMailAttachments(mailId);
+			if (currentCount > oldCount) {
+				return;
+			}
+
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				Ivy.log().warn("Thread was interrupted while waiting for attachment count {0}", e.getMessage());
+			}
+
+		} while (System.currentTimeMillis() - startTime < timeoutMillis);
 	}
 
 }
