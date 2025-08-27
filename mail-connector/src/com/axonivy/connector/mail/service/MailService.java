@@ -104,6 +104,8 @@ public class MailService {
 
 			final String resendTemplate = Ivy.cms().co("/Template/resendSection");
 			updateBody(newMail, resendTemplate);
+			newMail.setRecipient(null);
+			newMail.setRecipientCC(null);
 
 		} catch (final IllegalAccessException e) {
 			Ivy.log().error("An error occurred when copy mail: " + e.getMessage());
@@ -129,6 +131,7 @@ public class MailService {
 			updateBody(newMail, null);
 			updateSubject(newMail, prefix);
 			newMail.setRecipient(null);
+			newMail.setRecipientCC(null);
 
 		} catch (final IllegalAccessException e) {
 			Ivy.log().error("An error occurred when copy mail: " + e.getMessage());
@@ -155,6 +158,7 @@ public class MailService {
 			updateSubject(newMail, prefix);
 
 			newMail.setRecipient(mail.getSender());
+			newMail.setSender(null);
 		} catch (final IllegalAccessException e) {
 			Ivy.log().error("An error occurred when copy mail: " + e.getMessage());
 		} catch (final InvocationTargetException e1) {
@@ -177,6 +181,7 @@ public class MailService {
 		newMail.setResponseTo(mail);
 		newMail.setResponseAction(actionType);
 		newMail.setId(null);
+		newMail.setStatus(MailStatus.OUTBOX);
 
 		if (ResponseAction.isReplyResendForward(actionType)) {
 			newMail.setSentDate(null);
@@ -254,8 +259,10 @@ public class MailService {
 		templateSb.append(Constants.HORIZONTAL_RULE);
 		templateSb.append(metaInforFrom + StringUtils.SPACE + mail.getSender());
 		templateSb.append(Constants.BREAK_LINE);
-		templateSb.append(metaInforSent + StringUtils.SPACE + mail.getResponseTo().getSentDate());
-		templateSb.append(Constants.BREAK_LINE);
+		if (mail.getResponseTo().getSentDate() != null) {
+			templateSb.append(metaInforSent + StringUtils.SPACE + mail.getResponseTo().getSentDate());
+			templateSb.append(Constants.BREAK_LINE);
+		}
 		templateSb.append(metaInforTo + StringUtils.SPACE + mail.getRecipient());
 		templateSb.append(Constants.BREAK_LINE);
 		if (StringUtils.isNotEmpty(mail.getRecipientCC())) {

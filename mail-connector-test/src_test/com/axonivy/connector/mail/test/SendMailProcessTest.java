@@ -31,7 +31,7 @@ public class SendMailProcessTest {
 
 		History history = result.history();
 		assertThat(history.elementNames()).contains("SendMailException");
-		assertThat(result.workflow().activeTask().name("Send Mail Async")).isPresent();
+		assertThat(result.workflow().activeTask().name(Ivy.cms().co("/Tasks/name"))).isPresent();
 	}
 
 	@Test
