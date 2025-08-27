@@ -38,7 +38,7 @@
 			</div>
 		</div>
 
-		<!-- Mail list table -->
+		<!-- Email list table -->
 		<p:dataTable var="mail" value="#{mailBean.mailModel}"
 			rowIndexVar="rowIndex" id="mailTable" paginator="true"
 			paginatorPosition="bottom" rows="5"
@@ -182,7 +182,7 @@
 			skipDetailIfEqualsSummary="true" widgetVar="validationGrowlWidget"
 			escape="true" globalOnly="true" />
 
-		<!-- Mail Dialog -->
+		<!-- Email Dialog -->
 		<ic:com.axonivy.connector.mail.NewMailDialog id="newMail"
 			mail="#{mailBean.mail}"
 			newMailDialogId="#{cc.attrs.mailBrowserId}:newMail" />
