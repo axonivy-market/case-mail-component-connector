@@ -72,6 +72,7 @@ public class MailBean {
 			mail.setSubject(caseRef);
 		}
 		attachments = new ArrayList<Attachment>();
+		inlineAtachments = new ArrayList<Attachment>();
 	}
 
 	public void handleCloseDialog() {
@@ -81,21 +82,23 @@ public class MailBean {
 	public void prepareMail(String actionType) throws IllegalAccessException, InvocationTargetException {
 		ResponseAction type = ResponseAction.valueOf(actionType);
 		mail.setCaseId(caseId);
+		List<Attachment> allAttachments = mailService.copyMailAttachment(selectedMail.getId());
+		categorizeAttachments(allAttachments);
 		switch (type) {
 		case RESEND:
 			setMail(mailService.setUpResendMail(selectedMail));
-			attachments = mailService.copyMailAttachment(selectedMail.getId());
 			break;
 		case FORWARD:
 			setMail(mailService.setUpForwardMail(selectedMail));
-			attachments = mailService.copyMailAttachment(selectedMail.getId());
 			break;
 		case REPLY:
 			setMail(mailService.setUpReplyMail(selectedMail));
+			attachments = new ArrayList<>();
 			break;
 		default:
 			break;
 		}
+		replaceInlineImageWithBase64(mail);
 	}
 
 	/**
@@ -115,14 +118,7 @@ public class MailBean {
 	 * Get mail body with embedded images
 	 */
 	public String getMailBodyWithEmbeddedImages() {
-		if (CollectionUtils.isNotEmpty(inlineAtachments)) {
-			for (final Attachment file : inlineAtachments) {
-				final String content = Base64.getEncoder().encodeToString(file.getContent());
-				final StringBuilder base64Content = new StringBuilder().append("data:image/")
-						.append(file.getDefaultExtension()).append(";base64,").append(content);
-				selectedMail.setBody(selectedMail.getBody().replace("cid:" + file.getContentId(), base64Content));
-			}
-		}
+		replaceInlineImageWithBase64(selectedMail);
 		// Detect if it's HTML or plain text
 		if (!EmailContentUtil.isHtml(selectedMail.getBody())) {
 			// Escape HTML and wrap in <pre> to preserve formatting
@@ -130,6 +126,17 @@ public class MailBean {
 		}
 
 		return selectedMail.getBody();
+	}
+
+	private void replaceInlineImageWithBase64(Mail mail) {
+		if (CollectionUtils.isNotEmpty(inlineAtachments)) {
+			for (final Attachment file : inlineAtachments) {
+				final String content = Base64.getEncoder().encodeToString(file.getContent());
+				final StringBuilder base64Content = new StringBuilder().append("data:image/")
+						.append(file.getDefaultExtension()).append(";base64,").append(content);
+				mail.setBody(mail.getBody().replace("cid:" + file.getContentId(), base64Content));
+			}
+		}
 	}
 
 	/**
@@ -223,10 +230,12 @@ public class MailBean {
 		}
 
 		List<Attachment> allAttachments = MailService.findMailAttachments(selectedMail.getId());
+		categorizeAttachments(allAttachments);
+	}
 
+	private void categorizeAttachments(List<Attachment> allAttachments) {
 		attachments = new ArrayList<>();
 		inlineAtachments = new ArrayList<>();
-
 		for (Attachment attachment : allAttachments) {
 			boolean isInline = Boolean.TRUE.equals(attachment.getInlineAttachment());
 			boolean isEml = StringUtils.equalsIgnoreCase(attachment.getDefaultExtension(), Constants.EML_EXTENTION);
