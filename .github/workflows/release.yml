@@ -3,7 +3,7 @@ name: Release-Build
 on: workflow_dispatch
 
 permissions:
-  contents: read
+  contents: write
   checks: write
   pull-requests: write
 
