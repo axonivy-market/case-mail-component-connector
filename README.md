@@ -1,4 +1,4 @@
-# Mail Connector
+# Case Mail Component
 
 [![CI Build](https://github.com/axonivy-market/mail-connector/actions/workflows/ci.yml/badge.svg)](https://github.com/axonivy-market/mail-connector/actions/workflows/ci.yml)
 
