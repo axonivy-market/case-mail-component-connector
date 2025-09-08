@@ -3,7 +3,7 @@
   "id" : "197CEA1F4B1A6925",
   "kind" : "HTML_DIALOG",
   "config" : {
-    "data" : "com.axonivy.connector.mail.ErrorMailDetails.ErrorMailDetailsData"
+    "data" : "com.axonivy.connector.mail.AdminTask.AdminTaskData"
   },
   "elements" : [ {
       "id" : "f0",

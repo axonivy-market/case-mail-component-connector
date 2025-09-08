@@ -46,6 +46,7 @@ Mail:
   bcc: BCC
   body: Nachrichtentext
   cc: CC
+  content: Inhalt
   from: Von
   newMail: Neue E-Mail
   sent: Gesendet
@@ -73,7 +74,7 @@ RetrieveMail:
       name: E-Mail zugewiesen für Fall ''{3}''
   connectorError: 'Getting error when retrieve mail from mailbox ''''{0}'''', exception: {1}'
   contentError: 'Mail retrieve - content error handling: {0}.'
-  date: Date
+  date: Datum
   incompleteMailError: 'Mail retrieve incomplete error: {0}, for Mail Subject: {1}, Mail From {2}, Attachment name {3}, content-type {4}, will be moved to folder: {5}.'
   ivyRoleNotFound: Ivy role ''{0}'' not found.
   newMail: Neue E-Mail
@@ -83,7 +84,19 @@ RetrieveMail:
   taskTitle: Task title
 Tasks:
   EmailFailAdminTask:
-    name: Email Fail Admin Task
+    checkLater: Später prüfen
+    checkLaterTooltip: Aufgabe behalten und später prüfen
+    date: Datum
+    details: Details
+    errorMessage: Fehlermeldung
+    ignore: Ignorieren
+    ignoreConfirmatationHeader: Weiter?
+    ignoreConfirmatationMessage: Wollen Sie wirklich ignorieren und im Prozess weitergehen?
+    ignoreTooltip: Ignorieren und im Prozess weitergehen
+    name: Email Fehler Admin Task
+    retry: Erneut versuchen
+    retryTooltip: Operation erneut durchführen
+    time: Uhrzeit
   RetrySendingMail:
     description: Retry sending e-mail
     name: Retry sending e-mail

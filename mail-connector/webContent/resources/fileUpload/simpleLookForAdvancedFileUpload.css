@@ -16,3 +16,37 @@ body .ui-fileupload .ui-fileupload-content {
 .ui-fileupload {
 	display: inline-flex;
 }
+
+/* Custom upload button */
+.custom-upload-btn .ui-fileupload-choose {
+  background: #fff;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 25px !important;
+  height: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: none;
+}
+
+.custom-upload-btn .ui-fileupload-choose .ui-icon,
+.custom-upload-btn .ui-fileupload-choose .pi {
+  font-size: 1.2rem !important; /* ~16–18px */
+  width: 16px;
+  height: 18px;
+  line-height: 18px;
+  color: #007095 !important;
+}
+
+.custom-upload-btn .ui-button.ui-state-hover,
+.custom-upload-btn .ui-button.ui-state-active {
+  background: #fff;
+  border: none;
+  color: transparent;
+}
+
+.custom-upload-btn .ui-button.ui-state-focus {
+  box-shadow: none;
+}
