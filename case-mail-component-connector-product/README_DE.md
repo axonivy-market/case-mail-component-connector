@@ -2,7 +2,7 @@
 
 Ein kompaktes E-Mail-Modul zum Senden und Empfangen von Nachrichten, die einem bestimmten Ivy-Case zugeordnet sind. Alle ausgehenden E-Mails werden automatisch mit dem jeweiligen Case verknüpft – so bleibt die gesamte Kommunikation jederzeit nachvollziehbar und zentral im Workflow verfügbar.
 
-Der E-Mail-Connector unterstützt das Versenden, Empfangen, Beantworten, Weiterleiten und erneute Versenden von E-Mails.  
+Der Case Mail Komponente unterstützt das Versenden, Empfangen, Beantworten, Weiterleiten und erneute Versenden von E-Mails.  
 - Eine Listenansicht zeigt die wichtigsten Informationen wie Datum, Absender, Empfänger und Betreff.  
 - Detailansichten und die Integration in Prozesse sorgen für eine lückenlose Nachverfolgung.  
 - Eingaben werden validiert, Fehler automatisch behandelt und bei Bedarf wird fehlgeschlagenes Versenden erneut versucht; fehlgeschlagene Nachrichten erzeugen eine Admin-Aufgabe.  

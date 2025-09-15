@@ -2,7 +2,7 @@
 
 A simple mail component designed to send and receive emails related to a specific Ivy case. All sent emails are automatically linked to their corresponding case, providing seamless tracking and management of communication within the workflow.
 
-The Case Mail Component Connector allows sending, receiving, replying, forwarding, and resending emails linked to an Ivy case.
+The Case Mail Component allows sending, receiving, replying, forwarding, and resending emails linked to an Ivy case.
 - A email list view displays key details like date, sender, recipient, and subject.
 - Detailed email views and process integration ensure seamless communication tracking.
 - It supports field validation, error handling with retry logic, and admin task management for failed emails.
