@@ -1,4 +1,4 @@
-# E-Mail-Connector
+# Case Mail Komponente
 
 Ein kompaktes E-Mail-Modul zum Senden und Empfangen von Nachrichten, die einem bestimmten Ivy-Case zugeordnet sind. Alle ausgehenden E-Mails werden automatisch mit dem jeweiligen Case verknüpft – so bleibt die gesamte Kommunikation jederzeit nachvollziehbar und zentral im Workflow verfügbar.
 

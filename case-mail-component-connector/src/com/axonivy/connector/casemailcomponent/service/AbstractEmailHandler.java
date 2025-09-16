@@ -259,7 +259,7 @@ public abstract class AbstractEmailHandler {
 	/**
 	 * Creates a ivy task to notify user to handle received email. Task is directly
 	 * started with {@link IBpmSignalService} in process
-	 * /mail-connector/processes/RetrieveMails
+	 * /case-mail-component-connector/processes/RetrieveMails
 	 *
 	 * @see {@link NotificationTaskType} and its CMS entries with task details
 	 *      '/RetrieveMail/NotificationTaskType'
