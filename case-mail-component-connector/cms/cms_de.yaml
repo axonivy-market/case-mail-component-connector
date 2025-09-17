@@ -85,14 +85,14 @@ RetrieveMail:
 Tasks:
   EmailFailAdminTask:
     checkLater: Später prüfen
-    checkLaterTooltip: Aufgabe behalten und später prüfen
+    checkLaterTooltip: Aufgabe bestehen lassen und später prüfen
     date: Datum
     details: Details
     errorMessage: Fehlermeldung
     ignore: Ignorieren
     ignoreConfirmatationHeader: Weiter?
-    ignoreConfirmatationMessage: Wollen Sie wirklich ignorieren und im Prozess weitergehen?
-    ignoreTooltip: Ignorieren und im Prozess weitergehen
+    ignoreConfirmatationMessage: Möchten Sie den Prozess wirklich fortsetzen?
+    ignoreTooltip: Warnung ignorieren und den Prozess fortsetzen.
     name: Email Fehler Admin Task
     retry: Erneut versuchen
     retryTooltip: Operation erneut durchführen
