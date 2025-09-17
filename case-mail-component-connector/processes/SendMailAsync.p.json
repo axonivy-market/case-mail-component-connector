@@ -199,9 +199,9 @@
     }, {
       "id" : "f22",
       "type" : "DialogCall",
-      "name" : "ErrorMailDetails",
+      "name" : "Admin task",
       "config" : {
-        "dialog" : "com.axonivy.connector.casemailcomponent.ErrorMailDetails:start(String)",
+        "dialog" : "com.axonivy.connector.casemailcomponent.AdminTask:start(String)",
         "call" : {
           "map" : {
             "param.mailId" : "in.mail.id"
@@ -215,8 +215,8 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 856, "y" : 464 },
-        "size" : { "width" : 168, "height" : 54 }
+        "at" : { "x" : 842, "y" : 462 },
+        "size" : { "width" : 140, "height" : 51 }
       },
       "connect" : [
         { "id" : "f23", "to" : "f24" }
@@ -247,7 +247,7 @@
             "id" : "TaskA",
             "name" : "<%=ivy.cms.co(\"/Tasks/EmailFailAdminTask/name\")%>",
             "description" : "<%=ivy.cms.co(\"/Tasks/EmailFailAdminTask/description\")%>",
-            "category" : "Technical/MailSendingError",
+            "category" : "ADMIN",
             "responsible" : {
               "activator" : "Admin"
             }

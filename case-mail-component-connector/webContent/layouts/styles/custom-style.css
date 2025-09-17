@@ -44,3 +44,23 @@
 .chip-hover {
 	cursor: pointer;
 }
+
+.custom-chip {
+	background:#f9f9f9; border:1px solid #dcdcdc; min-height:3rem
+}
+
+.custom-chip .ui-chip {
+	margin:0.25rem;
+	border: 1px solid #E7E7E7;
+    border-radius: 5px;
+    background: #FFFFFF;
+}
+
+.custom-chip .ui-chip .ui-chip-icon {
+	color: #FF2116;
+}
+
+.color-gray, 
+.color-gray * {
+  color: #757575 !important;
+}

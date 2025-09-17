@@ -1,9 +1,9 @@
 {
   "$schema" : "https://json-schema.axonivy.com/process/12.0.0/process.json",
-  "id" : "197CEA1F4B1A6925",
+  "id" : "199567B5BC738412",
   "kind" : "HTML_DIALOG",
   "config" : {
-    "data" : "com.axonivy.connector.casemailcomponent.ErrorMailDetails.ErrorMailDetailsData"
+    "data" : "com.axonivy.connector.casemailcomponent.AdminTask.AdminTaskData"
   },
   "elements" : [ {
       "id" : "f0",
