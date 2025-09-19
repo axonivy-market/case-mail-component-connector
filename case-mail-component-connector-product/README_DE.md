@@ -12,12 +12,12 @@ Der Case Mail Komponente unterstützt das Versenden, Empfangen, Beantworten, Wei
 ### E-Mail-Listenansicht
 Übersicht aller E-Mails zu einem Fall.  
 
-![Alt text](images/mail-list.png)
+![Alt text](images/email-list.png)
 
 ### E-Mail-Details
 Anzeige der vollständigen Informationen zu einer ausgewählten Nachricht.  
 
-![Alt text](images/mail-details.png)
+![Alt text](images/email-details.png)
 
 ### Neue E-Mail
 - Erstellen und Versenden neuer Nachrichten.  
@@ -26,14 +26,14 @@ Anzeige der vollständigen Informationen zu einer ausgewählten Nachricht.
   - `To`: Pflichtfeld; gültige Liste von Adressen erforderlich.  
   - `CC`: Optional; falls angegeben, gültige Liste von Adressen.  
 
-![Alt text](images/new-mail.png)
+![Alt text](images/new-email.png)
 
 ### Antwort-E-Mail
 Automatische Übernahme der wichtigsten Daten der ursprünglichen Nachricht:  
 - `Subject`: wird mit `RE:` ergänzt  
 - `Body`: enthält die ursprüngliche Nachricht mit Absender, Datum, Empfänger, Betreff und Text  
 
-![Alt text](images/reply-mail.png)
+![Alt text](images/reply-email.png)
 
 ### E-Mail weiterleiten
 Weiterleitung eingegangener Nachrichten:  
@@ -51,7 +51,7 @@ Weiterleitung eingegangener Nachrichten:
 - Der Nachrichtenkörper enthält einen Hinweis, dass es sich um eine Kopie handelt  
 
 ![Alt text](images/resend-confirmation.png)  
-![Alt text](images/resend-mail.png)
+![Alt text](images/resend-email.png)
 
 ### Fehlerbehandlung
 - Automatischer Wiederholungsmechanismus:  
