@@ -398,39 +398,6 @@
       "connect" : [
         { "id" : "f23", "to" : "f24" }
       ]
-    }, {
-      "id" : "f13",
-      "type" : "TaskSwitchGateway",
-      "name" : "Email Fail Admin Task",
-      "visual" : {
-        "at" : { "x" : 1488, "y" : 544 },
-        "labelOffset" : { "x" : 8, "y" : 40 }
-      },
-      "connect" : [
-        { "id" : "f16", "to" : "f22", "condition" : "ivp==\"TaskA.ivp\"" }
-      ]
-    }, {
-      "id" : "f22",
-      "type" : "DialogCall",
-      "name" : "Admin task",
-      "config" : {
-        "dialog" : "com.axonivy.connector.casemailcomponent.AdminTask:start(String)",
-        "call" : {
-          "map" : {
-            "param.mailId" : "in.mail.id"
-          }
-        },
-        "output" : {
-          "map" : {
-            "out" : "in",
-            "out.retryAction" : "result.action"
-          }
-        }
-      },
-      "visual" : {
-        "at" : { "x" : 1626, "y" : 542 },
-        "size" : { "width" : 140, "height" : 51 }
-      }
     } ],
   "layout" : {
     "lanes" : [ {
