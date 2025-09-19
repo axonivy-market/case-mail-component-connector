@@ -58,7 +58,7 @@
       "type" : "TaskEnd",
       "name" : "end",
       "visual" : {
-        "at" : { "x" : 1256, "y" : 336 }
+        "at" : { "x" : 1296, "y" : 336 }
       }
     }, {
       "id" : "f4",
@@ -82,7 +82,7 @@
         "exceptionHandler" : "f31"
       },
       "visual" : {
-        "at" : { "x" : 808, "y" : 336 }
+        "at" : { "x" : 848, "y" : 336 }
       },
       "connect" : [
         { "id" : "f5", "to" : "f18" }
@@ -109,8 +109,7 @@
       "name" : "Number of attemp ok?",
       "config" : {
         "conditions" : {
-          "f12" : "in.counter <= ivy.var.mailLoopRepeatNumber.toNumber()",
-          "f14" : ""
+          "f12" : "in.counter <= ivy.var.mailLoopRepeatNumber.toNumber()"
         }
       },
       "visual" : {
@@ -118,8 +117,8 @@
         "labelOffset" : { "y" : 40 }
       },
       "connect" : [
-        { "id" : "f14", "to" : "f13", "via" : [ { "x" : 608, "y" : 464 } ], "var" : "in1" },
-        { "id" : "f12", "to" : "f3" }
+        { "id" : "f12", "to" : "f3" },
+        { "id" : "f14", "to" : "f37", "via" : [ { "x" : 576, "y" : 464 } ], "var" : "in1" }
       ]
     }, {
       "id" : "f15",
@@ -132,13 +131,13 @@
         "sudo" : true
       },
       "visual" : {
-        "at" : { "x" : 1112, "y" : 608 }
+        "at" : { "x" : 1152, "y" : 608 }
       },
       "connect" : [
         { "id" : "f17", "to" : "f10", "via" : [ { "x" : 512, "y" : 608 } ], "label" : {
             "name" : "retry sendMail",
             "segment" : 1.1,
-            "offset" : { "x" : 135, "y" : 48 }
+            "offset" : { "x" : 137, "y" : 43 }
           } }
       ]
     }, {
@@ -155,7 +154,7 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 984, "y" : 336 }
+        "at" : { "x" : 1024, "y" : 336 }
       },
       "connect" : [
         { "id" : "f19", "to" : "f1" }
@@ -197,31 +196,6 @@
         { "id" : "f6", "to" : "f7" }
       ]
     }, {
-      "id" : "f22",
-      "type" : "DialogCall",
-      "name" : "Admin task",
-      "config" : {
-        "dialog" : "com.axonivy.connector.casemailcomponent.AdminTask:start(String)",
-        "call" : {
-          "map" : {
-            "param.mailId" : "in.mail.id"
-          }
-        },
-        "output" : {
-          "map" : {
-            "out" : "in",
-            "out.retryAction" : "result.action"
-          }
-        }
-      },
-      "visual" : {
-        "at" : { "x" : 842, "y" : 462 },
-        "size" : { "width" : 140, "height" : 51 }
-      },
-      "connect" : [
-        { "id" : "f23", "to" : "f24" }
-      ]
-    }, {
       "id" : "f24",
       "type" : "Alternative",
       "name" : "Retry task?",
@@ -231,34 +205,12 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 1008, "y" : 464 },
+        "at" : { "x" : 1048, "y" : 464 },
         "labelOffset" : { "x" : 40, "y" : 32 }
       },
       "connect" : [
         { "id" : "f25", "to" : "f36", "var" : "in1" },
-        { "id" : "f26", "to" : "f1", "via" : [ { "x" : 1008, "y" : 400 }, { "x" : 1200, "y" : 400 }, { "x" : 1232, "y" : 360 } ] }
-      ]
-    }, {
-      "id" : "f13",
-      "type" : "TaskSwitchGateway",
-      "name" : "Email Fail Admin Task",
-      "config" : {
-        "tasks" : [ {
-            "id" : "TaskA",
-            "name" : "<%=ivy.cms.co(\"/Tasks/EmailFailAdminTask/name\")%>",
-            "description" : "<%=ivy.cms.co(\"/Tasks/EmailFailAdminTask/description\")%>",
-            "category" : "ADMIN",
-            "responsible" : {
-              "activator" : "Admin"
-            }
-          } ]
-      },
-      "visual" : {
-        "at" : { "x" : 704, "y" : 464 },
-        "labelOffset" : { "x" : 8, "y" : 40 }
-      },
-      "connect" : [
-        { "id" : "f16", "to" : "f22", "condition" : "ivp==\"TaskA.ivp\"" }
+        { "id" : "f26", "to" : "f1", "via" : [ { "x" : 1048, "y" : 400 }, { "x" : 1240, "y" : 400 }, { "x" : 1272, "y" : 360 } ] }
       ]
     }, {
       "id" : "f31",
@@ -320,7 +272,7 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 1112, "y" : 464 },
+        "at" : { "x" : 1152, "y" : 464 },
         "labelOffset" : { "x" : 65, "y" : 33 }
       },
       "connect" : [
@@ -396,7 +348,7 @@
         }
       },
       "visual" : {
-        "at" : { "x" : 632, "y" : 336 }
+        "at" : { "x" : 672, "y" : 336 }
       },
       "connect" : [
         { "id" : "f9", "to" : "f4" }
@@ -413,6 +365,71 @@
       "visual" : {
         "at" : { "x" : 661, "y" : 37 },
         "size" : { "width" : 406, "height" : 70 }
+      }
+    }, {
+      "id" : "f37",
+      "type" : "UserTask",
+      "name" : "Admin task",
+      "config" : {
+        "dialog" : "com.axonivy.connector.casemailcomponent.AdminTask:start(String)",
+        "call" : {
+          "map" : {
+            "param.mailId" : "in.mail.id"
+          }
+        },
+        "task" : {
+          "name" : "<%=ivy.cms.co(\"/Tasks/EmailFailAdminTask/name\")%>",
+          "description" : "<%=ivy.cms.co(\"/Tasks/EmailFailAdminTask/description\")%>",
+          "category" : "ADMIN",
+          "responsible" : {
+            "activator" : "Admin"
+          }
+        },
+        "output" : {
+          "map" : {
+            "out" : "in",
+            "out.retryAction" : "result.action"
+          }
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 760, "y" : 464 }
+      },
+      "connect" : [
+        { "id" : "f23", "to" : "f24" }
+      ]
+    }, {
+      "id" : "f13",
+      "type" : "TaskSwitchGateway",
+      "name" : "Email Fail Admin Task",
+      "visual" : {
+        "at" : { "x" : 1488, "y" : 544 },
+        "labelOffset" : { "x" : 8, "y" : 40 }
+      },
+      "connect" : [
+        { "id" : "f16", "to" : "f22", "condition" : "ivp==\"TaskA.ivp\"" }
+      ]
+    }, {
+      "id" : "f22",
+      "type" : "DialogCall",
+      "name" : "Admin task",
+      "config" : {
+        "dialog" : "com.axonivy.connector.casemailcomponent.AdminTask:start(String)",
+        "call" : {
+          "map" : {
+            "param.mailId" : "in.mail.id"
+          }
+        },
+        "output" : {
+          "map" : {
+            "out" : "in",
+            "out.retryAction" : "result.action"
+          }
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 1626, "y" : 542 },
+        "size" : { "width" : 140, "height" : 51 }
       }
     } ],
   "layout" : {
