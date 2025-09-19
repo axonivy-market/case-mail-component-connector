@@ -64,9 +64,9 @@
 						<h:outputText value="#{ivy.cms.co('/Mail/content')}" />
 					</h3>
 					<h:outputText value="#{data.mail.body}" escape="false"
-						styleClass="color-gray" style="white-space: pre-line;" />
+						styleClass="color-gray white-space-pre-line" />
 
-					<h3>Mail send history</h3>
+					<h3>#{ivy.cms.co("/Tasks/EmailFailAdminTask/mailSendHistory")}</h3>
 					<p:dataTable id="taskDataTable" value="#{data.sendingMailTasks}"
 						var="task" disabledTextSelection="false">
 						<p:column

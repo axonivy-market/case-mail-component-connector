@@ -86,13 +86,14 @@ Tasks:
     checkLater: Check later
     checkLaterTooltip: Keep this task to check later
     date: Date
-    description: Task for Email Admin which will (try) to send the Email.
+    description: Task for Admin who will  try to send the Email
     details: Details
     errorMessage: Error Message
     ignore: Ignore
     ignoreConfirmatationHeader: Continue?
     ignoreConfirmatationMessage: Do you really want to ignore and continue the process?
     ignoreTooltip: Ignore and continue process
+    mailSendHistory: Mail send history
     name: Email Fail Admin Task
     retry: Retry
     retryTooltip: Retry the operation

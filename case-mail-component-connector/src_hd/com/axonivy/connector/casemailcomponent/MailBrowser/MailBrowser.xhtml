@@ -174,11 +174,11 @@
 					<c:if test="#{not empty mailBean.selectedMail.body}">
 						<div class="grid w-full">
 							<div class="col-12">
-								<div class="iframe-wrapper border-round-md overflow-hidden mx-0"
-									style="border: 1px solid #dcdcdc; height: 400px;">
+								<div
+									class="iframe-wrapper border-round-md overflow-hidden mx-0">
 									<iframe id="emailContent" sandbox="allow-same-origin"
 										srcdoc="#{mailBean.getMailBodyWithEmbeddedImages()}"
-										class="iframe-mail-body w-full h-full" style="border: 0;" />
+										class="iframe-mail-body w-full h-full" />
 								</div>
 							</div>
 						</div>
