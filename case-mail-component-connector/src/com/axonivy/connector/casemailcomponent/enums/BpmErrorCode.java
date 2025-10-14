@@ -15,6 +15,7 @@ public enum BpmErrorCode {
 	RECEIVE_MAIL_INCOMPLETE_MAIL_ERROR("com:axonivy:connector:mail:retrieveMail:incompleteMailError","/RetrieveMail/incompleteMailError"),
 	RECEIVE_MAIL_CONNECTOR_ERROR("com:axonivy:connector:mail:retrieveMail:connectorError","/RetrieveMail/connectorError"),
 	IVY_ROLE_NOT_FOUND("com:axonivy:connector:mail:utils:ivyRoleNotFound", "/RetrieveMail/ivyRoleNotFound"),
+	ERROR_JAVA_API_MAIL_NOT_SENT("at:psa:cmt:core:email:mailJavaApiNotSent", "/Errors/mailJavaApiNotSend"),
 	;
 
 	private final String code;

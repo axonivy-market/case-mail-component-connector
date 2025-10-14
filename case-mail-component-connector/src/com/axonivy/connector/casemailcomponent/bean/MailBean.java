@@ -98,7 +98,7 @@ public class MailBean {
 		default:
 			break;
 		}
-		replaceInlineImageWithBase64(mail);
+		getMailBodyWithEmbeddedImages(mail);
 	}
 
 	/**
@@ -117,18 +117,21 @@ public class MailBean {
 	/**
 	 * Get mail body with embedded images
 	 */
-	public String getMailBodyWithEmbeddedImages() {
-		replaceInlineImageWithBase64(selectedMail);
+	public String getMailBodyWithEmbeddedImages(Mail mail) {
+		replaceInlineImageWithBase64(mail);
 		// Detect if it's HTML or plain text
-		if (!EmailContentUtil.isHtml(selectedMail.getBody())) {
+		if (!EmailContentUtil.isHtml(mail.getBody())) {
 			// Escape HTML and wrap in <pre> to preserve formatting
-			selectedMail.setBody("<pre>" + StringEscapeUtils.escapeHtml4(selectedMail.getBody()) + "</pre>");
+			mail.setBody("<pre>" + StringEscapeUtils.escapeHtml4(mail.getBody()) + "</pre>");
 		}
 
-		return selectedMail.getBody();
+		return mail.getBody();
 	}
 
 	private void replaceInlineImageWithBase64(Mail mail) {
+		if (CollectionUtils.isEmpty(inlineAtachments) || !shouldReplaceCidWithBase64(mail.getBody())) {
+			return;
+		}
 		if (CollectionUtils.isNotEmpty(inlineAtachments)) {
 			for (final Attachment file : inlineAtachments) {
 				final String content = Base64.getEncoder().encodeToString(file.getContent());
@@ -137,6 +140,14 @@ public class MailBean {
 				mail.setBody(mail.getBody().replace("cid:" + file.getContentId(), base64Content));
 			}
 		}
+	}
+
+	public static boolean shouldReplaceCidWithBase64(String htmlContent) {
+		if (htmlContent == null || htmlContent.isEmpty()) {
+			return false;
+		}
+
+		return htmlContent.contains("cid:");
 	}
 
 	/**

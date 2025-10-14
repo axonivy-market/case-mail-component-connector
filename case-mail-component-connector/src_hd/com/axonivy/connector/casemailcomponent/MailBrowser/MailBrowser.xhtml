@@ -177,7 +177,7 @@
 								<div
 									class="iframe-wrapper border-round-md overflow-hidden mx-0">
 									<iframe id="emailContent" sandbox="allow-same-origin"
-										srcdoc="#{mailBean.getMailBodyWithEmbeddedImages()}"
+										srcdoc="#{mailBean.getMailBodyWithEmbeddedImages(mailBean.selectedMail)}"
 										class="iframe-mail-body w-full h-full" />
 								</div>
 							</div>

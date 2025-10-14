@@ -17,6 +17,7 @@ Errors:
   failedToCacheFile: Datei kann nicht gecached werden
   failedToConvertToPdf: Datei konnte nicht in PDF konvertiert werden
   failedToLoadFile: Datei konnte nicht geladen werden
+  mailJavaApiNotSend: Fehler beim Emailversand mit Java API
   mailNotSent: Fehler beim Emailversand
 File:
   fileTypesAllowedMessage: Es sind nur {0} Dateien erlaubt

@@ -25,3 +25,6 @@ Variables:
   processedFolderName: Processed
   # Folder to which the mail will be moved if an error occurs
   errorFolderName: ErrorFolder
+  # If set to true, inline images added to emails are to be embedded in multipart message as CID references instead of base64
+  # [enum: true, false]
+  cidInlineImagesMode: "false"
