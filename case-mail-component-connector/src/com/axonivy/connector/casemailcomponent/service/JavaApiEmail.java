@@ -13,6 +13,7 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.axonivy.connector.casemailcomponent.Constants;
 import com.axonivy.connector.casemailcomponent.businessData.Mail;
 import com.axonivy.connector.casemailcomponent.enums.BpmErrorCode;
 import com.axonivy.connector.casemailcomponent.utils.FileUtils;
@@ -167,7 +168,7 @@ public class JavaApiEmail {
 			// Replace base64 in hmtl with CID reference
 			final int start = matcher.start() + offset;
 			final int end = matcher.end() + offset;
-			final String replacement = "cid:" + cid;
+			final String replacement = Constants.CID + cid;
 			htmlBuilder.replace(start, end, replacement);
 			offset += replacement.length() - (end - start);
 			imageIndex++;

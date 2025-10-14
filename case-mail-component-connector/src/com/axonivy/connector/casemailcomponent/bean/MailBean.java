@@ -137,7 +137,7 @@ public class MailBean {
 				final String content = Base64.getEncoder().encodeToString(file.getContent());
 				final StringBuilder base64Content = new StringBuilder().append("data:image/")
 						.append(file.getDefaultExtension()).append(";base64,").append(content);
-				mail.setBody(mail.getBody().replace("cid:" + file.getContentId(), base64Content));
+				mail.setBody(mail.getBody().replace(Constants.CID + file.getContentId(), base64Content));
 			}
 		}
 	}
@@ -147,7 +147,7 @@ public class MailBean {
 			return false;
 		}
 
-		return htmlContent.contains("cid:");
+		return htmlContent.contains(Constants.CID);
 	}
 
 	/**
