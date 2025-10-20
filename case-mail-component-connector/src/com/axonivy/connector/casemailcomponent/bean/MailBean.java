@@ -44,10 +44,10 @@ public class MailBean {
 	private MailService mailService;
 	private String caseId;
 	private String caseRef;
-	private java.util.List<Attachment> attachments;
+	private List<Attachment> attachments;
 	private String allowFileTypes = Ivy.var().get("allowFileTypes");
 	private String maxUploadSize = Ivy.var().get("maxUploadSize");
-	private List<Attachment> inlineAtachments;
+	private List<Attachment> inlineAttachments;
 
 	private static final Map<String, String> MIME_TYPE_ICON_MAP = new HashMap<>();
 
@@ -72,7 +72,7 @@ public class MailBean {
 			mail.setSubject(caseRef);
 		}
 		attachments = new ArrayList<Attachment>();
-		inlineAtachments = new ArrayList<Attachment>();
+		inlineAttachments = new ArrayList<Attachment>();
 	}
 
 	public void handleCloseDialog() {
@@ -129,11 +129,11 @@ public class MailBean {
 	}
 
 	private void replaceInlineImageWithBase64(Mail mail) {
-		if (CollectionUtils.isEmpty(inlineAtachments) || !shouldReplaceCidWithBase64(mail.getBody())) {
+		if (CollectionUtils.isEmpty(inlineAttachments) || !shouldReplaceCidWithBase64(mail.getBody())) {
 			return;
 		}
-		if (CollectionUtils.isNotEmpty(inlineAtachments)) {
-			for (final Attachment file : inlineAtachments) {
+		if (CollectionUtils.isNotEmpty(inlineAttachments)) {
+			for (final Attachment file : inlineAttachments) {
 				final String content = Base64.getEncoder().encodeToString(file.getContent());
 				final StringBuilder base64Content = new StringBuilder().append("data:image/")
 						.append(file.getDefaultExtension()).append(";base64,").append(content);
@@ -236,7 +236,7 @@ public class MailBean {
 		selectedMail = event.getObject();
 		if (selectedMail == null) {
 			attachments = Collections.emptyList();
-			inlineAtachments = Collections.emptyList();
+			inlineAttachments = Collections.emptyList();
 			return;
 		}
 
@@ -246,13 +246,13 @@ public class MailBean {
 
 	private void categorizeAttachments(List<Attachment> allAttachments) {
 		attachments = new ArrayList<>();
-		inlineAtachments = new ArrayList<>();
+		inlineAttachments = new ArrayList<>();
 		for (Attachment attachment : allAttachments) {
 			boolean isInline = Boolean.TRUE.equals(attachment.getInlineAttachment());
 			boolean isEml = StringUtils.equalsIgnoreCase(attachment.getDefaultExtension(), Constants.EML_EXTENTION);
 
 			if (isInline) {
-				inlineAtachments.add(attachment);
+				inlineAttachments.add(attachment);
 			} else if (!isEml) {
 				attachments.add(attachment);
 			}
@@ -307,7 +307,7 @@ public class MailBean {
 		this.maxUploadSize = maxUploadSize;
 	}
 
-	public java.util.List<Attachment> getAttachments() {
+	public List<Attachment> getAttachments() {
 		return attachments;
 	}
 
