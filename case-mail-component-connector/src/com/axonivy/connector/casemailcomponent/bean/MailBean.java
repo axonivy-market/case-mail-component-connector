@@ -311,7 +311,7 @@ public class MailBean {
 		return attachments;
 	}
 
-	public void setAttachments(java.util.List<Attachment> attachments) {
+	public void setAttachments(List<Attachment> attachments) {
 		this.attachments = attachments;
 	}
 
