@@ -15,11 +15,11 @@ import javax.mail.Flags;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Part;
+import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeUtility;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -188,7 +188,7 @@ public abstract class AbstractEmailHandler {
 						file.setInlineAttachment(false);
 					}
 
-					final String fileExtension = FilenameUtils.getExtension(fileName);
+					final String fileExtension = getExtension(part);
 					file.setDefaultExtension(fileExtension);
 					files.add(file);
 				}
@@ -197,6 +197,54 @@ public abstract class AbstractEmailHandler {
 				Ivy.log().error(createIncompleteErrorLog(ex.getMessage(), null, null, ex));
 			}
 		}
+	}
+	
+	private String getExtension(Part part) {
+		try {
+			// From filename if available
+			final String fileName = part.getFileName() == null ? "" : MimeUtility.decodeText(part.getFileName());
+			if (StringUtils.isNotBlank(fileName) && fileName.contains(".")) {
+				return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+			}
+
+			// From Content-Type
+			final String contentType = part.getContentType();
+			if (contentType != null) {
+				final ContentType ct = new ContentType(contentType);
+				final String baseType = ct.getBaseType();
+
+				switch (baseType.toLowerCase()) {
+				case "image/jpeg":
+					return "jpg";
+				case "image/pjpeg":
+					return "jpg";
+				case "image/png":
+					return "png";
+				case "image/gif":
+					return "gif";
+				case "image/bmp":
+					return "bmp";
+				case "image/tiff":
+					return "tif";
+				case "application/pdf":
+					return "pdf";
+				case "text/plain":
+					return "txt";
+				case "text/html":
+					return "html";
+				}
+
+				// If Content-Type has "name="
+				final String paramName = ct.getParameter("name");
+				if (StringUtils.isNotBlank(paramName) && paramName.contains(".")) {
+					return paramName.substring(paramName.lastIndexOf('.') + 1).toLowerCase();
+				}
+			}
+		} catch (final Exception e) {
+			Ivy.log().warn("getExtension error: {0}", e.getMessage());
+		}
+
+		return "";
 	}
 
 	private String createIncompleteErrorLog(String message, String attachmentFileName, String attachmentContentType,

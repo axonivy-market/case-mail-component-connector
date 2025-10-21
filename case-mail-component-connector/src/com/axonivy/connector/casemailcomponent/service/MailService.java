@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -402,6 +405,39 @@ public class MailService {
 			}
 
 		} while (System.currentTimeMillis() - startTime < timeoutMillis);
+	}
+	
+	/**
+	 * Processes a string of joined email addresses. Converts all separator and blank characters to {@link Constants#EMAIL_ADDRESS_SEPARATOR}.
+	 * Then it separates with this separator again, removes empty email addresses and trims the resting ones.
+	 *
+	 * @param joinedEmailsString
+	 * @return
+	 */
+	public static List<String> extractEmails(String joinedEmailsString) {
+		joinedEmailsString = StringUtils.replace(joinedEmailsString, Constants.COMMA, Constants.EMAIL_ADDRESS_SEPARATOR);
+		joinedEmailsString = StringUtils.replace(joinedEmailsString, Constants.SEMICOLON, Constants.EMAIL_ADDRESS_SEPARATOR);
+		joinedEmailsString = StringUtils.replace(joinedEmailsString, StringUtils.SPACE, Constants.EMAIL_ADDRESS_SEPARATOR);
+		return List.of(StringUtils.split(joinedEmailsString, Constants.EMAIL_ADDRESS_SEPARATOR)).stream()
+				.filter(s -> StringUtils.isNotBlank(s)) // filter empty addresses
+				.map(ea -> ea.trim()) //trim the emails
+				.toList();
+	}
+
+	/**
+	 * Performs following operations:
+	 * <ul>
+	 * 	<li>{@link #extractEmails(String)}</li>
+	 * 	<li>{@link InternetAddress#parse(String)}</li> hint: this operation requires comma as separator char of emails
+	 * 	<li>converts result to {@link List}</li>
+	 * </ul>
+	 *
+	 * @param joinedEmailsString
+	 * @return
+	 * @throws AddressException
+	 */
+	public static List<InternetAddress> extractInternetAddresses(String joinedEmailsString) throws AddressException {
+		return Arrays.asList(InternetAddress.parse(StringUtils.join(extractEmails(joinedEmailsString), Constants.COMMA)));
 	}
 
 }

@@ -20,5 +20,8 @@
   }, {
     "name" : "attachments",
     "type" : "List<File>"
+  }, {
+    "name" : "javaApiEmail",
+    "type" : "com.axonivy.connector.casemailcomponent.service.JavaApiEmail"
   } ]
 }

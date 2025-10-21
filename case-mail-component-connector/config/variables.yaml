@@ -25,3 +25,6 @@ Variables:
   processedFolderName: Processed
   # Folder to which the mail will be moved if an error occurs
   errorFolderName: ErrorFolder
+  # If set to true, the email will be sent via the Java Mail API, and any inline images included in the message will be embedded as CID (Content-ID) references within a multipart message, instead of being encoded as Base64.
+  # [enum: true, false]
+  cidInlineImagesMode: "false"

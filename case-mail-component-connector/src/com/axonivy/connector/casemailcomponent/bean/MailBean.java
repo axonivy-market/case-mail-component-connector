@@ -44,10 +44,10 @@ public class MailBean {
 	private MailService mailService;
 	private String caseId;
 	private String caseRef;
-	private java.util.List<Attachment> attachments;
+	private List<Attachment> attachments;
 	private String allowFileTypes = Ivy.var().get("allowFileTypes");
 	private String maxUploadSize = Ivy.var().get("maxUploadSize");
-	private List<Attachment> inlineAtachments;
+	private List<Attachment> inlineAttachments;
 
 	private static final Map<String, String> MIME_TYPE_ICON_MAP = new HashMap<>();
 
@@ -72,7 +72,7 @@ public class MailBean {
 			mail.setSubject(caseRef);
 		}
 		attachments = new ArrayList<Attachment>();
-		inlineAtachments = new ArrayList<Attachment>();
+		inlineAttachments = new ArrayList<Attachment>();
 	}
 
 	public void handleCloseDialog() {
@@ -98,7 +98,7 @@ public class MailBean {
 		default:
 			break;
 		}
-		replaceInlineImageWithBase64(mail);
+		getMailBodyWithEmbeddedImages(mail);
 	}
 
 	/**
@@ -117,26 +117,37 @@ public class MailBean {
 	/**
 	 * Get mail body with embedded images
 	 */
-	public String getMailBodyWithEmbeddedImages() {
-		replaceInlineImageWithBase64(selectedMail);
+	public String getMailBodyWithEmbeddedImages(Mail mail) {
+		replaceInlineImageWithBase64(mail);
 		// Detect if it's HTML or plain text
-		if (!EmailContentUtil.isHtml(selectedMail.getBody())) {
+		if (!EmailContentUtil.isHtml(mail.getBody())) {
 			// Escape HTML and wrap in <pre> to preserve formatting
-			selectedMail.setBody("<pre>" + StringEscapeUtils.escapeHtml4(selectedMail.getBody()) + "</pre>");
+			mail.setBody("<pre>" + StringEscapeUtils.escapeHtml4(mail.getBody()) + "</pre>");
 		}
 
-		return selectedMail.getBody();
+		return mail.getBody();
 	}
 
 	private void replaceInlineImageWithBase64(Mail mail) {
-		if (CollectionUtils.isNotEmpty(inlineAtachments)) {
-			for (final Attachment file : inlineAtachments) {
+		if (CollectionUtils.isEmpty(inlineAttachments) || !shouldReplaceCidWithBase64(mail.getBody())) {
+			return;
+		}
+		if (CollectionUtils.isNotEmpty(inlineAttachments)) {
+			for (final Attachment file : inlineAttachments) {
 				final String content = Base64.getEncoder().encodeToString(file.getContent());
 				final StringBuilder base64Content = new StringBuilder().append("data:image/")
 						.append(file.getDefaultExtension()).append(";base64,").append(content);
-				mail.setBody(mail.getBody().replace("cid:" + file.getContentId(), base64Content));
+				mail.setBody(mail.getBody().replace(Constants.CID + file.getContentId(), base64Content));
 			}
 		}
+	}
+
+	public static boolean shouldReplaceCidWithBase64(String htmlContent) {
+		if (htmlContent == null || htmlContent.isEmpty()) {
+			return false;
+		}
+
+		return htmlContent.contains(Constants.CID);
 	}
 
 	/**
@@ -225,7 +236,7 @@ public class MailBean {
 		selectedMail = event.getObject();
 		if (selectedMail == null) {
 			attachments = Collections.emptyList();
-			inlineAtachments = Collections.emptyList();
+			inlineAttachments = Collections.emptyList();
 			return;
 		}
 
@@ -235,13 +246,13 @@ public class MailBean {
 
 	private void categorizeAttachments(List<Attachment> allAttachments) {
 		attachments = new ArrayList<>();
-		inlineAtachments = new ArrayList<>();
+		inlineAttachments = new ArrayList<>();
 		for (Attachment attachment : allAttachments) {
 			boolean isInline = Boolean.TRUE.equals(attachment.getInlineAttachment());
 			boolean isEml = StringUtils.equalsIgnoreCase(attachment.getDefaultExtension(), Constants.EML_EXTENTION);
 
 			if (isInline) {
-				inlineAtachments.add(attachment);
+				inlineAttachments.add(attachment);
 			} else if (!isEml) {
 				attachments.add(attachment);
 			}
@@ -296,11 +307,11 @@ public class MailBean {
 		this.maxUploadSize = maxUploadSize;
 	}
 
-	public java.util.List<Attachment> getAttachments() {
+	public List<Attachment> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(java.util.List<Attachment> attachments) {
+	public void setAttachments(List<Attachment> attachments) {
 		this.attachments = attachments;
 	}
 

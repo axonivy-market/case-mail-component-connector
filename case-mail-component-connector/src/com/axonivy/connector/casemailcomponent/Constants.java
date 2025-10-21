@@ -24,4 +24,6 @@ public class Constants {
 	public static final String DOT = ".";
 	public static final String EML_EXTENTION = "eml";
 	public static final int DEFAULT_SMALL_STRING_LENGTH = 50;
+	public static final String EMAIL_ADDRESS_SEPARATOR = COMMA;
+	public static final String CID = "cid:";
 }

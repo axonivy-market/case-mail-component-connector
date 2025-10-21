@@ -17,6 +17,7 @@ Errors:
   failedToCacheFile: Failed to cache file
   failedToConvertToPdf: Failed to convert file to PDF
   failedToLoadFile: Failed to load file
+  mailJavaApiNotSend: Error by sending email message with Java API
   mailNotSent: Error by sending email message
 File:
   fileTypesAllowedMessage: only {0} is allowed
