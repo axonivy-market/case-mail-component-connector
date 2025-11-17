@@ -1,88 +1,148 @@
-# Case Mail Komponente
+# Fall Post Komponente
 
-Ein kompaktes E-Mail-Modul zum Senden und Empfangen von Nachrichten, die einem bestimmten Ivy-Case zugeordnet sind. Alle ausgehenden E-Mails werden automatisch mit dem jeweiligen Case verknüpft – so bleibt die gesamte Kommunikation jederzeit nachvollziehbar und zentral im Workflow verfügbar.
+Eine simple Post Komponente gestaltet zu senden und empfangen #Email erzählt zu
+einem spezifischen Efeu Fall. Alle #hingerissen #Email sind automatisch zu ihrem
+#entsprechend Fall verbunden, versehend nahtlos #rückverfolgen und Management
+von Kommunikation #innerhalb die workflow.
 
-Der Case Mail Komponente unterstützt das Versenden, Empfangen, Beantworten, Weiterleiten und erneute Versenden von E-Mails.  
-- Eine Listenansicht zeigt die wichtigsten Informationen wie Datum, Absender, Empfänger und Betreff.  
-- Detailansichten und die Integration in Prozesse sorgen für eine lückenlose Nachverfolgung.  
-- Eingaben werden validiert, Fehler automatisch behandelt und bei Bedarf wird fehlgeschlagenes Versenden erneut versucht; fehlgeschlagene Nachrichten erzeugen eine Admin-Aufgabe.  
-- Inhalt und Anhänge bleiben bei Antworten, Weiterleitungen und erneutem Versand vollständig erhalten.  
+Die Fall Post Komponente erlaubt senden, Empfang, Antwort, Nachsendung, und
+resending #Email verbanden zu einen Efeu Fall.
+- Eine #Email Liste Ausblick Displays wesentliche Details gleichnamiges Datum,
+  Absender, Empfänger, und dienstbar.
+- Detaillierte #Email Ausblicke und Arbeitsgang Integration sichert nahtlose
+  Kommunikation #rückverfolgen.
+- Es unterstützt Feld Bestätigung, Fehler bedienen mit Wiederholung Logik, und
+  admin Task Management für #verkracht #Email.
+- Originaler Meldung Inhalt und Anfügungen sind bewahrt in Beantwortungen,
+  Stürmer, und resends.
 
 ## Demo
-### E-Mail-Listenansicht
-Übersicht aller E-Mails zu einem Fall.  
+### #Email Liste Ausblick
+Zeigt eine Liste von alle #Email
 
-![Alt text](images/email-list.png)
+![Alt Text](images/email-list.png)
 
-### E-Mail-Details
-Anzeige der vollständigen Informationen zu einer ausgewählten Nachricht.  
 
-![Alt text](images/email-details.png)
+### #Mailen #Zuweisen Schau an
+Volle Details von einer exklusiven #Email
 
-### Neue E-Mail
-- Erstellen und Versenden neuer Nachrichten.  
-- Validierungen:  
-  - `From`: Pflichtfeld; gültige Adresse erforderlich.  
-  - `To`: Pflichtfeld; gültige Liste von Adressen erforderlich.  
-  - `CC`: Optional; falls angegeben, gültige Liste von Adressen.  
+![Alt Text](images/email-details.png)
 
-![Alt text](images/new-email.png)
 
-### Antwort-E-Mail
-Automatische Übernahme der wichtigsten Daten der ursprünglichen Nachricht:  
-- `Subject`: wird mit `RE:` ergänzt  
-- `Body`: enthält die ursprüngliche Nachricht mit Absender, Datum, Empfänger, Betreff und Text  
+### Neue #Email
+- Erlaubt #abfassen und sendend neue #Email.
+- Feld Bestätigungen:
+  - `Von`: Bedürft; Müssen sein eine gültige #Email Adresse.
+  - `Zu`: Bedürft; Müssen sein eine gültige Liste von #mailen adressiert.
+  - `#CC`: Optional; Ob versehen, müssen sein eine gültige Liste von #mailen
+    adressiert.
 
-![Alt text](images/reply-email.png)
+![Alt Text](images/new-email.png)
 
-### E-Mail weiterleiten
-Weiterleitung eingegangener Nachrichten:  
-- `From`: ursprünglicher Absender  
-- `To`: vom Benutzer definiert  
-- `Subject`: wird mit `FW:` ergänzt  
-- `Body`: enthält die gesamte Originalnachricht  
-- Anhänge: werden übernommen  
 
-![Alt text](images/forward.png)
+### #Erwidern #Mailen
+Automatisch bevölkert #auffangen gegründet auf der originalen #Email:
+  - `Dienstbar`: Vorangestellt mit `RE:`
+  - `Körper`:
+    ```
+    <new message>
 
-### E-Mail erneut senden
-- Verfügbar nur für Nachrichten mit Status `Sent`  
-- Sendet eine E-Mail erneut mit denselben Daten (Absender, Empfänger, Betreff, Text, Anhänge)  
-- Der Nachrichtenkörper enthält einen Hinweis, dass es sich um eine Kopie handelt  
+    From: <original from>
+    Sent: <original sent date>
+    To: <original to>
+    CC: <original cc>
+    Subject: <original subject>
+    <original body>
+    ```
 
-![Alt text](images/resend-confirmation.png)  
-![Alt text](images/resend-email.png)
+![Alt Text](images/reply-email.png)
 
-### Fehlerbehandlung
-- Automatischer Wiederholungsmechanismus:  
-  - Anzahl (`mailLoopRepeatNumber`) und Intervall (`mailLoopRepeatDelay`) konfigurierbar  
-- Scheitern alle Versuche, wird eine Admin-Aufgabe erstellt  
 
-### Admin-Aufgaben
-- **Abbrechen:** Aufgabe beenden  
-- **Erneut versuchen:** Versand erneut starten; bei Fehlschlag greift die Wiederholungslogik und ggf. wird eine neue Aufgabe erzeugt  
+### #Nachschicken #Mailen
+Benutzt zu #nachschicken anerkannte Meldungen:
+  - `Von`: Originaler Absender.
+  - `Zu`: Nutzer-#abgesteckt.
+  - `Dienstbar`: Vorangestellt mit `FW:`
+  - `Körper` schließt ein volle Original Meldung Details.
+  - Anfügungen: Originale Anfügungen sind eingeschlossen.
 
-![Alt text](images/admin-task.png)  
-![Alt text](images/admin-task-detail.png)
+![Alt Text](images/forward.png)
+
+### Resend #Email
+- Nur verfügbar für #Email herein `Gesandt` Staat.
+- Benutzt zu resend eine vorher #hingerissen #Email:
+  - `Von`, `Zu`, `Dienstbar`: Gleich da das Original.
+  - `Körper`:
+    ```
+    <<<<  This is a copy of an email that has already been sent  >>>>>
+
+    Original message:
+    <original body>
+    ```
+  - Anfügungen: Originale Anfügungen sind eingeschlossen.
+
+![Alt Text](images/resend-confirmation.png)
+
+![Alt Text](images/resend-email.png)
+
+
+### Fehler Handing
+- Automatischer Wiederholung Mechanismus:
+  - Wiederholungen `x` Zeiten #jede `y` Sekunden, konfigurierbar via variabel:
+    - `mailLoopRepeatNumber`
+    - `mailLoopRepeatDelay`
+- Ob alle Wiederholungen scheitern, #ein admin Task ist geschafft.
+
+### Admin Tasks
+- **Treiben ab:** Streicht den Task und endet den Arbeitsgang.
+- **Wiederholung:** Versuche zu senden nochmal die #Email. Ob ihm scheitert,
+  Wiederholungen gegründet weiter die konfiguriert Wiederholung Logik und
+  generiert #andere admin Task #erforderlichenfalls.
+
+![Alt Text](images/admin-task.png)
+
+![Alt Text](images/admin-task-detail.png)
+
+### Anerkannte Post
+#Wiedergewinnen alle #Post von dem Briefkasten wessen unterwirft Wettkämpfe das
+Muster definiert herein das `subjectMatches` Variable.
+
+Ob die Post zügelt einen gültigen Fall Verweis in dem Sujet (da definiert herein
+dem `caseReferenceRegex` Variable), es ist begeben zu die `processedFolderName`
+Ordner; Andernfalls, es ist begeben zu das `errorFolderName` Ordner.
+
+Nach der #Email ist verarbeitet, ein Task ist geschafft für Nutzer mit Rolle
+definiert herein die `retrieveMailTaskRole` Variable.
 
 ## Einrichtung
-1. Maximale Größe des Request-Bodys festlegen  
+1. Konfigurier #Höchster Bitte Körper Größe
 
-   Bestimmt, wie groß der zwischengespeicherte/speicherbare Request-Body sein darf, z. B. bei:  
-   - FORM- oder CLIENT-CERT-Authentifizierung  
-   - HTTP/1.1-Upgrade-Requests  
+   Gesetzt die #höchster Größe (#in Byte) von den Bitte Körper dass den Server
+   sollte Pufferspeicher/speichert während:
+   - FORM oder KUNDE-CERT Authentifizierung
+   - HTTP/1.1 #aktualisieren #auffordern
 
-   **Konfiguration:**  
-   - In `ivy.yaml`:  
+   **Wie zu konfigurieren:**
+   - Herein `Efeu.yaml`:
      ```yaml
      Http:
        MaxPostSize: 2097152
-     ```  
-     👉 Referenz: [Axon Ivy Docs – ivy.yaml](https://developer.axonivy.com/doc/12.0/engine-guide/configuration/files/ivy-yaml.html)
+     ```
+     👉 Verweis: [#Axon Efeu Docs –
+     Efeu.yaml](https://developer.axonivy.com/doc/12.0/engine-guide/configuration/files/ivy-yaml.html)
 
-   - In der **nginx**-Konfiguration:  
+   - Herein **nginx** Konfiguration:
      ```nginx
      client_max_body_size 150M;
      ```
 
-2. Folgende Projektvariablen setzen:  
+2. Gesetzt die folgenden Variablen in eurem Projekt:
+```
+@variables.yaml@
+```
+
+3. Stell auf Ordner in eurem Briefkasten
+
+   Ob du benutzt die anerkannte Post Charakterzug, schaff zwei Ordner in eurem
+   Briefkasten konfiguriert da herein dem `processedFolderName` und
+   `errorFolderName` Variablen
