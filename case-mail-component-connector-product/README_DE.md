@@ -1,49 +1,50 @@
-# Fall Post Komponente
+# Fall-Mail-Komponente
 
-Eine simple Post Komponente gestaltet zu senden und empfangen #Email erzählt zu
-einem spezifischen Efeu Fall. Alle #hingerissen #Email sind automatisch zu ihrem
-#entsprechend Fall verbunden, versehend nahtlos #rückverfolgen und Management
-von Kommunikation #innerhalb die workflow.
+Eine einfache E-Mail-Komponente zum Senden und Empfangen von E-Mails zu einem
+bestimmten Ivy-Fall. Alle gesendeten E-Mails werden automatisch mit dem
+entsprechenden Fall verknüpft, sodass die Kommunikation innerhalb des Workflows
+nahtlos verfolgt und verwaltet werden kann.
 
-Die Fall Post Komponente erlaubt senden, Empfang, Antwort, Nachsendung, und
-resending #Email verbanden zu einen Efeu Fall.
-- Eine #Email Liste Ausblick Displays wesentliche Details gleichnamiges Datum,
-  Absender, Empfänger, und dienstbar.
-- Detaillierte #Email Ausblicke und Arbeitsgang Integration sichert nahtlose
-  Kommunikation #rückverfolgen.
-- Es unterstützt Feld Bestätigung, Fehler bedienen mit Wiederholung Logik, und
-  admin Task Management für #verkracht #Email.
-- Originaler Meldung Inhalt und Anfügungen sind bewahrt in Beantwortungen,
-  Stürmer, und resends.
+Die Case Mail-Komponente ermöglicht das Senden, Empfangen, Beantworten,
+Weiterleiten und erneute Senden von E-Mails, die mit einem Ivy-Fall verknüpft
+sind.
+- Eine E-Mail-Listenansicht zeigt wichtige Details wie Datum, Absender,
+  Empfänger und Betreff an.
+- Detaillierte E-Mail-Ansichten und Prozessintegration gewährleisten eine
+  nahtlose Kommunikationsverfolgung.
+- Es unterstützt Feldvalidierung, Fehlerbehandlung mit Wiederholungslogik und
+  die Verwaltung von Administratoraufgaben für fehlgeschlagene E-Mails.
+- Der ursprüngliche Inhalt der Nachricht und die Anhänge bleiben bei Antworten,
+  Weiterleitungen und erneuten Sendungen erhalten.
 
 ## Demo
-### #Email Liste Ausblick
-Zeigt eine Liste von alle #Email
+### E-Mail-Listenansicht
+Zeigt eine Liste aller E-Mails an.
 
-![Alt Text](images/email-list.png)
-
-
-### #Mailen #Zuweisen Schau an
-Volle Details von einer exklusiven #Email
-
-![Alt Text](images/email-details.png)
+![Alt-Text](images/email-list.png)
 
 
-### Neue #Email
-- Erlaubt #abfassen und sendend neue #Email.
-- Feld Bestätigungen:
-  - `Von`: Bedürft; Müssen sein eine gültige #Email Adresse.
-  - `Zu`: Bedürft; Müssen sein eine gültige Liste von #mailen adressiert.
-  - `#CC`: Optional; Ob versehen, müssen sein eine gültige Liste von #mailen
-    adressiert.
+### E-Mail-Details anzeigen
+Alle Details zu einer ausgewählten E-Mail
 
-![Alt Text](images/new-email.png)
+![Alt-Text](images/email-details.png)
 
 
-### #Erwidern #Mailen
-Automatisch bevölkert #auffangen gegründet auf der originalen #Email:
-  - `Dienstbar`: Vorangestellt mit `RE:`
-  - `Körper`:
+### Neue E-Mail
+- Ermöglicht das Verfassen und Versenden neuer E-Mails.
+- Feldvalidierungen:
+  - `Aus`: Erforderlich; muss eine gültige E-Mail-Adresse sein.
+  - `An`: Erforderlich; muss eine gültige Liste von E-Mail-Adressen sein.
+  - `CC-`: Optional; falls angegeben, muss es sich um eine gültige Liste von
+    E-Mail-Adressen handeln.
+
+![Alt-Text](images/new-email.png)
+
+
+### Antwort-E-Mail
+Füllt Felder automatisch auf Basis der ursprünglichen E-Mail aus:
+  - `Betreff`: Vorangestellt mit `RE:`
+  - `Hauptteil`:
     ```
     <new message>
 
@@ -55,94 +56,98 @@ Automatisch bevölkert #auffangen gegründet auf der originalen #Email:
     <original body>
     ```
 
-![Alt Text](images/reply-email.png)
+![Alt-Text](images/reply-email.png)
 
 
-### #Nachschicken #Mailen
-Benutzt zu #nachschicken anerkannte Meldungen:
-  - `Von`: Originaler Absender.
-  - `Zu`: Nutzer-#abgesteckt.
-  - `Dienstbar`: Vorangestellt mit `FW:`
-  - `Körper` schließt ein volle Original Meldung Details.
-  - Anfügungen: Originale Anfügungen sind eingeschlossen.
+### E-Mail weiterleiten
+Wird zum Weiterleiten empfangener Nachrichten verwendet:
+  - `Von`: Ursprünglicher Absender.
+  - `An`: Benutzerdefiniert.
+  - `Betreff`: Präfix mit `FW:`
+  - `Der Text` enthält die vollständigen Details der Originalnachricht.
+  - Anhänge: Die Original-Anhänge sind enthalten.
 
-![Alt Text](images/forward.png)
+![Alt-Text](images/forward.png)
 
-### Resend #Email
-- Nur verfügbar für #Email herein `Gesandt` Staat.
-- Benutzt zu resend eine vorher #hingerissen #Email:
-  - `Von`, `Zu`, `Dienstbar`: Gleich da das Original.
-  - `Körper`:
+### E-Mail erneut senden
+- `Nur verfügbar für E-Mails im Status „Gesendet“ (Sent) und „` “ (Gesendet,
+  aber nicht bestätigt) ( ).
+- Wird verwendet, um eine zuvor gesendete E-Mail erneut zu senden:
+  - `Von`, `Zu`, `Betreff`: Wie im Original.
+  - `Hauptteil`:
     ```
     <<<<  This is a copy of an email that has already been sent  >>>>>
 
     Original message:
     <original body>
     ```
-  - Anfügungen: Originale Anfügungen sind eingeschlossen.
+  - Anhänge: Die Original-Anhänge sind enthalten.
 
-![Alt Text](images/resend-confirmation.png)
+![Alt-Text](images/resend-confirmation.png)
 
-![Alt Text](images/resend-email.png)
+![Alt-Text](images/resend-email.png)
 
 
-### Fehler Handing
-- Automatischer Wiederholung Mechanismus:
-  - Wiederholungen `x` Zeiten #jede `y` Sekunden, konfigurierbar via variabel:
+### Fehlerbehandlung
+- Automatischer Wiederholungsmechanismus:
+  - Wiederholungsversuche `x` Mal alle `y` Sekunden, konfigurierbar über
+    Variable:
     - `mailLoopRepeatNumber`
     - `mailLoopRepeatDelay`
-- Ob alle Wiederholungen scheitern, #ein admin Task ist geschafft.
+- Wenn alle Wiederholungsversuche fehlschlagen, wird eine Admin-Aufgabe
+  erstellt.
 
-### Admin Tasks
-- **Treiben ab:** Streicht den Task und endet den Arbeitsgang.
-- **Wiederholung:** Versuche zu senden nochmal die #Email. Ob ihm scheitert,
-  Wiederholungen gegründet weiter die konfiguriert Wiederholung Logik und
-  generiert #andere admin Task #erforderlichenfalls.
+### Administratoraufgaben
+- **Abbrechen:** Bricht die Aufgabe ab und beendet den Prozess.
+- **Wiederholen:** Versucht, die E-Mail erneut zu senden. Wenn dies fehlschlägt,
+  werden gemäß der konfigurierten Wiederholungslogik weitere Versuche
+  unternommen und bei Bedarf eine weitere Administratoraufgabe generiert.
 
-![Alt Text](images/admin-task.png)
+![Alt-Text](images/admin-task.png)
 
-![Alt Text](images/admin-task-detail.png)
+![Alt-Text](images/admin-task-detail.png)
 
-### Anerkannte Post
-#Wiedergewinnen alle #Post von dem Briefkasten wessen unterwirft Wettkämpfe das
-Muster definiert herein das `subjectMatches` Variable.
+### Erhaltene E-Mail
+Ruft alle E-Mails aus dem Postfach ab, deren Betreff mit dem Muster
+übereinstimmt, das in der Variablen „ `subjectMatches` ” definiert ist.
 
-Ob die Post zügelt einen gültigen Fall Verweis in dem Sujet (da definiert herein
-dem `caseReferenceRegex` Variable), es ist begeben zu die `processedFolderName`
-Ordner; Andernfalls, es ist begeben zu das `errorFolderName` Ordner.
+Wenn die E-Mail eine gültige Fallreferenz im Betreff enthält (wie in der
+Variable „ `caseReferenceRegex”` definiert), wird sie in den Ordner „
+`processedFolderName”` verschoben; andernfalls wird sie in den Ordner „
+`errorFolderName”` verschoben.
 
-Nach der #Email ist verarbeitet, ein Task ist geschafft für Nutzer mit Rolle
-definiert herein die `retrieveMailTaskRole` Variable.
+Nachdem die E-Mail verarbeitet wurde, wird eine Aufgabe für den Benutzer mit der
+Rolle erstellt, die in der Variablen „ `retrieveMailTaskRole` ” definiert ist.
 
 ## Einrichtung
-1. Konfigurier #Höchster Bitte Körper Größe
+1. Maximale Größe des Request-Body konfigurieren
 
-   Gesetzt die #höchster Größe (#in Byte) von den Bitte Körper dass den Server
-   sollte Pufferspeicher/speichert während:
-   - FORM oder KUNDE-CERT Authentifizierung
-   - HTTP/1.1 #aktualisieren #auffordern
+   Legen Sie die maximale Größe (in Byte) des Request-Body fest, den der Server
+   währenddessen puffern/speichern soll:
+   - FORM- oder CLIENT-CERT-Authentifizierung
+   - HTTP/1.1-Upgrade-Anfragen
 
-   **Wie zu konfigurieren:**
-   - Herein `Efeu.yaml`:
+   **So konfigurieren Sie:**
+   - In `ivy.yaml`:
      ```yaml
      Http:
        MaxPostSize: 2097152
      ```
-     👉 Verweis: [#Axon Efeu Docs –
-     Efeu.yaml](https://developer.axonivy.com/doc/12.0/engine-guide/configuration/files/ivy-yaml.html)
+     👉 Referenz: [Axon Ivy Docs –
+     ivy.yaml](https://developer.axonivy.com/doc/12.0/engine-guide/configuration/files/ivy-yaml.html)
 
-   - Herein **nginx** Konfiguration:
+   - In der Konfiguration „ **“ von Nginx „** “:
      ```nginx
      client_max_body_size 150M;
      ```
 
-2. Gesetzt die folgenden Variablen in eurem Projekt:
+2. Legen Sie die folgenden Variablen in Ihrem Projekt fest:
 ```
 @variables.yaml@
 ```
 
-3. Stell auf Ordner in eurem Briefkasten
+3. Richten Sie Ordner in Ihrem Postfach ein.
 
-   Ob du benutzt die anerkannte Post Charakterzug, schaff zwei Ordner in eurem
-   Briefkasten konfiguriert da herein dem `processedFolderName` und
-   `errorFolderName` Variablen
+   `Wenn Sie die Funktion „Empfangene E-Mails” verwenden, erstellen Sie zwei
+   Ordner in Ihrem Postfach, wie in den Variablen „ `”, „processedFolderName” (`
+   ) und „errorFolderName” (` ) konfiguriert.
