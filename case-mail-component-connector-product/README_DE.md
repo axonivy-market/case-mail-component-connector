@@ -119,7 +119,7 @@ Variable „ `caseReferenceRegex”` definiert), wird sie in den Ordner „
 Nachdem die E-Mail verarbeitet wurde, wird eine Aufgabe für den Benutzer mit der
 Rolle erstellt, die in der Variablen „ `retrieveMailTaskRole` ” definiert ist.
 
-## Einrichtung
+## Setup
 1. Maximale Größe des Request-Body konfigurieren
 
    Legen Sie die maximale Größe (in Byte) des Request-Body fest, den der Server
