@@ -1,88 +1,153 @@
-# Case Mail Komponente
+# Fall-Mail-Komponente
 
-Ein kompaktes E-Mail-Modul zum Senden und Empfangen von Nachrichten, die einem bestimmten Ivy-Case zugeordnet sind. Alle ausgehenden E-Mails werden automatisch mit dem jeweiligen Case verknüpft – so bleibt die gesamte Kommunikation jederzeit nachvollziehbar und zentral im Workflow verfügbar.
+Eine einfache E-Mail-Komponente zum Senden und Empfangen von E-Mails zu einem
+bestimmten Ivy-Fall. Alle gesendeten E-Mails werden automatisch mit dem
+entsprechenden Fall verknüpft, sodass die Kommunikation innerhalb des Workflows
+nahtlos verfolgt und verwaltet werden kann.
 
-Der Case Mail Komponente unterstützt das Versenden, Empfangen, Beantworten, Weiterleiten und erneute Versenden von E-Mails.  
-- Eine Listenansicht zeigt die wichtigsten Informationen wie Datum, Absender, Empfänger und Betreff.  
-- Detailansichten und die Integration in Prozesse sorgen für eine lückenlose Nachverfolgung.  
-- Eingaben werden validiert, Fehler automatisch behandelt und bei Bedarf wird fehlgeschlagenes Versenden erneut versucht; fehlgeschlagene Nachrichten erzeugen eine Admin-Aufgabe.  
-- Inhalt und Anhänge bleiben bei Antworten, Weiterleitungen und erneutem Versand vollständig erhalten.  
+Die Case Mail-Komponente ermöglicht das Senden, Empfangen, Beantworten,
+Weiterleiten und erneute Senden von E-Mails, die mit einem Ivy-Fall verknüpft
+sind.
+- Eine E-Mail-Listenansicht zeigt wichtige Details wie Datum, Absender,
+  Empfänger und Betreff an.
+- Detaillierte E-Mail-Ansichten und Prozessintegration gewährleisten eine
+  nahtlose Kommunikationsverfolgung.
+- Es unterstützt Feldvalidierung, Fehlerbehandlung mit Wiederholungslogik und
+  die Verwaltung von Administratoraufgaben für fehlgeschlagene E-Mails.
+- Der ursprüngliche Inhalt der Nachricht und die Anhänge bleiben bei Antworten,
+  Weiterleitungen und erneuten Sendungen erhalten.
 
 ## Demo
 ### E-Mail-Listenansicht
-Übersicht aller E-Mails zu einem Fall.  
+Zeigt eine Liste aller E-Mails an.
 
-![Alt text](images/email-list.png)
+![Alt-Text](images/email-list.png)
 
-### E-Mail-Details
-Anzeige der vollständigen Informationen zu einer ausgewählten Nachricht.  
 
-![Alt text](images/email-details.png)
+### E-Mail-Details anzeigen
+Alle Details zu einer ausgewählten E-Mail
+
+![Alt-Text](images/email-details.png)
+
 
 ### Neue E-Mail
-- Erstellen und Versenden neuer Nachrichten.  
-- Validierungen:  
-  - `From`: Pflichtfeld; gültige Adresse erforderlich.  
-  - `To`: Pflichtfeld; gültige Liste von Adressen erforderlich.  
-  - `CC`: Optional; falls angegeben, gültige Liste von Adressen.  
+- Ermöglicht das Verfassen und Versenden neuer E-Mails.
+- Feldvalidierungen:
+  - `Aus`: Erforderlich; muss eine gültige E-Mail-Adresse sein.
+  - `An`: Erforderlich; muss eine gültige Liste von E-Mail-Adressen sein.
+  - `CC-`: Optional; falls angegeben, muss es sich um eine gültige Liste von
+    E-Mail-Adressen handeln.
 
-![Alt text](images/new-email.png)
+![Alt-Text](images/new-email.png)
+
 
 ### Antwort-E-Mail
-Automatische Übernahme der wichtigsten Daten der ursprünglichen Nachricht:  
-- `Subject`: wird mit `RE:` ergänzt  
-- `Body`: enthält die ursprüngliche Nachricht mit Absender, Datum, Empfänger, Betreff und Text  
+Füllt Felder automatisch auf Basis der ursprünglichen E-Mail aus:
+  - `Betreff`: Vorangestellt mit `RE:`
+  - `Hauptteil`:
+    ```
+    <new message>
 
-![Alt text](images/reply-email.png)
+    From: <original from>
+    Sent: <original sent date>
+    To: <original to>
+    CC: <original cc>
+    Subject: <original subject>
+    <original body>
+    ```
+
+![Alt-Text](images/reply-email.png)
+
 
 ### E-Mail weiterleiten
-Weiterleitung eingegangener Nachrichten:  
-- `From`: ursprünglicher Absender  
-- `To`: vom Benutzer definiert  
-- `Subject`: wird mit `FW:` ergänzt  
-- `Body`: enthält die gesamte Originalnachricht  
-- Anhänge: werden übernommen  
+Wird zum Weiterleiten empfangener Nachrichten verwendet:
+  - `Von`: Ursprünglicher Absender.
+  - `An`: Benutzerdefiniert.
+  - `Betreff`: Präfix mit `FW:`
+  - `Der Text` enthält die vollständigen Details der Originalnachricht.
+  - Anhänge: Die Original-Anhänge sind enthalten.
 
-![Alt text](images/forward.png)
+![Alt-Text](images/forward.png)
 
 ### E-Mail erneut senden
-- Verfügbar nur für Nachrichten mit Status `Sent`  
-- Sendet eine E-Mail erneut mit denselben Daten (Absender, Empfänger, Betreff, Text, Anhänge)  
-- Der Nachrichtenkörper enthält einen Hinweis, dass es sich um eine Kopie handelt  
+- `Nur verfügbar für E-Mails im Status „Gesendet“ (Sent) und „` “ (Gesendet,
+  aber nicht bestätigt) ( ).
+- Wird verwendet, um eine zuvor gesendete E-Mail erneut zu senden:
+  - `Von`, `Zu`, `Betreff`: Wie im Original.
+  - `Hauptteil`:
+    ```
+    <<<<  This is a copy of an email that has already been sent  >>>>>
 
-![Alt text](images/resend-confirmation.png)  
-![Alt text](images/resend-email.png)
+    Original message:
+    <original body>
+    ```
+  - Anhänge: Die Original-Anhänge sind enthalten.
+
+![Alt-Text](images/resend-confirmation.png)
+
+![Alt-Text](images/resend-email.png)
+
 
 ### Fehlerbehandlung
-- Automatischer Wiederholungsmechanismus:  
-  - Anzahl (`mailLoopRepeatNumber`) und Intervall (`mailLoopRepeatDelay`) konfigurierbar  
-- Scheitern alle Versuche, wird eine Admin-Aufgabe erstellt  
+- Automatischer Wiederholungsmechanismus:
+  - Wiederholungsversuche `x` Mal alle `y` Sekunden, konfigurierbar über
+    Variable:
+    - `mailLoopRepeatNumber`
+    - `mailLoopRepeatDelay`
+- Wenn alle Wiederholungsversuche fehlschlagen, wird eine Admin-Aufgabe
+  erstellt.
 
-### Admin-Aufgaben
-- **Abbrechen:** Aufgabe beenden  
-- **Erneut versuchen:** Versand erneut starten; bei Fehlschlag greift die Wiederholungslogik und ggf. wird eine neue Aufgabe erzeugt  
+### Administratoraufgaben
+- **Abbrechen:** Bricht die Aufgabe ab und beendet den Prozess.
+- **Wiederholen:** Versucht, die E-Mail erneut zu senden. Wenn dies fehlschlägt,
+  werden gemäß der konfigurierten Wiederholungslogik weitere Versuche
+  unternommen und bei Bedarf eine weitere Administratoraufgabe generiert.
 
-![Alt text](images/admin-task.png)  
-![Alt text](images/admin-task-detail.png)
+![Alt-Text](images/admin-task.png)
 
-## Einrichtung
-1. Maximale Größe des Request-Bodys festlegen  
+![Alt-Text](images/admin-task-detail.png)
 
-   Bestimmt, wie groß der zwischengespeicherte/speicherbare Request-Body sein darf, z. B. bei:  
-   - FORM- oder CLIENT-CERT-Authentifizierung  
-   - HTTP/1.1-Upgrade-Requests  
+### Erhaltene E-Mail
+Ruft alle E-Mails aus dem Postfach ab, deren Betreff mit dem Muster
+übereinstimmt, das in der Variablen „ `subjectMatches` ” definiert ist.
 
-   **Konfiguration:**  
-   - In `ivy.yaml`:  
+Wenn die E-Mail eine gültige Fallreferenz im Betreff enthält (wie in der
+Variable „ `caseReferenceRegex”` definiert), wird sie in den Ordner „
+`processedFolderName”` verschoben; andernfalls wird sie in den Ordner „
+`errorFolderName”` verschoben.
+
+Nachdem die E-Mail verarbeitet wurde, wird eine Aufgabe für den Benutzer mit der
+Rolle erstellt, die in der Variablen „ `retrieveMailTaskRole` ” definiert ist.
+
+## Setup
+1. Maximale Größe des Request-Body konfigurieren
+
+   Legen Sie die maximale Größe (in Byte) des Request-Body fest, den der Server
+   währenddessen puffern/speichern soll:
+   - FORM- oder CLIENT-CERT-Authentifizierung
+   - HTTP/1.1-Upgrade-Anfragen
+
+   **So konfigurieren Sie:**
+   - In `ivy.yaml`:
      ```yaml
      Http:
        MaxPostSize: 2097152
-     ```  
-     👉 Referenz: [Axon Ivy Docs – ivy.yaml](https://developer.axonivy.com/doc/12.0/engine-guide/configuration/files/ivy-yaml.html)
+     ```
+     👉 Referenz: [Axon Ivy Docs –
+     ivy.yaml](https://developer.axonivy.com/doc/12.0/engine-guide/configuration/files/ivy-yaml.html)
 
-   - In der **nginx**-Konfiguration:  
+   - In der Konfiguration „ **“ von Nginx „** “:
      ```nginx
      client_max_body_size 150M;
      ```
 
-2. Folgende Projektvariablen setzen:  
+2. Legen Sie die folgenden Variablen in Ihrem Projekt fest:
+```
+@variables.yaml@
+```
+
+3. Richten Sie Ordner in Ihrem Postfach ein.
+
+   `Wenn Sie die Funktion „Empfangene E-Mails” verwenden, erstellen Sie zwei
+   Ordner in Ihrem Postfach, wie in den Variablen „ `”, „processedFolderName” (`
+   ) und „errorFolderName” (` ) konfiguriert.
