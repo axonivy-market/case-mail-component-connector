@@ -7,14 +7,14 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>${project.name}</module>
-    <module>${project.name}-demo</module>
-    <module>${project.name}-test</module>
-    <module>${project.name}-product</module>
+    <module>case-mail-component-connector</module>
+    <module>case-mail-component-connector-demo</module>
+    <module>case-mail-component-connector-test</module>
+    <module>case-mail-component-connector-product</module>
   </modules>
 
   <scm>
-    <developerConnection>scm:git:https://github.com/axonivy-market/${project.name}.git</developerConnection>
+    <developerConnection>scm:git:https://github.com/axonivy-market/case-mail-component-connector.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
