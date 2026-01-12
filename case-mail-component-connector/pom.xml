@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.axonivy.connector.casemailcomponent</groupId>
   <artifactId>case-mail-component-connector</artifactId>
-  <version>12.0.5-SNAPSHOT</version>
+  <version>13.2.0-SNAPSHOT</version>
   <packaging>iar</packaging>
   <properties>
     <project.build.plugin.version>12.0.0</project.build.plugin.version>
@@ -20,12 +20,12 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.11.0</version>
+      <version>1.15.0</version>
     </dependency>
     <dependency>
       <groupId>com.axonivy.utils.docfactory</groupId>
       <artifactId>doc-factory</artifactId>
-      <version>12.0.1</version>
+      <version>13.2.1</version>
       <type>iar</type>
     </dependency>
     <dependency>
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>com.axonivy.connector.mailstore</groupId>
       <artifactId>mailstore-connector</artifactId>
-      <version>12.0.2</version>
+      <version>13.1.3</version>
       <type>iar</type>
     </dependency>
     <dependency>
