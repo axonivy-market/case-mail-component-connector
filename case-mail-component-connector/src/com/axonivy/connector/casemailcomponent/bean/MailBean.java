@@ -14,8 +14,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.text.StringEscapeUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
@@ -129,10 +129,10 @@ public class MailBean {
 	}
 
 	private void replaceInlineImageWithBase64(Mail mail) {
-		if (CollectionUtils.isEmpty(inlineAttachments) || !shouldReplaceCidWithBase64(mail.getBody())) {
+		if (inlineAttachments.isEmpty()|| !shouldReplaceCidWithBase64(mail.getBody())) {
 			return;
 		}
-		if (CollectionUtils.isNotEmpty(inlineAttachments)) {
+		if (!inlineAttachments.isEmpty()) {
 			for (final Attachment file : inlineAttachments) {
 				final String content = Base64.getEncoder().encodeToString(file.getContent());
 				final StringBuilder base64Content = new StringBuilder().append("data:image/")
@@ -199,7 +199,7 @@ public class MailBean {
 		attachment.setDefaultExtension(
 				StringUtils.upperCase(StringUtils.substringAfterLast(uploadedFile.getFileName(), ".")));
 		attachment.setInlineAttachment(false);
-		if (CollectionUtils.isEmpty(attachments)) {
+		if (attachments.isEmpty()) {
 			attachments = new java.util.ArrayList<Attachment>();
 		}
 		attachments.add(attachment);
@@ -249,7 +249,7 @@ public class MailBean {
 		inlineAttachments = new ArrayList<>();
 		for (Attachment attachment : allAttachments) {
 			boolean isInline = Boolean.TRUE.equals(attachment.getInlineAttachment());
-			boolean isEml = StringUtils.equalsIgnoreCase(attachment.getDefaultExtension(), Constants.EML_EXTENTION);
+			boolean isEml = Strings.CI.equals(attachment.getDefaultExtension(), Constants.EML_EXTENTION);
 
 			if (isInline) {
 				inlineAttachments.add(attachment);

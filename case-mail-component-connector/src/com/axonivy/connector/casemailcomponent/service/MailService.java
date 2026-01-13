@@ -10,7 +10,6 @@ import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.axonivy.connector.casemailcomponent.Constants;
@@ -291,7 +290,7 @@ public class MailService {
 			final String message = Ivy.cms().co("/Labels/resendConfirmMessage",
 					Arrays.asList(mail.getSubject(), mail.getRecipient(), mail.getRecipientCC()));
 			if (StringUtils.isEmpty(mail.getRecipientCC())) {
-				result = StringUtils.replace(message, Constants.SEMICOLON, StringUtils.EMPTY);
+				result = message.replace(Constants.SEMICOLON, StringUtils.EMPTY);
 				return result;
 			} else {
 				return message;
@@ -347,7 +346,7 @@ public class MailService {
 	static public List<ch.ivyteam.ivy.scripting.objects.File> prepareAttachments(String mailId) {
 		final List<ch.ivyteam.ivy.scripting.objects.File> files = new ArrayList<ch.ivyteam.ivy.scripting.objects.File>();
 		List<Attachment> attachments = findMailAttachments(mailId);
-		if (CollectionUtils.isNotEmpty(attachments)) {
+		if (!attachments.isEmpty()) {
 			for (final Attachment attachment : attachments) {
 				try {
 					final ch.ivyteam.ivy.scripting.objects.File file = new ch.ivyteam.ivy.scripting.objects.File(
@@ -377,7 +376,7 @@ public class MailService {
 		mail.setCreatedDate(new DateTime());
 		String mailId = Ivy.repo().save(mail).getId();
 		mail.setId(mailId);
-		if (CollectionUtils.isNotEmpty(attachments)) {
+		if (!attachments.isEmpty()) {
 			for (Attachment attachment : attachments) {
 				attachment.setMailId(mailId);
 				Ivy.repo().save(attachment);
@@ -415,9 +414,9 @@ public class MailService {
 	 * @return
 	 */
 	public static List<String> extractEmails(String joinedEmailsString) {
-		joinedEmailsString = StringUtils.replace(joinedEmailsString, Constants.COMMA, Constants.EMAIL_ADDRESS_SEPARATOR);
-		joinedEmailsString = StringUtils.replace(joinedEmailsString, Constants.SEMICOLON, Constants.EMAIL_ADDRESS_SEPARATOR);
-		joinedEmailsString = StringUtils.replace(joinedEmailsString, StringUtils.SPACE, Constants.EMAIL_ADDRESS_SEPARATOR);
+		joinedEmailsString = joinedEmailsString.replace(Constants.COMMA, Constants.EMAIL_ADDRESS_SEPARATOR);
+		joinedEmailsString = joinedEmailsString.replace(Constants.SEMICOLON, Constants.EMAIL_ADDRESS_SEPARATOR);
+		joinedEmailsString = joinedEmailsString.replace(StringUtils.SPACE, Constants.EMAIL_ADDRESS_SEPARATOR);
 		return List.of(StringUtils.split(joinedEmailsString, Constants.EMAIL_ADDRESS_SEPARATOR)).stream()
 				.filter(s -> StringUtils.isNotBlank(s)) // filter empty addresses
 				.map(ea -> ea.trim()) //trim the emails

@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.axonivy.ivy.api</groupId>
     <artifactId>ivy-project-parent</artifactId>
-    <version>13.2.1-SNAPSHOT</version>
+    <version>13.2.0</version>
     <relativePath></relativePath>
   </parent>
   <groupId>com.axonivy.connector.casemailcomponent</groupId>
@@ -13,15 +13,14 @@
   <version>13.2.0-SNAPSHOT</version>
   <packaging>iar</packaging>
   <properties>
-    <project.build.plugin.version>12.0.0</project.build.plugin.version>
+    <project.build.plugin.version>13.2.0</project.build.plugin.version>
     <apache.pdfbox.version>3.0.4</apache.pdfbox.version>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.15.0</version>
-    </dependency>
+      </dependency>
     <dependency>
       <groupId>com.axonivy.utils.docfactory</groupId>
       <artifactId>doc-factory</artifactId>
@@ -41,9 +40,18 @@
     <dependency>
       <groupId>com.axonivy.connector.mailstore</groupId>
       <artifactId>mailstore-connector</artifactId>
-      <version>13.1.3</version>
+      <version>13.2.0</version>
       <type>iar</type>
     </dependency>
+    <dependency>
+      <groupId>jakarta.mail</groupId>
+      <artifactId>jakarta.mail-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      </dependency>
     <dependency>
       <groupId>com.axonivy.ivy.api</groupId>
       <artifactId>ivy-api</artifactId>
