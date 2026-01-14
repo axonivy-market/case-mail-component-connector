@@ -78,7 +78,7 @@ Weiterleitung eingegangener Nachrichten:
      Http:
        MaxPostSize: 2097152
      ```  
-     👉 Referenz: [Axon Ivy Docs – ivy.yaml](https://developer.axonivy.com/doc/12.0/engine-guide/configuration/files/ivy-yaml.html)
+     👉 Referenz: [Axon Ivy Docs – ivy.yaml](https://developer.axonivy.com/doc/13.2.0/engine-guide/configuration/files/ivy-yaml.html)
 
    - In der **nginx**-Konfiguration:  
      ```nginx

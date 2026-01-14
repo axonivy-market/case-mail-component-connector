@@ -13,7 +13,6 @@
   <version>13.2.0-SNAPSHOT</version>
   <packaging>iar</packaging>
   <properties>
-    <project.build.plugin.version>13.2.0</project.build.plugin.version>
     <apache.pdfbox.version>3.0.4</apache.pdfbox.version>
   </properties>
   <dependencies>

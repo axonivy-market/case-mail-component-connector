@@ -12,10 +12,6 @@
   <artifactId>case-mail-component-connector-test</artifactId>
   <version>13.2.0-SNAPSHOT</version>
   <packaging>iar</packaging>
-  <properties>
-    <tester.version>13.2.0</tester.version>
-    <project.build.plugin.version>13.2.0</project.build.plugin.version>
-  </properties>
   <dependencies>
     <dependency>
       <groupId>com.axonivy.connector.casemailcomponent</groupId>
