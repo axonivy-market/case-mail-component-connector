@@ -130,7 +130,7 @@ public class MailBean {
 	}
 
 	private void replaceInlineImageWithBase64(Mail mail) {
-		if (CollectionUtils.isEmpty(inlineAttachments)|| !shouldReplaceCidWithBase64(mail.getBody())) {
+		if (CollectionUtils.isEmpty(inlineAttachments) || !shouldReplaceCidWithBase64(mail.getBody())) {
 			return;
 		}
 		if (CollectionUtils.isNotEmpty(inlineAttachments)) {

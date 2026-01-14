@@ -153,7 +153,7 @@ public class JavaApiEmail {
 			final String imageType = matcher.group(1);
 			final String base64Data = matcher.group(2);
 			final String cid = "image" + imageIndex;
-			
+
 			// Decode image
 			final byte[] imageBytes = Base64.getDecoder().decode(base64Data);
 
