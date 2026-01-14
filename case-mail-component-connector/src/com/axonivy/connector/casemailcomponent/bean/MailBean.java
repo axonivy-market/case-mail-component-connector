@@ -14,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.apache.commons.text.StringEscapeUtils;
@@ -129,10 +130,10 @@ public class MailBean {
 	}
 
 	private void replaceInlineImageWithBase64(Mail mail) {
-		if (inlineAttachments.isEmpty()|| !shouldReplaceCidWithBase64(mail.getBody())) {
+		if (CollectionUtils.isEmpty(inlineAttachments)|| !shouldReplaceCidWithBase64(mail.getBody())) {
 			return;
 		}
-		if (!inlineAttachments.isEmpty()) {
+		if (CollectionUtils.isNotEmpty(inlineAttachments)) {
 			for (final Attachment file : inlineAttachments) {
 				final String content = Base64.getEncoder().encodeToString(file.getContent());
 				final StringBuilder base64Content = new StringBuilder().append("data:image/")
@@ -199,7 +200,7 @@ public class MailBean {
 		attachment.setDefaultExtension(
 				StringUtils.upperCase(StringUtils.substringAfterLast(uploadedFile.getFileName(), ".")));
 		attachment.setInlineAttachment(false);
-		if (attachments.isEmpty()) {
+		if (CollectionUtils.isEmpty(attachments)) {
 			attachments = new java.util.ArrayList<Attachment>();
 		}
 		attachments.add(attachment);
