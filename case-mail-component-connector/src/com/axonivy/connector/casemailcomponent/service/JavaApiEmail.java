@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.activation.DataSource;
-import javax.mail.util.ByteArrayDataSource;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.axonivy.connector.casemailcomponent.Constants;
@@ -20,7 +17,9 @@ import com.axonivy.connector.casemailcomponent.utils.FileUtils;
 
 import ch.ivyteam.ivy.bpm.error.BpmError;
 import ch.ivyteam.ivy.environment.Ivy;
-import ch.ivyteam.ivy.mail.Attachment;
+import ch.ivyteam.ivy.io.DataStream;
+import ch.ivyteam.ivy.io.DataStreamProvider;
+import ch.ivyteam.ivy.mail.MailAttachment;
 import ch.ivyteam.ivy.mail.MailClient;
 import ch.ivyteam.ivy.mail.MailMessage;
 
@@ -62,7 +61,7 @@ public class JavaApiEmail {
 
 			// optional cc
 			if (StringUtils.isNotBlank(mail.getRecipientCC())) {
-				mBuilder.toMailMessage().cc().addAll(MailService.extractInternetAddresses(mail.getRecipientCC()));
+				mBuilder.toMailMessage().cc().addAll(MailService.extractEmails(mail.getRecipientCC()));
 			}
 
 			jaMail.setIvyMessageBuilder(mBuilder);
@@ -101,9 +100,8 @@ public class JavaApiEmail {
 	 */
 	private static class HtmlAndImages {
 		public final String html;
-		public final List<Attachment> imageParts;
-
-		public HtmlAndImages(String html, List<Attachment> imageParts) {
+		public final List<MailAttachment> imageParts;
+		public HtmlAndImages(String html, List<MailAttachment> imageParts) {
 			this.html = html;
 			this.imageParts = imageParts;
 		}
@@ -141,7 +139,7 @@ public class JavaApiEmail {
 	 * @throws Exception
 	 */
 	private HtmlAndImages extractImagesAndReplaceWithCid(String originalHtml) throws Exception {
-		final List<Attachment> imageParts = new ArrayList<>();
+		final List<MailAttachment> imageParts = new ArrayList<>();
 		final StringBuilder htmlBuilder = new StringBuilder(originalHtml);
 		// pattern to find base64 images
 		final Pattern pattern = Pattern.compile("data:image/(\\w+);base64,([A-Za-z0-9+/=]+)");
@@ -158,11 +156,15 @@ public class JavaApiEmail {
 
 			// Decode image
 			final byte[] imageBytes = Base64.getDecoder().decode(base64Data);
-			final InputStream imageStream = new ByteArrayInputStream(imageBytes);
-			final DataSource ds = new ByteArrayDataSource(imageStream, "image/" + imageType);
-			// transform to ivy inline mail attachment and
-			final Attachment imagePart = Attachment.create().dataSource(ds).filename("inline" + cid).contentId(cid)
-					.dispositionInline().toAttachment();
+
+			DataStreamProvider ds = () -> new DataStream() {
+				public String name() { return "inline-" + cid; }
+				public String contentType() { return "image/" + imageType; }
+				public InputStream openStream() { return new ByteArrayInputStream(imageBytes); }
+			};
+			
+			final MailAttachment imagePart = MailAttachment.create().dataStream(ds).fileName("inline" + cid).inline(cid)
+					.toMailAttachment();
 			imageParts.add(imagePart);
 
 			// Replace base64 in hmtl with CID reference
@@ -186,15 +188,18 @@ public class JavaApiEmail {
 	public void prepareAttachments(List<com.axonivy.connector.casemailcomponent.businessData.Attachment> files)
 			throws BpmError {
 		try {
-			Attachment properMailAtt;
-			DataSource ds;
-			String contentType;
+			MailAttachment properMailAtt;
+			DataStreamProvider ds;
 
 			for (final com.axonivy.connector.casemailcomponent.businessData.Attachment file : files) {
-				contentType = FileUtils.getContentType(file.getName());
-				ds = new ByteArrayDataSource(file.getContent(), contentType);
-				properMailAtt = Attachment.create().dataSource(ds).filename(file.getName())
-						.contentId(file.getContentId()).toAttachment();
+				String contentType = FileUtils.getContentType(file.getName());
+				ds = () -> new DataStream() {
+					public String name() { return file.getName(); }
+					public String contentType() { return contentType; }
+					public InputStream openStream() { return new ByteArrayInputStream(file.getContent()); }
+				};
+				properMailAtt = MailAttachment.create().dataStream(ds).fileName(file.getName())
+						.inline(file.getContentId()).toMailAttachment();
 
 				getIvyMessageBuilder().attachments(properMailAtt);
 			}
@@ -210,7 +215,7 @@ public class JavaApiEmail {
 	 */
 	public void sendEmail() throws BpmError {
 		try {
-			MailClient.newMailClient().send(getIvyMessageBuilder().toMailMessage());
+			MailClient.create().send(getIvyMessageBuilder().toMailMessage());
 		} catch (final Exception e) {
 			BpmErrorService.get().throwBpmErrorSimplified(BpmErrorCode.ERROR_JAVA_API_MAIL_NOT_SENT, e);
 		}

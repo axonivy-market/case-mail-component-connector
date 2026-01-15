@@ -14,8 +14,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.commons.text.StringEscapeUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
@@ -249,7 +250,7 @@ public class MailBean {
 		inlineAttachments = new ArrayList<>();
 		for (Attachment attachment : allAttachments) {
 			boolean isInline = Boolean.TRUE.equals(attachment.getInlineAttachment());
-			boolean isEml = StringUtils.equalsIgnoreCase(attachment.getDefaultExtension(), Constants.EML_EXTENTION);
+			boolean isEml = Strings.CI.equals(attachment.getDefaultExtension(), Constants.EML_EXTENTION);
 
 			if (isInline) {
 				inlineAttachments.add(attachment);

@@ -1,5 +1,5 @@
 {
-  "$schema" : "https://json-schema.axonivy.com/process/12.0.0/process.json",
+  "$schema" : "https://json-schema.axonivy.com/process/13.2.0/process.json",
   "id" : "18CED859A6758833",
   "config" : {
     "data" : "com.axonivy.connector.casemailcomponent.businessCaseData.SendMailAsyncData"
@@ -27,7 +27,9 @@
           "name" : "<%=ivy.cms.co(\"/Processes/SendMail/Tasks/SendingMail/name\")%>",
           "category" : "Technical/MailSending",
           "responsible" : {
-            "activator" : "SYSTEM"
+            "roles" : [
+              "SYSTEM"
+            ]
           },
           "customFields" : [
             { "name" : "HIDE", "type" : "STRING", "value" : "\"HIDE\"" }
@@ -238,7 +240,9 @@
           "description" : "<%=ivy.cms.co(\"/Tasks/RetrySendingMail/description\")%>",
           "category" : "Technical/MailSending",
           "responsible" : {
-            "activator" : "SYSTEM"
+            "roles" : [
+              "SYSTEM"
+            ]
           },
           "skipTasklist" : true,
           "notification" : {
@@ -289,7 +293,9 @@
           "description" : "<%=ivy.cms.co(\"/Tasks/description\")%>",
           "category" : "Technical/MailSending",
           "responsible" : {
-            "activator" : "SYSTEM"
+            "roles" : [
+              "SYSTEM"
+            ]
           },
           "delay" : "new Duration(ivy.var.mailLoopRepeatDelay + \"s\")",
           "customFields" : [
@@ -337,7 +343,9 @@
           "description" : "<%=ivy.cms.co(\"/Tasks/EmailFailAdminTask/description\")%>",
           "category" : "ADMIN",
           "responsible" : {
-            "activator" : "Admin"
+            "roles" : [
+              "Admin"
+            ]
           }
         },
         "output" : {

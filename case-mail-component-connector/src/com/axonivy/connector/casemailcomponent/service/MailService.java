@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import com.axonivy.connector.casemailcomponent.Constants;
 import com.axonivy.connector.casemailcomponent.businessData.Attachment;
@@ -291,7 +292,7 @@ public class MailService {
 			final String message = Ivy.cms().co("/Labels/resendConfirmMessage",
 					Arrays.asList(mail.getSubject(), mail.getRecipient(), mail.getRecipientCC()));
 			if (StringUtils.isEmpty(mail.getRecipientCC())) {
-				result = StringUtils.replace(message, Constants.SEMICOLON, StringUtils.EMPTY);
+				result = Strings.CS.replace(message, Constants.SEMICOLON, StringUtils.EMPTY);
 				return result;
 			} else {
 				return message;
@@ -415,9 +416,9 @@ public class MailService {
 	 * @return
 	 */
 	public static List<String> extractEmails(String joinedEmailsString) {
-		joinedEmailsString = StringUtils.replace(joinedEmailsString, Constants.COMMA, Constants.EMAIL_ADDRESS_SEPARATOR);
-		joinedEmailsString = StringUtils.replace(joinedEmailsString, Constants.SEMICOLON, Constants.EMAIL_ADDRESS_SEPARATOR);
-		joinedEmailsString = StringUtils.replace(joinedEmailsString, StringUtils.SPACE, Constants.EMAIL_ADDRESS_SEPARATOR);
+		joinedEmailsString = Strings.CS.replace(joinedEmailsString, Constants.COMMA, Constants.EMAIL_ADDRESS_SEPARATOR);
+		joinedEmailsString = Strings.CS.replace(joinedEmailsString, Constants.SEMICOLON, Constants.EMAIL_ADDRESS_SEPARATOR);
+		joinedEmailsString = Strings.CS.replace(joinedEmailsString, StringUtils.SPACE, Constants.EMAIL_ADDRESS_SEPARATOR);
 		return List.of(StringUtils.split(joinedEmailsString, Constants.EMAIL_ADDRESS_SEPARATOR)).stream()
 				.filter(s -> StringUtils.isNotBlank(s)) // filter empty addresses
 				.map(ea -> ea.trim()) //trim the emails

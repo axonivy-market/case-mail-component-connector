@@ -14,6 +14,7 @@ import javax.faces.bean.ViewScoped;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 
 import com.axonivy.connector.casemailcomponent.businessData.Attachment;
 import com.axonivy.connector.casemailcomponent.enums.BpmErrorCode;
@@ -64,7 +65,7 @@ public class DocumentViewerBean {
 	 */
 	public void showFile(Attachment file) {
 		if (file != null && file.getDefaultExtension() != null
-				&& StringUtils.equalsAnyIgnoreCase(file.getDefaultExtension(), ALLOWED_TYPES)) {
+				&& Strings.CI.equalsAny(file.getDefaultExtension(), ALLOWED_TYPES)) {
 			String sessionDirectory = "";
 
 			final byte[] fileContent = file.getContent();
@@ -74,7 +75,7 @@ public class DocumentViewerBean {
 			}
 
 			final String extension = file.getDefaultExtension();
-			this.isFileImage = StringUtils.equalsAnyIgnoreCase(extension, ALLOWED_IMAGE_FILE_TYPES);
+			this.isFileImage = Strings.CI.equalsAny(extension, ALLOWED_IMAGE_FILE_TYPES);
 			this.currentFile = handleFile(file, sessionDirectory);
 			if (this.currentFile != null) {
 				this.currentFileId = file.getId();
@@ -96,7 +97,7 @@ public class DocumentViewerBean {
 		final String extension = file.getDefaultExtension();
 
 		// check if conversion to PDF is needed
-		final boolean needsConversion = StringUtils.equalsAnyIgnoreCase(extension,
+		final boolean needsConversion = Strings.CI.equalsAny(extension,
 				DocumentService.ASPOSE_MS_DOCUMENT_TYPES);
 
 		// change extension to "pdf" if conversion is needed
@@ -191,10 +192,10 @@ public class DocumentViewerBean {
 
 	/**
 	 * @return URL of current file to be show
-	 * @see {@link IHtmlDialogContext#fileref(ch.ivyteam.ivy.scripting.objects.File)}
+	 * @see {@link IHtmlDialogContext#fileLink(ch.ivyteam.ivy.scripting.objects.File)}
 	 */
 	public String getCurrentFileRef() {
-		return Ivy.html().fileref(currentFile);
+		return Ivy.html().fileLink(currentFile).get();
 	}
 
 	/**

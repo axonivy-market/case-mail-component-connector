@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
@@ -165,11 +165,11 @@ public class DocumentService {
 	 */
 	public static byte[] convertDocumentToPdf(byte[] docInputData, String extension) throws Exception {
 		byte[] result = null;
-		if (StringUtils.equalsAnyIgnoreCase(extension, ASPOSE_EXCEL_FILE_TYPES)) {
+		if (Strings.CI.equalsAny(extension, ASPOSE_EXCEL_FILE_TYPES)) {
 			result = DocumentService.convertExcelToPdf(docInputData);
-		} else if (StringUtils.equalsAnyIgnoreCase(extension, ASPOSE_WORD_FILE_TYPES)) {
+		} else if (Strings.CI.equalsAny(extension, ASPOSE_WORD_FILE_TYPES)) {
 			result = DocumentService.convertWordToPdf(docInputData);
-		} else if (StringUtils.equalsAnyIgnoreCase(extension, ASPOSE_POWERPOINT_FILE_TYPES)) {
+		} else if (Strings.CI.equalsAny(extension, ASPOSE_POWERPOINT_FILE_TYPES)) {
 			result = DocumentService.convertPowerPointToPdf(docInputData);
 		}
 		return result;
