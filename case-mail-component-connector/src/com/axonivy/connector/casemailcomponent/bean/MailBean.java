@@ -46,8 +46,8 @@ public class MailBean {
 	private String caseId;
 	private String caseRef;
 	private List<Attachment> attachments;
-	private String allowFileTypes = Ivy.var().get("allowFileTypes");
-	private String maxUploadSize = Ivy.var().get("maxUploadSize");
+	private String allowFileTypes = Ivy.var().get("mailstoreConnector.allowFileTypes");
+	private String maxUploadSize = Ivy.var().get("mailstoreConnector.maxUploadSize");
 	private List<Attachment> inlineAttachments;
 
 	private static final Map<String, String> MIME_TYPE_ICON_MAP = new HashMap<>();
