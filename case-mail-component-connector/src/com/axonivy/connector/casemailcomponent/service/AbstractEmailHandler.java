@@ -99,7 +99,6 @@ public abstract class AbstractEmailHandler {
 					this.mail.getSubject(), this.mail.getSender()), ex);
 		} catch (final Exception ex) {
 			setFlag();
-			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_CONNECTOR_ERROR.getCmsMessage(mailBoxServer, ex.getMessage()));
 			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_CONNECTOR_ERROR.getCmsMessage(mailBoxServer, ex.getMessage()), ex);
 		} finally {
 			if (storeConnected) {
@@ -373,7 +372,6 @@ public abstract class AbstractEmailHandler {
 				this.message.setFlag(Flags.Flag.FLAGGED, true);
 			}
 		} catch (final Exception e) {
-			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_CONNECTOR_ERROR.getCmsMessage(mailBoxServer, e.getMessage()));
 			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_CONNECTOR_ERROR.getCmsMessage(mailBoxServer, e.getMessage()), e);
 		}
 	}
@@ -382,7 +380,6 @@ public abstract class AbstractEmailHandler {
 		try {
 			this.message.setFlag(Flags.Flag.FLAGGED, false);
 		} catch (final Exception e) {
-			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_CONNECTOR_ERROR.getCmsMessage(mailBoxServer, e.getMessage()));
 			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_CONNECTOR_ERROR.getCmsMessage(mailBoxServer, e.getMessage()), e);
 		}
 	}
@@ -403,7 +400,6 @@ public abstract class AbstractEmailHandler {
 				}
 			}
 		} catch (final Exception ex) {
-			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_CONNECTOR_ERROR.getCmsMessage(mailBoxServer, ex.getMessage()));
 			Ivy.log().error(BpmErrorCode.RECEIVE_MAIL_CONNECTOR_ERROR.getCmsMessage(mailBoxServer, ex.getMessage()), ex);
 		}
 	}
