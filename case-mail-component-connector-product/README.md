@@ -138,7 +138,9 @@ This section helps you understand how incoming emails are linked to cases and ho
 
 #### How the case reference is stored
 
-It is a **persistent field** on the Mail entity: the value returned by the reference extraction logic is stored in the `caseId` field of the `Mail` business data object. Mails are stored in the Axon Ivy repository (database) and are linked to cases only by this string. The MailBrowser (and any logic that lists mails per case) filters Mail entities by this `caseId` value.
+When an email is retrieved, the component extracts a **case reference** from the subject (e.g. `C-2025-01` from `[Ref=C-2025-01]`). This extraction is done by the **`getReferenceCaseId(String subject)`** method (in `AbstractEmailHandler`), which you can override to use your own logic. The reference is simply the string that identifies “which case this email belongs to”.
+
+That string is stored in a persistent field on the **Mail** entity named **`caseId`**. So: **`Mail.caseId` = the case reference** (the identifier you extracted). All mails are stored in the Axon Ivy repository; there is no direct link from Mail to an Ivy case object. The only link is this **`caseId`** value.
 
 #### What you need for emails to show up on a case
 
@@ -158,7 +160,7 @@ If no valid reference is found, the email will then be treated as “no referenc
 
 ---
 
-#### Customizing how the case reference is extracted:
+#### Customizing how the case reference is extracted
 
 By default, the component uses the **first capture group** of `caseReferenceRegex` on the email subject as the case identifier and stores it in `Mail.caseId`. If your cases are identified by a different scheme (e.g. internal UUID, or a code that must be looked up), you can **override the method `getReferenceCaseId`** in a custom email handler.
 
